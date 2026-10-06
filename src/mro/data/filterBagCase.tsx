@@ -95,7 +95,7 @@ const structuredDoc = (
       createdOn: "2026-06-20 · 09:06",
       materialCode: MAT,
       description: "Filter Bag · 25 Micron · Polypropylene · Size 2",
-      plant: "Lindfeld · Electronics Works",
+      plant: "Amberg · Electronics Works",
       costCenter: "10034 · Deburring & Finishing Maintenance",
       glAccount: "600420 · Spare parts consumed",
       item: [
@@ -174,8 +174,8 @@ const stockDoc = (
       createdOn: "2026-06-20 · 09:12",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Lindfeld · Electronics Works", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
-        { plant: "Lindfeld · Drive Systems Works", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
+        { plant: "Amberg · Electronics Works", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
+        { plant: "Amberg · Drive Systems Works", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
         { plant: "Riomar · Assembly & Packaging", storageLoc: "Main store", onHand: "60", safety: "60", uom: "EA" },
         { plant: "Lianhe · Electronics Works", storageLoc: "Main store", onHand: "110", safety: "100", uom: "EA" },
       ],
@@ -196,7 +196,7 @@ const priceSheet = (
           rows: [
             { cells: [TIERS[0].band, TIERS[0].unit, "base", "Riomar and Lianhe order here"], matched: false },
             { cells: [TIERS[1].band, TIERS[1].unit, "−10%", "this order"], matched: true },
-            { cells: [TIERS[2].band, TIERS[2].unit, "−20%", "one order for the network"], matched: false },
+            { cells: [TIERS[2].band, TIERS[2].unit, "��20%", "one order for the network"], matched: false },
             { cells: [TIERS[3].band, TIERS[3].unit, "−27%", "a year in one call-off"], matched: false },
           ],
         },
@@ -285,7 +285,7 @@ const poDoc = (
         { label: "Incoterms", value: "DAP · plant" },
       ],
       items: [
-        { item: "10", material: MAT, description: "Filter bag · 25 micron · size 2 · Lindfeld", qty: "400 EA", netPrice: "19.90", value: "7,960.00", delivDate: "2026-07-03" },
+        { item: "10", material: MAT, description: "Filter bag · 25 micron · size 2 · Amberg", qty: "400 EA", netPrice: "19.90", value: "7,960.00", delivDate: "2026-07-03" },
         { item: "20", material: MAT, description: "Filter bag · 25 micron · size 2 · Winding Plant", qty: "380 EA", netPrice: "19.90", value: "7,562.00", delivDate: "2026-07-03" },
         { item: "30", material: MAT, description: "Filter bag · 25 micron · size 2 · Electronics Works", qty: "260 EA", netPrice: "19.90", value: "5,174.00", delivDate: "2026-07-03" },
       ],
@@ -317,7 +317,7 @@ const signedAgreement = (
           role: "the Buyer",
           name: "Orvantec AG",
           detail:
-            "Purchasing organisation 1000 · acting for the Lindfeld, Riomar and Lianhe manufacturing sites",
+            "Purchasing organisation 1000 · acting for the Amberg, Riomar and Lianhe manufacturing sites",
         },
         {
           role: "the Supplier",
@@ -405,8 +405,8 @@ const signedAgreement = (
           title: "Named sites and delivery points",
           columns: ["Site", "Delivery address", "Plant code"],
           rows: [
-            { cells: ["Lindfeld · Electronics Works", "Werkstrasse 4, Lindfeld", "1010"] },
-            { cells: ["Lindfeld · Drive Systems Works", "Werkstrasse 11, Lindfeld", "1020"] },
+            { cells: ["Amberg · Electronics Works", "Werkstrasse 4, Amberg", "1010"] },
+            { cells: ["Amberg · Drive Systems Works", "Werkstrasse 11, Amberg", "1020"] },
             { cells: ["Riomar · Assembly & Packaging", "Poligono Industrial 7, Riomar", "2010"] },
             { cells: ["Lianhe · Electronics Works", "Lianhe Industrial Park, Building 3", "3010"] },
           ],
@@ -473,8 +473,8 @@ const demandRecord = (
           columns: ["Site", "Orders placed", "Typical order size", "Annual volume", "Break reached"],
           usedNote: "→ 4,000 EA across the network",
           rows: [
-            { cells: ["Lindfeld · Electronics Works", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
-            { cells: ["Lindfeld · Drive Systems Works", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
+            { cells: ["Amberg · Electronics Works", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
+            { cells: ["Amberg · Drive Systems Works", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
             { cells: ["Lianhe · Electronics Works", "4", "200 EA", "800 EA", "1–249 EA"], matched: false },
             { cells: ["Riomar · Assembly & Packaging", "4", "150 EA", "600 EA", "1–249 EA"], matched: false },
             { cells: ["Network", "16", "—", "4,000 EA", "2,500 EA and above"], matched: false },
@@ -715,7 +715,7 @@ export const filterBagSteps: RunStep[] = [
         title: "Catalogue match & account assignment",
         fields: [
           { label: "Catalogue item", value: "Yes · listed since 2021" },
-          { label: "Plant", value: "Lindfeld · Electronics Works" },
+          { label: "Plant", value: "Amberg · Electronics Works" },
           { label: "Cost center", value: "10034 · Deburring & Finishing Maintenance" },
           { label: "G/L account", value: "600420 · Spare parts consumed" },
           { label: "Agreement price", value: `$${UNIT} / EA` },
@@ -766,8 +766,8 @@ export const filterBagSteps: RunStep[] = [
       spec: {
         totalLabel: "4,000 EA a year across the network",
         rows: [
-          { site: "Lindfeld · Electronics Works", qty: "1,600 EA", share: 40 },
-          { site: "Lindfeld · Drive Systems Works", qty: "1,000 EA", share: 25 },
+          { site: "Amberg · Electronics Works", qty: "1,600 EA", share: 40 },
+          { site: "Amberg · Drive Systems Works", qty: "1,000 EA", share: 25 },
           { site: "Lianhe · Electronics Works", qty: "800 EA", share: 20 },
           { site: "Riomar · Assembly & Packaging", qty: "600 EA", share: 15 },
         ],
@@ -850,7 +850,7 @@ export const filterBagSteps: RunStep[] = [
         split: {
           title: "Three separate purchase orders",
           total: "$23,521",
-          sub: "Lindfeld 400 EA · Winding 380 EA · Electronics 260 EA",
+          sub: "Amberg 400 EA · Winding 380 EA · Electronics 260 EA",
           caption: "Each priced at the 250–999 EA break",
           detail: splitWorking,
         },
@@ -877,9 +877,10 @@ export const filterBagSteps: RunStep[] = [
       subject: `${PO} — 1,040 filter bags, three delivery points`,
       lines: [
         "Please process this as a single order against SA-MRO-07 at the 1,000+ break.",
-        "1,040 filter bags, 25 micron, size 2 — 400 to Lindfeld, 380 to Winding, 260 to the Electronics Works, all for 3 July.",
+        "1,040 filter bags, 25 micron, size 2 — 400 to Amberg, 380 to Winding, 260 to the Electronics Works, all for 3 July.",
         "Purchase order PO-77351 is attached. Please confirm the delivery date.",
       ],
+      attachment: poDoc,
       attachmentLabel: `${PO} · ME23N`,
       toastTitle: "Order placed",
       toastBody: `${PO} sent to ${VENDOR} · ${Q4} EA at $${ORDER_UNIT}, $2,750 below three separate orders.`,

@@ -60,7 +60,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "PR-48630",
     type: "PR intake & validation · MRO",
-    site: "Lindfeld · Assembly Line 2",
+    site: "Amberg · Assembly Line 2",
     urgency: "critical",
     title: "Mechanical-seal request — line down; specification needs confirmation to release",
     dueLabel: "Confirm",
@@ -70,7 +70,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "RISK-49001",
     type: "Predictive risk · auto-procurement",
-    site: "Lindfeld · Utilities line",
+    site: "Amberg · Utilities line",
     urgency: "high",
     title: "Drive-gearbox seal kit — projected shortage in 9 days; early purchase recommended",
     dueLabel: "Pre-empt",
@@ -90,7 +90,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "PR-48655",
     type: "PR intake & validation · MRO",
-    site: "Lindfeld · Deburring Line 3",
+    site: "Amberg · Deburring Line 3",
     urgency: "high",
     title: "Grinding-media request — mostly covered by existing stock and warranty",
     dueLabel: "Review",

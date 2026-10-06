@@ -75,7 +75,7 @@ function ChannelCard({
             {channel.open.text}
           </span>
           <span className="mt-1 block text-[12px] leading-[16px] text-ink">
-            {lang?.emoji} {lang?.native} · open it
+            {lang?.emoji} {lang?.native} · {channel.open.lang === "de" ? "öffnen" : "open it"}
           </span>
         </button>
 

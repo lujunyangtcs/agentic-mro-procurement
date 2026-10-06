@@ -65,12 +65,12 @@ const buildCodingRef = (material: string, line: string, confidence: string, open
         file: "cost-centers.xlsx",
         tab: "Plant maintenance",
         columns: ["Cost center", "Description", "Plant"],
-        usedNote: `→ ${line} rolls up to Lindfeld`,
+        usedNote: `→ ${line} rolls up to Amberg`,
         rows: [
-          { cells: ["10031", "Drive Systems Maintenance", "Lindfeld"], matched: false },
-          { cells: ["10034", "Deburring & Finishing Maintenance", "Lindfeld"], matched: true },
+          { cells: ["10031", "Drive Systems Maintenance", "Amberg"], matched: false },
+          { cells: ["10034", "Deburring & Finishing Maintenance", "Amberg"], matched: true },
           { cells: ["10052", "Test & Pack Line Maintenance", "Riomar"], matched: false },
-          { cells: ["10061", "Utilities Maintenance", "Lindfeld"], matched: false },
+          { cells: ["10061", "Utilities Maintenance", "Amberg"], matched: false },
         ],
       },
       {
@@ -119,8 +119,8 @@ const buildRequestorRef = (match: string) => (
         columns: ["Requestor", "Plant", "Purch org", "Purch grp", "PR type"],
         usedNote: `→ ${match}`,
         rows: [
-          { cells: ["Plant engineer · Deburring Line 3", "Lindfeld · BM3", "1000", "200 · MRO", "NB"], matched: match === "BM3" },
-          { cells: ["Plant engineer · Assembly Line 2", "Lindfeld · ML2", "1000", "200 · MRO", "NB"], matched: match === "ML2" },
+          { cells: ["Plant engineer · Deburring Line 3", "Amberg · BM3", "1000", "200 · MRO", "NB"], matched: match === "BM3" },
+          { cells: ["Plant engineer · Assembly Line 2", "Amberg · ML2", "1000", "200 · MRO", "NB"], matched: match === "ML2" },
           { cells: ["Reliability eng · Filling Plant", "Riomar · Test & Pack Line 2", "1000", "200 · MRO", "NB"], matched: match === "Pulping" },
           { cells: ["Reliability eng · Utilities line", "Utilities line", "1000", "200 · MRO", "NB"], matched: match === "Recovery" },
         ],
@@ -447,7 +447,7 @@ const beltStockOverview = (
       createdOn: "2026-06-20 · 10:48",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Lindfeld · Electronics", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA", tone: "short" },
+        { plant: "Amberg · Electronics", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA", tone: "short" },
         { plant: "Clairmont plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
         { plant: "Riomar", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
       ],
@@ -467,7 +467,7 @@ const beltStockSheet = (
         columns: ["Plant", "Material", "On-hand", "Safety stock", "UoM"],
         usedNote: "→ 0 on-hand · 0 safety · no interplant cover",
         rows: [
-          { cells: ["Lindfeld · Assembly Line 2", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: true },
+          { cells: ["Amberg · Assembly Line 2", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: true },
           { cells: ["Clairmont plant", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
           { cells: ["Riomar", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
         ],
@@ -490,10 +490,10 @@ const beltOpenPrList = (
       createdBy: "Master Data agent",
       scope: "Open PRs · plant 1000 · material group MRO · not yet released",
       rows: [
-        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Lindfeld · ML2", created: "2026-06-19" },
+        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Amberg · ML2", created: "2026-06-19" },
         { pr: "PR-48631", item: "10", material: "MRO-PUMP-SEAL-STD", qty: "2 EA", plant: "Utilities", created: "2026-06-20" },
-        { pr: "PR-48633", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "4 BAG", plant: "Lindfeld · BM3", created: "2026-06-20" },
-        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Lindfeld · BM3", created: "2026-06-18" },
+        { pr: "PR-48633", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "4 BAG", plant: "Amberg · BM3", created: "2026-06-20" },
+        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Amberg · BM3", created: "2026-06-18" },
       ],
       note: "No open PR carries MRO-SEAL-MECH-50MM-SIC — no duplicate for the mechanical seal. PR-48630 is the only demand for this material.",
     }}
@@ -867,7 +867,7 @@ export const rollerInventorySheet = (
         columns: ["Plant", "Material", "On-hand", "Safety", "UoM"],
         usedNote: "→ 6 BAG surplus at Clairmont · transfer before buying",
         rows: [
-          { cells: ["Lindfeld · Deburring Line 3", "MRO-MEDIA-ZRO2-1.2MM", "0", "2", "BAG"], matched: false },
+          { cells: ["Amberg · Deburring Line 3", "MRO-MEDIA-ZRO2-1.2MM", "0", "2", "BAG"], matched: false },
           { cells: ["Clairmont plant", "MRO-MEDIA-ZRO2-1.2MM", "6", "2", "BAG"], matched: true },
           { cells: ["Riomar", "MRO-MEDIA-ZRO2-1.2MM", "0", "0", "BAG"], matched: false },
         ],
@@ -892,16 +892,45 @@ const rollerStockTransfer = (
       createdBy: "Approval & routing",
       header: [
         { label: "Supplying plant", value: "Clairmont plant · MRO-01" },
-        { label: "Receiving plant", value: "Lindfeld · Deburring Line 3" },
+        { label: "Receiving plant", value: "Amberg · Deburring Line 3" },
         { label: "Movement type", value: "351 · interplant transfer" },
         { label: "Doc type", value: "UB · stock transport order" },
         { label: "Value redirected", value: "$708 (6 BAG)" },
         { label: "Lead time", value: "In-network · this week" },
       ],
       items: [
-        { item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", description: "Grinding media · zirconia 1.2 mm · 25 kg bag", qty: "6 BAG", from: "Clairmont", to: "Lindfeld" },
+        { item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", description: "Grinding media · zirconia 1.2 mm · 25 kg bag", qty: "6 BAG", from: "Clairmont", to: "Amberg" },
       ],
       note: "Transfers the 6 BAG surplus from Clairmont instead of a fresh buy — avoids $708 of duplicate spend. On posting, Clairmont stock draws down and a goods receipt is scheduled at Deburring Line 3, so inventory and logistics records update across both plants.",
+    }}
+  />
+);
+
+const rollerPoDoc = (
+  <PurchaseOrderDoc
+    p={{
+      number: "PO-77311",
+      status: "Released · awaiting delivery",
+      createdOn: "2026-06-20 · 11:33",
+      createdBy: "Approval & routing",
+      header: [
+        { label: "Vendor", value: "Apex Industrial Supply" },
+        { label: "Material", value: "MRO-MEDIA-ZRO2-1.2MM" },
+        { label: "Payment terms", value: "Net 30" },
+        { label: "Incoterms", value: "FCA · Apex DC" },
+        { label: "Currency", value: "USD" },
+      ],
+      items: [
+        { item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", description: "Grinding media · zirconia 1.2 mm · 25 kg bag", qty: "2 BAG", netPrice: "118.00", value: "236.00", delivDate: "2026-06-22" },
+      ],
+      conditions: [
+        { label: "Net value", value: "$236.00" },
+        { label: "Tax (U1)", value: "$0.00 · reverse charge" },
+        { label: "Total", value: "$236.00" },
+      ],
+      release: [
+        { label: "L1 · Plant Maintenance", value: "Approved · within DOA" },
+      ],
     }}
   />
 );
@@ -913,8 +942,8 @@ export const rollerOpenPrList = (
       createdBy: "Master Data agent",
       scope: "Open PRs · plant 1000 · material group MRO · not yet released",
       rows: [
-        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Lindfeld · ML2", created: "2026-06-19" },
-        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Lindfeld · BM3", created: "2026-06-18", tone: "dup" },
+        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Amberg · ML2", created: "2026-06-19" },
+        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Amberg · BM3", created: "2026-06-18", tone: "dup" },
         { pr: "PR-48650", item: "10", material: "MRO-DIAPH-PTFE-15IN", qty: "10 EA", plant: "Test & Pack Line", created: "2026-06-19" },
       ],
       note: "PR-48641 already requests 6 BAG of MRO-MEDIA-ZRO2-1.2MM for the same line — a duplicate of this requisition. Consolidate and cancel it.",
@@ -1156,7 +1185,7 @@ const beltGrDoc = (
             { label: "Material", value: "MRO-SEAL-MECH-50MM-SIC" },
             { label: "Movement type", value: "101 · GR goods receipt" },
             { label: "Quantity received", value: "1 EA" },
-            { label: "Plant / SLoc", value: "Lindfeld · Assembly Line 2" },
+            { label: "Plant / SLoc", value: "Amberg · Assembly Line 2" },
           ],
         },
       ],
@@ -1345,7 +1374,7 @@ export const beltPrSteps: RunStep[] = [
         reasoning: "Checking on-hand and interplant stock",
         title: "Stock overview · MB52",
         fields: [
-          { label: "On-hand · Lindfeld", value: "0 EA" },
+          { label: "On-hand · Amberg", value: "0 EA" },
           { label: "Clairmont plant", value: "0 EA" },
           { label: "Riomar", value: "0 EA" },
           { label: "Transfer possible", value: "No · new buy justified" },
@@ -1449,8 +1478,8 @@ export const beltPrSteps: RunStep[] = [
     ],
     email: {
       cta: "Release & tell the engineer",
-      attachment: beltStructuredDoc,
-      attachmentLabel: "PR-48630 · ME51N",
+      attachment: beltPoDoc,
+      attachmentLabel: "PO-77310 · purchase order",
       to: "Plant engineer · Assembly Line 2",
       subject: "PR-48630 — mechanical seal on its way · releasing",
       lines: [
@@ -1843,7 +1872,7 @@ export const rollerPrSteps: RunStep[] = [
       "I've re-scoped this from an eight-unit buy down to a transfer, a warranty claim and a two-unit buy. Let me send the plan and route it.",
     reasoning: [
       "Confirming cost center 10034 / GL 600450",
-      "Routing 6 BAG as an interplant transfer from Lindfeld",
+      "Routing 6 BAG as an interplant transfer from Amberg",
       "Raising a warranty claim on the early-worn media",
       "Re-scoping the buy to the 2 BAG shortfall · cancelling PR-48641",
     ],
@@ -1853,10 +1882,10 @@ export const rollerPrSteps: RunStep[] = [
       { id: "roller-ven-handoff", label: "VAL-48655-VEN", meta: "from Sourcing", kind: "sap", handoff: true, body: rollerVendorDoc },
       { id: "roller-doa", label: "DOA release routing", meta: "WF-48655-REL", kind: "policy", body: rollerApprovalRouting },
     ],
-    email: {
-      cta: "Send the re-scoped plan",
-      attachment: rollerStructuredDoc,
-      attachmentLabel: "PR-48655 · ME51N",
+  email: {
+    cta: "Send the re-scoped plan",
+    attachment: rollerPoDoc,
+    attachmentLabel: "PO-77311 · purchase order",
       to: "Plant engineer · Deburring Line 3",
       subject: "PR-48655 — re-scoped: transfer + warranty claim + 2-unit buy",
       lines: [
@@ -1996,7 +2025,7 @@ const riskSignalDoc = (
       createdOn: "2026-06-24 · 07:22",
       materialCode: SEAL_KIT,
       description: "Drive-Gearbox Mechanical Seal & Bearing Kit — GearTech OEM",
-      plant: "Lindfeld · Utilities line",
+      plant: "Amberg · Utilities line",
       costCenter: COST_CENTER,
       glAccount: GL,
       item: [
@@ -2203,7 +2232,7 @@ const riskStockOverview = (
       createdOn: "2026-06-24 · 07:24",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Lindfeld · Utilities line", storageLoc: "MRO-01", onHand: "1", safety: "2", uom: "EA", tone: "short" },
+        { plant: "Amberg · Utilities line", storageLoc: "MRO-01", onHand: "1", safety: "2", uom: "EA", tone: "short" },
         { plant: "Clairmont plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
         { plant: "Riomar", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
       ],
@@ -2616,7 +2645,7 @@ export const riskPrSteps: RunStep[] = [
       cta: "Review & send for authorization",
       attachment: <BudgetApprovalDoc a={riskPrebuyAuthorization} />,
       attachmentLabel: "Pre-buy authorization · WF-49001-REL",
-      to: "Reliability lead · Lindfeld Utilities line",
+      to: "Reliability lead · Amberg Utilities line",
       subject: "RISK-49001 — drive-gearbox seal kit predicted to stock out in 9 days · authorize pre-buy",
       lines: [
         "No PR was raised — I detected a stock-out risk on the A1-critical drive-gearbox seal kit by fusing five signals: the S&OP ramp, equipment criticality, rising consumption, a 9-week single-source lead and a tightening alloy market.",
@@ -2627,7 +2656,7 @@ export const riskPrSteps: RunStep[] = [
       toastBody: "The reliability lead signed the proactive pre-buy authorization — the override is approved.",
       resolvedDocument: riskApprovalDocResolved,
       reply: {
-        from: "Reliability lead · Lindfeld Utilities line",
+        from: "Reliability lead · Amberg Utilities line",
         receivedMeta: "Outlook · 08:05",
         subject: "RE: RISK-49001 — authorization signed",
         lines: ["Signed the attached authorization — pre-buy the 2 kits and protect the utilities line. Good catch ahead of the ramp."],
@@ -2639,7 +2668,7 @@ export const riskPrSteps: RunStep[] = [
           body: (
             <div className="space-y-3">
               <EmailDoc
-                from="Reliability lead · Lindfeld Utilities line"
+                from="Reliability lead · Amberg Utilities line"
                 fromAddr="reliability@orvantec.com"
                 to="Approval & routing"
                 sent="2026-06-24 · 08:05"

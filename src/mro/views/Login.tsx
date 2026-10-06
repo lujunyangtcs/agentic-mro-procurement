@@ -24,7 +24,7 @@ const ACCENT = { hex: "#14b8a6", halo: "rgba(20,184,166,0.45)" };
 
 const PERSONA = {
   badge: "Procurement",
-  name: "Agentic Procurement workspace",
+  name: "Siemens MRO Procurement workspace",
   capabilities: [
     "One cockpit over 5 agents and the orchestrator",
     "Touchless release of on-contract requisitions · approvals only when it matters",
@@ -107,7 +107,7 @@ function TopBar({
         </span>
         <span className="flex flex-col leading-tight">
           <span className="text-[15px] font-bold tracking-[-0.01em] text-white">
-            Agentic Procurement
+            Siemens MRO Procurement
           </span>
           <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
             Maintenance, repair &amp; operations workforce
@@ -148,7 +148,7 @@ function Hero({ onAccess }: { onAccess: () => void }) {
         className="font-bold leading-[1.04] tracking-[-0.025em] text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)]"
         style={{ fontSize: "clamp(2rem, 5.6vw, 4.4rem)" }}
       >
-        Agentic Procurement
+        Siemens MRO Procurement
       </h1>
       <p className="mt-6 max-w-xl text-[14px] font-normal leading-[1.55] text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-[15px]">
         Turn a plant engineer's free-text request into a coded requisition,
@@ -181,7 +181,7 @@ function SignInPanel({ signIn }: { signIn: () => void }) {
     <div className="relative z-10 mx-auto w-full max-w-[440px]">
       <div className="text-center mb-8">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
-          Agentic Procurement workspace
+          Siemens MRO Procurement workspace
         </span>
         <h2
           className="mt-3 font-bold leading-[1.05] tracking-[-0.02em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)]"

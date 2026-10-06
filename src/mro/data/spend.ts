@@ -27,10 +27,10 @@ export type Site = {
 };
 
 export const sites: Site[] = [
-  { country: "DE", countryName: "Germany", site: "Lindfeld · Electronics Works", lang: "de" },
-  { country: "ES", countryName: "Spain", site: "Riomar · Assembly & Packaging", lang: "es" },
-  { country: "FR", countryName: "France", site: "Clairmont · Drives & Power", lang: "fr" },
-  { country: "CN", countryName: "China", site: "Lianhe · Electronics Works", lang: "zh" },
+  { country: "DE", countryName: "Germany", site: "Amberg · Digital Factory", lang: "de" },
+  { country: "ES", countryName: "Spain", site: "Nanjing · Assembly & Packaging", lang: "es" },
+  { country: "FR", countryName: "France", site: "Berlin · Drives & Power", lang: "fr" },
+  { country: "CN", countryName: "China", site: "Chengdu · Electronics Works", lang: "zh" },
   { country: "US", countryName: "United States", site: "Riverbend · Technical Centre", lang: "en" },
 ];
 
@@ -223,7 +223,7 @@ export const spendLines: SpendLine[] = [
 
   /* China — newest site, catalogue adoption still low */
   L("CN", "seals", "plant-engineer", "contract", "Apex Industrial Supply", 76_500),
-  L("CN", "seals", "plant-engineer", "off-contract", "Lianhe Sealing Works", 64_200),
+  L("CN", "seals", "plant-engineer", "off-contract", "Chengdu Sealing Works", 64_200),
   L("CN", "media", "plant-engineer", "contract", "ZirCore Materials", 112_300),
   L("CN", "media", "maintenance-planner", "off-contract", "Huaxin Grinding", 58_100),
   L("CN", "instruments", "instrument-technician", "off-contract", "Yuanda Instruments", 71_400),
@@ -268,7 +268,7 @@ export const suppliers: Supplier[] = [
   { name: "Motores Del Sur", serves: ["ES"], onTime: 0.77, invoiceAccuracy: 0.72, singleSource: false, underAgreement: false },
   { name: "Filtration Duval", serves: ["FR"], onTime: 0.88, invoiceAccuracy: 0.85, singleSource: false, underAgreement: false },
   { name: "Atelier Mécanique Rive", serves: ["FR"], onTime: 0.81, invoiceAccuracy: 0.76, singleSource: false, underAgreement: false },
-  { name: "Lianhe Sealing Works", serves: ["CN"], onTime: 0.83, invoiceAccuracy: 0.79, singleSource: false, underAgreement: false },
+  { name: "Chengdu Sealing Works", serves: ["CN"], onTime: 0.83, invoiceAccuracy: 0.79, singleSource: false, underAgreement: false },
   { name: "Huaxin Grinding", serves: ["CN"], onTime: 0.80, invoiceAccuracy: 0.75, singleSource: false, underAgreement: false },
   { name: "Yuanda Instruments", serves: ["CN"], onTime: 0.78, invoiceAccuracy: 0.73, singleSource: false, underAgreement: false },
   { name: "Zhonghe Valve", serves: ["CN"], onTime: 0.76, invoiceAccuracy: 0.71, singleSource: false, underAgreement: false },
@@ -279,7 +279,7 @@ export const supplierByName: Record<string, Supplier> = suppliers.reduce(
   {} as Record<string, Supplier>,
 );
 
-/* ════════════════════════════════════════════════════════════════════════
+/* ��═══════════════════════════════════════════════════════════════════════
  * Selectors — every number the control tower shows is produced here.
  * ════════════════════════════════════════════════════════════════════════ */
 
