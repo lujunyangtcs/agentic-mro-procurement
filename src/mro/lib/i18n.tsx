@@ -549,7 +549,7 @@ const DICT: Record<string, Phrase> = {
     de: "Wächst mit jeder Klärung",
     es: "Crece a medida que resuelve",
     fr: "Augmente à mesure que vous résolvez",
-    zh: "随您逐条处理而增长",
+    zh: "随您逐条处理而增��",
   },
   "kpi.spendClosed": {
     en: "{n} exceptions closed",
@@ -2087,7 +2087,7 @@ const DICT: Record<string, Phrase> = {
     de: "Es fehlt nichts. Die Bankverbindung ist bewusst als ungeprüft gekennzeichnet — sie wird per Rückruf gesetzt, nie aus einem Dokument oder einer Nachricht.",
     es: "Nothing is missing. The bank account is flagged as unverified on purpose — it is set by callback, never from a document or a message.",
     fr: "Nothing is missing. The bank account is flagged as unverified on purpose — it is set by callback, never from a document or a message.",
-    zh: "没有缺项。银行账户被有意标记为未核实 —— 它只能通过回拨电话确认，绝不从文件或消息里直接采信。",
+    zh: "没有缺项。银行账户被有意标记为未核实 —— 它只能通过回拨电话确认，绝不从文件或消息里直���采信。",
   },
   "run.onboarding.4.agentName": {
     en: "Master Data agent",
@@ -2190,10 +2190,10 @@ const DICT: Record<string, Phrase> = {
 
   /* ── Run headers, and the hero run's stages ────────────────────────── */
   "flow.pump.contextTitle": {
-    en: "Lindfeld · Assembly Line 2 · mechanical seal PR",
-    de: "Lindfeld · Montagelinie 2 · Anforderung Gleitringdichtung",
-    es: "Lindfeld · Assembly Line 2 · mechanical seal PR",
-    fr: "Lindfeld · Assembly Line 2 · mechanical seal PR",
+    en: "Amberg · Assembly Line 2 · mechanical seal PR",
+    de: "Amberg · Montagelinie 2 · Anforderung Gleitringdichtung",
+    es: "Amberg · Assembly Line 2 · mechanical seal PR",
+    fr: "Amberg · Assembly Line 2 · mechanical seal PR",
     zh: "分散体厂 · 搅拌 2 线 · 机械密封申请",
   },
   "flow.pump.contextSub": {
@@ -2211,10 +2211,10 @@ const DICT: Record<string, Phrase> = {
     zh: "申请校验 · 进行中",
   },
   "flow.bearing.contextTitle": {
-    en: "Lindfeld · Assembly Line 1 · pump diaphragm PR",
-    de: "Lindfeld · Montagelinie 1 · Anforderung Pumpenmembran",
-    es: "Lindfeld · Assembly Line 1 · pump diaphragm PR",
-    fr: "Lindfeld · Assembly Line 1 · pump diaphragm PR",
+    en: "Amberg · Assembly Line 1 · pump diaphragm PR",
+    de: "Amberg · Montagelinie 1 · Anforderung Pumpenmembran",
+    es: "Amberg · Assembly Line 1 · pump diaphragm PR",
+    fr: "Amberg · Assembly Line 1 · pump diaphragm PR",
     zh: "分散体厂 · 搅拌 1 线 · 泵隔膜申请",
   },
   "flow.bearing.contextSub": {
@@ -2233,7 +2233,7 @@ const DICT: Record<string, Phrase> = {
   },
   "flow.off-catalogue.contextTitle": {
     en: "Deburring Plant · Deburring Line 1 · no agreement covers it",
-    de: "Lindfeld · Entgratlinie 1 · kein Vertrag deckt das ab",
+    de: "Amberg · Entgratlinie 1 · kein Vertrag deckt das ab",
     es: "Deburring Plant · Deburring Line 1 · no agreement covers it",
     fr: "Deburring Plant · Deburring Line 1 · no agreement covers it",
     zh: "分散体厂 · 稀释 1 线 · 无协议覆盖",
@@ -2603,11 +2603,11 @@ const DICT: Record<string, Phrase> = {
     zh: "结果",
   },
   "run.pump.2.stage.2.field.0": {
-    en: "On-hand · Lindfeld",
-    de: "Bestand · Lindfeld",
-    es: "On-hand · Lindfeld",
-    fr: "On-hand · Lindfeld",
-    zh: "Lindfeld 库存",
+    en: "On-hand · Amberg",
+    de: "Bestand · Amberg",
+    es: "On-hand · Amberg",
+    fr: "On-hand · Amberg",
+    zh: "Amberg 库存",
   },
   "run.pump.2.stage.2.field.1": {
     en: "Clairmont plant",
@@ -3011,10 +3011,10 @@ const DICT: Record<string, Phrase> = {
     zh: "最近一次采购",
   },
   "run.bearing.2.stage.1.field.0": {
-    en: "Lindfeld · Assembly Line 1",
-    de: "Lindfeld · Montagelinie 1",
-    es: "Lindfeld · Assembly Line 1",
-    fr: "Lindfeld · Assembly Line 1",
+    en: "Amberg · Assembly Line 1",
+    de: "Amberg · Montagelinie 1",
+    es: "Amberg · Assembly Line 1",
+    fr: "Amberg · Assembly Line 1",
     zh: "分散体厂 · 搅拌 1 线",
   },
   "run.bearing.2.stage.1.field.1": {
@@ -4201,19 +4201,19 @@ const DICT: Record<string, Phrase> = {
     fr: "4,000 EA a year across the network",
     zh: "全网每年 4,000 件",
   },
-  "phrase.Lindfeld · Electronics Works": {
-    en: "Lindfeld · Electronics Works",
-    de: "Lindfeld · Elektronikwerk",
-    es: "Lindfeld · Electronics Works",
-    fr: "Lindfeld · Electronics Works",
-    zh: "Lindfeld · 电子工厂",
+  "phrase.Amberg · Electronics Works": {
+    en: "Amberg · Electronics Works",
+    de: "Amberg · Elektronikwerk",
+    es: "Amberg · Electronics Works",
+    fr: "Amberg · Electronics Works",
+    zh: "Amberg · 电子工厂",
   },
-  "phrase.Lindfeld · Drive Systems Works": {
-    en: "Lindfeld · Drive Systems Works",
-    de: "Lindfeld · Antriebswerk",
-    es: "Lindfeld · Drive Systems Works",
-    fr: "Lindfeld · Drive Systems Works",
-    zh: "Lindfeld · 传动工厂",
+  "phrase.Amberg · Drive Systems Works": {
+    en: "Amberg · Drive Systems Works",
+    de: "Amberg · Antriebswerk",
+    es: "Amberg · Drive Systems Works",
+    fr: "Amberg · Drive Systems Works",
+    zh: "Amberg · 传动工厂",
   },
   "phrase.Lianhe · Electronics Works": {
     en: "Lianhe · Electronics Works",
@@ -4295,7 +4295,7 @@ const DICT: Record<string, Phrase> = {
   "phrase.Nobody is paying the wrong price — every site is paying the right price for the order it placed. The money is in the size of the orders, not the rate.": {
     en: "Nobody is paying the wrong price — every site is paying the right price for the order it placed. The money is in the size of the orders, not the rate.",
     de: "Niemand zahlt den falschen Preis — jeder Standort zahlt den richtigen Preis für die Bestellung, die er aufgegeben hat. Das Geld steckt in der Bestellgröße, nicht im Satz.",
-    es: "Nobody is paying the wrong price — every site is paying the right price for the order it placed. The money is in the size of the orders, not the rate.",
+    es: "Nobody is paying the wrong price �� every site is paying the right price for the order it placed. The money is in the size of the orders, not the rate.",
     fr: "Nobody is paying the wrong price — every site is paying the right price for the order it placed. The money is in the size of the orders, not the rate.",
     zh: "没有人买错价 —— 每个厂都按自己下的单量付了正确的价。钱不在费率上，在订单的大小上。",
   },
@@ -4306,11 +4306,11 @@ const DICT: Record<string, Phrase> = {
     fr: "Three orders, as requested",
     zh: "按申请开三张单",
   },
-  "phrase.Lindfeld 400 · Winding 380 · Electronics 260": {
-    en: "Lindfeld 400 · Winding 380 · Electronics 260",
-    de: "Lindfeld 400 · Wicklung 380 · Elektronik 260",
-    es: "Lindfeld 400 · Winding 380 · Electronics 260",
-    fr: "Lindfeld 400 · Winding 380 · Electronics 260",
+  "phrase.Amberg 400 · Winding 380 · Electronics 260": {
+    en: "Amberg 400 · Winding 380 · Electronics 260",
+    de: "Amberg 400 · Wicklung 380 · Elektronik 260",
+    es: "Amberg 400 · Winding 380 · Electronics 260",
+    fr: "Amberg 400 · Winding 380 · Electronics 260",
     zh: "分散体 400 · 树脂 380 · 涂料 260",
   },
   "phrase.Each priced at the 250–999 EA break": {
@@ -4462,7 +4462,7 @@ const DICT: Record<string, Phrase> = {
   },
   "flow.catalogue.contextTitle": {
     en: "Deburring Plant · Deburring Line 1 · quarterly filter change",
-    de: "Lindfeld-Werk · Entgratlinie 1 · Quartals-Filterwechsel",
+    de: "Amberg-Werk · Entgratlinie 1 · Quartals-Filterwechsel",
     es: "Deburring Plant · Deburring Line 1 · quarterly filter change",
     fr: "Deburring Plant · Deburring Line 1 · quarterly filter change",
     zh: "分散体厂 · 稀释 1 线 · 季度换滤",

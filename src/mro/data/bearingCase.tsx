@@ -131,9 +131,9 @@ const bearingRequestorRef = (
         columns: ["Requestor", "Plant", "Purch org", "Purch grp", "PR type"],
         usedNote: "→ ML1",
         rows: [
-          { cells: ["Maintenance planner · Assembly Line 1", "Lindfeld · ML1", "1000", "200 · MRO", "NB"], flag: true },
-          { cells: ["Plant engineer · Assembly Line 2", "Lindfeld · ML2", "1000", "200 · MRO", "NB"], matched: false },
-          { cells: ["Plant engineer · Deburring Line 3", "Lindfeld · BM3", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Maintenance planner · Assembly Line 1", "Amberg · ML1", "1000", "200 · MRO", "NB"], flag: true },
+          { cells: ["Plant engineer · Assembly Line 2", "Amberg · ML2", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Plant engineer · Deburring Line 3", "Amberg · BM3", "1000", "200 · MRO", "NB"], matched: false },
         ],
       },
     ]}
@@ -166,7 +166,7 @@ const bearingCodingRef = (
         columns: ["Cost center", "Description", "Plant"],
         usedNote: "→ 10034 · Deburring & Finishing Maintenance",
         rows: [
-          { cells: ["10034", "Deburring & Finishing Maintenance", "Lindfeld"], flag: true },
+          { cells: ["10034", "Deburring & Finishing Maintenance", "Amberg"], flag: true },
           { cells: ["10031", "Drive Systems Maintenance", "Clairmont"], matched: false },
         ],
       },
@@ -320,7 +320,7 @@ const bearingGrDoc = (
             { label: "Material", value: MAT },
             { label: "Movement type", value: "101 · GR goods receipt" },
             { label: "Quantity received", value: `${QTY} EA` },
-            { label: "Plant / SLoc", value: "Lindfeld · Assembly Line 1" },
+            { label: "Plant / SLoc", value: "Amberg · Assembly Line 1" },
           ],
         },
       ],
@@ -527,7 +527,7 @@ export const bearingPrSteps: RunStep[] = [
         reasoning: "Checking every plant before buying anything",
         title: "Stock overview · MB52",
         fields: [
-          { label: "Lindfeld · Assembly Line 1", value: "0 EA on hand · safety 2 EA" },
+          { label: "Amberg · Assembly Line 1", value: "0 EA on hand · safety 2 EA" },
           { label: "Clairmont", value: "0 EA · not stocked" },
           { label: "Riomar", value: "0 EA · not stocked" },
           { label: "Verdict", value: "Nothing to transfer — the buy stands" },
@@ -664,6 +664,7 @@ export const bearingPrSteps: RunStep[] = [
         ],
         sendingIn: "Español",
       },
+      attachment: bearingPoDoc,
       attachmentLabel: `${PO} · purchase order`,
       toastTitle: "Order sent",
       toastBody: `${PO} sent to ${VENDOR} in Spanish · the invoice follows.`,
