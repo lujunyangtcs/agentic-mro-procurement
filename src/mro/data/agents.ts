@@ -6,8 +6,8 @@
  *
  * Every agent surface (work-menu pages, cockpit fleet, run accountability) reads
  * from here so names and autonomy stay consistent. Operating entity is the
- * fictional "Bond" — a specialty coatings and resins plant
- * network whose plant engineers raise maintenance, repair and operations (MRO)
+ * Siemens (illustrative data) — an electronics and automation manufacturing
+ * network (Amberg, Erlangen, Fürth, Chengdu) whose plant engineers raise maintenance, repair and operations (MRO)
  * purchase requisitions. The AI structures, validates, recommends and routes;
  * a human approves every real decision.
  *

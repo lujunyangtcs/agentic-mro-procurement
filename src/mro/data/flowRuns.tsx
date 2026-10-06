@@ -96,7 +96,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   onboarding: {
     id: "onboarding",
-    contextTitle: "Westport · vessel relining · new supplier",
+    contextTitle: "Fürth · vessel relining · new supplier",
     contextSub: "No approved supplier in the category · quotes sought · winner onboarded",
     reviewPill: "Supplier onboarding · in review",
     completeNote: "Supplier prepared · one signature left · bank details by callback",
@@ -142,7 +142,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
 
   bearing: {
     id: "bearing",
-    contextTitle: "Dispersion · Mixing Line 1 · pump diaphragm PR",
+    contextTitle: "Dispersion · Assembly Line 1 · pump diaphragm PR",
     contextSub: "Complete request · every check clean · released and paid without a person",
     reviewPill: "PR validation · running",
     completeNote: "Released by rule · four-way matched · scheduled for payment",
@@ -164,7 +164,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   pump: {
     id: "pump",
-    contextTitle: "Dispersion · Mixing Line 2 · mechanical seal PR",
+    contextTitle: "Dispersion · Assembly Line 2 · mechanical seal PR",
     contextSub: "Free-text request · intake structured it, every check cleared · released on contract",
     reviewPill: "PR validation · in review",
     completeNote: "PR released · structured, coded and validated on-contract",
@@ -186,7 +186,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   gearbox: {
     id: "gearbox",
-    contextTitle: "Dispersion · Bead Mill 3 · grinding media PR",
+    contextTitle: "Dispersion · SMT Line 3 · grinding media PR",
     contextSub: "Free-text request · intake found a duplicate, sister-plant stock and warranty cover",
     reviewPill: "PR validation · in review",
     completeNote: "Re-scoped · interplant transfer + warranty claim + 2-unit buy",
@@ -208,7 +208,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   risk: {
     id: "risk",
-    contextTitle: "Northgate · Utilities line · drive-gearbox seal kit · stock-out risk",
+    contextTitle: "Amberg · Utilities line · drive-gearbox seal kit · stock-out risk",
     contextSub: "No PR raised · agent predicted a stock-out from SNOP + consumption + lead-time signals · pre-buy recommended",
     reviewPill: "Risk pre-buy · in review",
     completeNote: "Pre-buy approved · proactive PR routed on-contract ahead of the stock-out",

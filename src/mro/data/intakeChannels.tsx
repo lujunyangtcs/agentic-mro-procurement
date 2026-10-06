@@ -193,12 +193,12 @@ const mediaSpec: IntakeSpec = {
   originalMeta: "Supplier portal · Chinese · 11:20",
   think: 1800,
   lines: [
-    "Reading the request from Bead Mill 3",
+    "Reading the request from SMT Line 3",
     "Matching the media grade and bag size",
     "Checking what is already open for this line",
   ],
   conclusion:
-    "Grinding media for Bead Mill 3. I have coded it — but something very like it is already open, so that is worth looking at first.",
+    "Grinding media for SMT Line 3. I have coded it — but something very like it is already open, so that is worth looking at first.",
   fields: formFields("gearbox", { why: "Media worn — mill throughput dropping" }),
   stagger: 0,
   receipt: step0("gearbox").document,

@@ -42,7 +42,7 @@ export function requisitionDoc(r: Requisition): StructuredPr {
     flags: r.note ? [r.note] : undefined,
     prType: "NB · Standard requisition",
     requestor: r.requestor,
-    purchOrg: "1000 · Bond Procurement",
+    purchOrg: "1000 · Siemens Procurement",
     purchGroup: "200 · Maintenance and operations",
     valuation: [
       { label: "Unit price", value: `${usd(r.unitPrice)} / ${r.uom}` },

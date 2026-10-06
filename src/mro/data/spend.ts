@@ -27,10 +27,10 @@ export type Site = {
 };
 
 export const sites: Site[] = [
-  { country: "DE", countryName: "Germany", site: "Northgate · Dispersion Plant", lang: "de" },
-  { country: "ES", countryName: "Spain", site: "Westport · Filling & Packaging", lang: "es" },
-  { country: "FR", countryName: "France", site: "Eastbrook · Resin & Additives", lang: "fr" },
-  { country: "CN", countryName: "China", site: "Lianhe · Coatings Works", lang: "zh" },
+  { country: "DE", countryName: "Germany", site: "Amberg · Electronics Works", lang: "de" },
+  { country: "ES", countryName: "Spain", site: "Fürth · Assembly & Packaging", lang: "es" },
+  { country: "FR", countryName: "France", site: "Erlangen · Drives & Power", lang: "fr" },
+  { country: "CN", countryName: "China", site: "Chengdu · Electronic Works", lang: "zh" },
   { country: "US", countryName: "United States", site: "Riverbend · Technical Centre", lang: "en" },
 ];
 

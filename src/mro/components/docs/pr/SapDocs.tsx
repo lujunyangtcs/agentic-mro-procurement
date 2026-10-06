@@ -9,7 +9,7 @@
  *   · OutlineAgreementDoc — ME33K (value contract · target value · item prices)
  *   · VendorRecordDoc     — vendor master / approved-supplier record
  *   · ApprovalRoutingDoc  — release strategy / DOA approval routing
- * Operating entity is the fictional Bond; vendors anonymised.
+ * Operating entity is Siemens; vendors anonymised.
  * Presentational only.
  */
 

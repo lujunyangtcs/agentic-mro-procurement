@@ -146,7 +146,7 @@ export function AiConversation({
           <input
             value={typed}
             onChange={(e) => setTyped(e.target.value)}
-            placeholder="Mixing Line 2 needs a new seal…"
+            placeholder="Assembly Line 2 needs a new seal…"
             className="h-[38px] min-w-0 flex-1 rounded-md border border-divider bg-white px-3 text-[13px] text-ink outline-none placeholder:text-ink/50 focus:border-surface-deep/50"
           />
           <button

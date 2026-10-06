@@ -337,7 +337,7 @@ const reply = (o: {
     <MultilingualEmailDoc
       from={o.name}
       fromAddr={o.addr}
-      to="Procurement · Bond"
+      to="Procurement · Siemens"
       sent={o.meta}
       sourceLang={o.lang}
       original={{ subject: o.subject, lines: o.lines }}
@@ -531,7 +531,7 @@ const poReply = {
       <MultilingualEmailDoc
         from="Süddeutsche Pigmentwerke · Vertrieb"
         fromAddr="sales@sued-pigmentwerke.example"
-        to="Procurement · Bond"
+        to="Procurement · Siemens"
         sent="2026-06-20 · 17:05"
         sourceLang="de"
         original={{
@@ -565,7 +565,7 @@ export const offContractSteps: RunStep[] = [
     aiThought:
       "The engineer's note is in German and there is no part number in it. Let me structure the request first, then look for something that covers this grade — an agreement, a source list, an old price. If there is nothing, this has to go to market.",
     reasoning: [
-      "Reading the engineer's note from Mixing Line 2",
+      "Reading the engineer's note from Assembly Line 2",
       "Coding it to a material and a plant",
       "Searching outline agreements for this material — nothing",
       "Searching the source list and info records — nothing",

@@ -54,7 +54,7 @@ const GL = "600420 · Spare parts consumed";
 export const bearingFreeText = (
   <MultilingualEmailDoc
     from="Instandhaltungsplanung · Dispersion Plant"
-    fromAddr="planer@bondgroup.com"
+    fromAddr="planer@siemens.com"
     to="Procurement intake"
     sent="2026-06-26 · 08:12"
     sourceLang="de"
@@ -67,9 +67,9 @@ export const bearingFreeText = (
       ],
     }}
     translated={{
-      subject: "Diaphragm replacement — Mixing Line 1 transfer pump",
+      subject: "Diaphragm replacement — Assembly Line 1 transfer pump",
       lines: [
-        "Please order 6 PTFE diaphragms for the 2 in double-diaphragm pump on Mixing Line 1. This is our standard planned-maintenance replacement, part number MRO-DIAPH-PTFE-2IN.",
+        "Please order 6 PTFE diaphragms for the 2 in double-diaphragm pump on Assembly Line 1. This is our standard planned-maintenance replacement, part number MRO-DIAPH-PTFE-2IN.",
         "Same item as the last two orders, from Apex under our agreement. Six covers the scheduled change plus the shelf spare.",
         "Needed for the planned shutdown on 10 July — no production risk before then.",
       ],
@@ -85,13 +85,13 @@ export const bearingStructuredDoc = (
       createdBy: "PR Processing agent",
       materialCode: MAT,
       description: ITEM,
-      plant: "Dispersion Plant · Mixing Line 1",
+      plant: "Dispersion Plant · Assembly Line 1",
       costCenter: COST_CENTER,
       glAccount: GL,
       confidence: "100%",
       prType: "NB · Standard requisition",
-      requestor: "Maintenance planner · Mixing Line 1",
-      purchOrg: "1000 · Bond Procurement",
+      requestor: "Maintenance planner · Assembly Line 1",
+      purchOrg: "1000 · Siemens Procurement",
       purchGroup: "200 · MRO / Maintenance",
       item: [
         { label: "Material", value: MAT },
@@ -102,7 +102,7 @@ export const bearingStructuredDoc = (
       assignment: [
         { label: "Cost center", value: COST_CENTER },
         { label: "G/L account", value: GL },
-        { label: "Plant", value: "Dispersion Plant · Mixing Line 1" },
+        { label: "Plant", value: "Dispersion Plant · Assembly Line 1" },
       ],
       valuation: [
         { label: "Unit price", value: `$${UNIT} / EA` },
@@ -131,9 +131,9 @@ const bearingRequestorRef = (
         columns: ["Requestor", "Plant", "Purch org", "Purch grp", "PR type"],
         usedNote: "→ ML1",
         rows: [
-          { cells: ["Maintenance planner · Mixing Line 1", "Dispersion · ML1", "1000", "200 · MRO", "NB"], flag: true },
-          { cells: ["Plant engineer · Mixing Line 2", "Dispersion · ML2", "1000", "200 · MRO", "NB"], matched: false },
-          { cells: ["Plant engineer · Bead Mill 3", "Dispersion · BM3", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Maintenance planner · Assembly Line 1", "Dispersion · ML1", "1000", "200 · MRO", "NB"], flag: true },
+          { cells: ["Plant engineer · Assembly Line 2", "Dispersion · ML2", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Plant engineer · SMT Line 3", "Dispersion · BM3", "1000", "200 · MRO", "NB"], matched: false },
         ],
       },
     ]}
@@ -167,7 +167,7 @@ const bearingCodingRef = (
         usedNote: "→ 10034 · Dispersion Plant Maintenance",
         rows: [
           { cells: ["10034", "Dispersion Plant Maintenance", "Dispersion"], flag: true },
-          { cells: ["10031", "Resin Plant Maintenance", "Eastbrook"], matched: false },
+          { cells: ["10031", "Resin Plant Maintenance", "Erlangen"], matched: false },
         ],
       },
     ]}
@@ -216,8 +216,8 @@ const bearingStockDoc = (
       createdBy: "Master Data agent",
       rows: [
         { plant: "Dispersion Plant", storageLoc: "ML1 · line store", onHand: "0", safety: "2", uom: "EA", tone: "short" },
-        { plant: "Eastbrook · Resin & Additives", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
-        { plant: "Westport · Filling & Packaging", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Erlangen · Drives & Power", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Fürth · Assembly & Packaging", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
       ],
       note: "No stock anywhere in the network and none on order — buying is the only way to cover the shutdown.",
     }}
@@ -258,7 +258,7 @@ const bearingApprovalRouting = (
       createdBy: "Approval & routing agent",
       summary: [
         { label: "Document", value: `${PR} · ${ITEM}` },
-        { label: "Requestor", value: "Maintenance planner · Mixing Line 1" },
+        { label: "Requestor", value: "Maintenance planner · Assembly Line 1" },
         { label: "Amount", value: `$${TOTAL}` },
       ],
       chain: [
@@ -311,7 +311,7 @@ const bearingGrDoc = (
       docType: `Goods receipt · ${PO}`,
       system: "Inventory management · MIGO",
       createdOn: "2026-07-06 · 07:20",
-      createdBy: "Goods receiving · Mixing Line 1",
+      createdBy: "Goods receiving · Assembly Line 1",
       sections: [
         {
           band: "Receipt",
@@ -320,7 +320,7 @@ const bearingGrDoc = (
             { label: "Material", value: MAT },
             { label: "Movement type", value: "101 · GR goods receipt" },
             { label: "Quantity received", value: `${QTY} EA` },
-            { label: "Plant / SLoc", value: "Dispersion · Mixing Line 1" },
+            { label: "Plant / SLoc", value: "Dispersion · Assembly Line 1" },
           ],
         },
       ],
@@ -435,9 +435,9 @@ export const bearingPrSteps: RunStep[] = [
     title: "Structure & code the request",
     sub: "Turns the planner's note into a coded requisition",
     aiThought:
-      "A planned-maintenance request has come in from Mixing Line 1 — six pump diaphragms for the July shutdown. The planner gave the part number outright, so this should code cleanly. Let me read it and structure it.",
+      "A planned-maintenance request has come in from Assembly Line 1 — six pump diaphragms for the July shutdown. The planner gave the part number outright, so this should code cleanly. Let me read it and structure it.",
     reasoning: [
-      "Reading the planner's note from Mixing Line 1",
+      "Reading the planner's note from Assembly Line 1",
       `Part number given in full — ${MAT}`,
       `Quantity ${QTY} EA · needed for the 10 July shutdown`,
       `Coding cost center ${COST_CENTER.split(" · ")[0]} · G/L ${GL.split(" · ")[0]}`,
@@ -462,7 +462,7 @@ export const bearingPrSteps: RunStep[] = [
           { label: "Quantity", value: `${QTY} EA` },
           { label: "UoM", value: "EA" },
           { label: "Delivery date", value: "2026-07-08", type: "date" },
-          { label: "Requisitioner", value: "Maintenance planner · Mixing Line 1" },
+          { label: "Requisitioner", value: "Maintenance planner · Assembly Line 1" },
         ],
       },
       {
@@ -471,8 +471,8 @@ export const bearingPrSteps: RunStep[] = [
         title: "Requisition header",
         fields: [
           { label: "PR type", value: "NB · Standard requisition" },
-          { label: "Requestor", value: "Maintenance planner · Mixing Line 1" },
-          { label: "Purch. org", value: "1000 · Bond Procurement" },
+          { label: "Requestor", value: "Maintenance planner · Assembly Line 1" },
+          { label: "Purch. org", value: "1000 · Siemens Procurement" },
           { label: "Purch. group", value: "200 · MRO / Maintenance" },
         ],
       },
@@ -482,7 +482,7 @@ export const bearingPrSteps: RunStep[] = [
         title: "Account assignment",
         fields: [
           { label: "Material code", value: MAT },
-          { label: "Plant", value: "Dispersion Plant · Mixing Line 1" },
+          { label: "Plant", value: "Dispersion Plant · Assembly Line 1" },
           { label: "Cost center", value: COST_CENTER },
           { label: "G/L account", value: GL },
         ],
@@ -527,9 +527,9 @@ export const bearingPrSteps: RunStep[] = [
         reasoning: "Checking every plant before buying anything",
         title: "Stock overview · MB52",
         fields: [
-          { label: "Dispersion · Mixing Line 1", value: "0 EA on hand · safety 2 EA" },
-          { label: "Eastbrook", value: "0 EA · not stocked" },
-          { label: "Westport", value: "0 EA · not stocked" },
+          { label: "Dispersion · Assembly Line 1", value: "0 EA on hand · safety 2 EA" },
+          { label: "Erlangen", value: "0 EA · not stocked" },
+          { label: "Fürth", value: "0 EA · not stocked" },
           { label: "Verdict", value: "Nothing to transfer — the buy stands" },
         ],
       },
@@ -544,12 +544,12 @@ export const bearingPrSteps: RunStep[] = [
     aiThought:
       "A diaphragm change can sometimes sit under an equipment warranty or a service contract. If it does, we should not be buying it at all. Let me check the register.",
     reasoning: [
-      "Equipment register · Mixing Line 1 drive end",
+      "Equipment register · Assembly Line 1 drive end",
       "Drive rebuilt 2023 — parts warranty expired 2024",
       "No service contract covering consumable pump spares",
       "This is a planned replacement, not a failure claim",
     ],
-    docLabel: "Coverage check · Mixing Line 1",
+    docLabel: "Coverage check · Assembly Line 1",
     document: (
       <RecordDoc
         d={{
@@ -565,7 +565,7 @@ export const bearingPrSteps: RunStep[] = [
             {
               band: "Coverage",
               rows: [
-                { label: "Equipment", value: "Mixing Line 1 · drive end" },
+                { label: "Equipment", value: "Assembly Line 1 · drive end" },
                 { label: "Parts warranty", value: "Expired 2024-05-30" },
                 { label: "Service contract", value: "None covering consumable pump spares" },
                 { label: "Failure claim", value: "No — planned replacement" },
@@ -580,7 +580,7 @@ export const bearingPrSteps: RunStep[] = [
       />
     ),
     sources: [
-      { id: "bearing-wty", label: "IQS3 · coverage", meta: "equipment register", kind: "master", body: <RecordDoc d={{ tcode: "IQS3", tname: "Display Equipment Coverage", number: "WTY-CHK-48692", status: "Checked · not covered", docType: "Warranty & service-contract check", system: "Plant maintenance", createdOn: "2026-06-26 · 08:19", createdBy: "Warranty & coverage desk", sections: [{ band: "Coverage", rows: [{ label: "Equipment", value: "Mixing Line 1 · drive end" }, { label: "Parts warranty", value: "Expired 2024-05-30" }, { label: "Service contract", value: "None covering consumable pump spares" }] }], determination: { ok: true, text: "Nothing else covers this — the plant pays." } }} /> },
+      { id: "bearing-wty", label: "IQS3 · coverage", meta: "equipment register", kind: "master", body: <RecordDoc d={{ tcode: "IQS3", tname: "Display Equipment Coverage", number: "WTY-CHK-48692", status: "Checked · not covered", docType: "Warranty & service-contract check", system: "Plant maintenance", createdOn: "2026-06-26 · 08:19", createdBy: "Warranty & coverage desk", sections: [{ band: "Coverage", rows: [{ label: "Equipment", value: "Assembly Line 1 · drive end" }, { label: "Parts warranty", value: "Expired 2024-05-30" }, { label: "Service contract", value: "None covering consumable pump spares" }] }], determination: { ok: true, text: "Nothing else covers this — the plant pays." } }} /> },
     ],
     recommendation:
       "Out of warranty and outside every service contract, and it is a planned change rather than a failure. The plant carries the cost.",

@@ -107,7 +107,7 @@ export function sourcesFor(r: Requisition, type: ExceptionType): ExceptionSource
             label: "Open requisitions — ME5A list",
             meta: "Purchasing · open PRs · this plant",
             body: rollerOpenPrList,
-            note: "PR-48641 already asks for the same media for Bead Mill 3. Releasing both buys it twice.",
+            note: "PR-48641 already asks for the same media for SMT Line 3. Releasing both buys it twice.",
           },
         ];
       }
@@ -155,7 +155,7 @@ export function sourcesFor(r: Requisition, type: ExceptionType): ExceptionSource
             label: "Stock on hand — network view",
             meta: "stock-on-hand.xlsx · all plants",
             body: rollerInventorySheet,
-            note: "Eastbrook already holds the surplus this request would buy — transfer it instead.",
+            note: "Erlangen already holds the surplus this request would buy — transfer it instead.",
           },
         ];
       }
@@ -173,23 +173,23 @@ export function sourcesFor(r: Requisition, type: ExceptionType): ExceptionSource
                   file: "stock-on-hand.xlsx",
                   tab: "MRO inventory · filtration",
                   columns: ["Plant", "Material", "On-hand", "Safety", "UoM"],
-                  usedNote: "→ 60 on hand at Eastbrook · transfer before buying",
+                  usedNote: "→ 60 on hand at Erlangen · transfer before buying",
                   rows: [
                     { cells: [`${r.plant}`, r.material, "0", "10", r.uom], matched: false },
-                    { cells: ["Eastbrook · Resin & Additives", r.material, "60", "20", r.uom], flag: true },
-                    { cells: ["Westport · Filling & Packaging", r.material, "12", "10", r.uom], matched: false },
+                    { cells: ["Erlangen · Drives & Power", r.material, "60", "20", r.uom], flag: true },
+                    { cells: ["Fürth · Assembly & Packaging", r.material, "12", "10", r.uom], matched: false },
                   ],
                 },
               ]}
               footer={
                 <>
-                  Eastbrook holds <strong>60 {r.uom}</strong> against a safety stock of 20 — more than
+                  Erlangen holds <strong>60 {r.uom}</strong> against a safety stock of 20 — more than
                   this request needs. An interplant transfer covers it without buying.
                 </>
               }
             />
           ),
-          note: `Eastbrook's store already holds more than the ${r.qty} ${r.uom} requested — the network buys nothing.`,
+          note: `Erlangen's store already holds more than the ${r.qty} ${r.uom} requested — the network buys nothing.`,
         },
       ];
 

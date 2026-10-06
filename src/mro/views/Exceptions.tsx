@@ -79,7 +79,7 @@ function recommendationFor(r: Requisition, type: ExceptionType): Recommendation 
         finding: "A sister plant already holds this item in its store.",
         action: "Transfer from the sister plant",
         evidence: [
-          { label: "Held at", detail: "Eastbrook · maintenance store" },
+          { label: "Held at", detail: "Erlangen · maintenance store" },
           { label: "Needed at", detail: `${r.plant} · ${r.line}` },
           { label: "Why it matters", detail: "Buying what the network already owns is pure waste" },
         ],
@@ -125,7 +125,7 @@ function planFor(r: Requisition, type: ExceptionType): ResolutionPlan {
   const map: Record<ExceptionType, { apply: string; done: string }> = {
     "spec-incomplete": { apply: "Confirm and release", done: "Spec confirmed · 50 mm shaft" },
     "duplicate-demand": { apply: "Merge into the open request", done: "Merged into the open request" },
-    "stock-available": { apply: "Route the interplant transfer", done: "Transfer routed from Eastbrook" },
+    "stock-available": { apply: "Route the interplant transfer", done: "Transfer routed from Erlangen" },
     "warranty-covered": { apply: "Raise the warranty claim", done: "Warranty claim raised" },
     "off-contract": { apply: "Move to the approved supplier", done: "Moved to the approved supplier" },
     "over-threshold": { apply: "Route for sign-off", done: "Signed off one level up" },
@@ -387,7 +387,7 @@ export function Exceptions() {
     open.length === 0
       ? `${resolvedCount} exceptions closed, each with its action on the record below.`
       : hero
-        ? `Start with PR-48630 — the ${usd(4180, 0)} mechanical seal for Mixing Line 2. The line is down and one specification holds release.`
+        ? `Start with PR-48630 — the ${usd(4180, 0)} mechanical seal for Assembly Line 2. The line is down and one specification holds release.`
         : `${protectedSoFar > 0 ? usd(protectedSoFar, 0) + " already protected. " : ""}Pick any row for the evidence and one recommended action.`;
 
   const doResolve = (row: Row, action: string, avoided?: number) =>

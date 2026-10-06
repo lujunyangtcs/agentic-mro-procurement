@@ -55,7 +55,7 @@ const rfqDoc = (
           band: "RFQ header",
           rows: [
             { label: "Category", value: CAT },
-            { label: "Scope", value: "Reline two 40 m³ mixing vessels · Westport" },
+            { label: "Scope", value: "Reline two 40 m³ mixing vessels · Fürth" },
             { label: "Window", value: "2026-09-07 → 2026-09-25 · plant shutdown" },
             { label: "Terms sought", value: "Net 30 · fixed price" },
           ],
@@ -95,7 +95,7 @@ const buildQuote = (q: {
     <div className="grid grid-cols-3 gap-x-4 gap-y-3 px-4 py-3">
       <Field label="Quote ref" value={q.quoteNo} mono />
       <Field label="In response to" value={RFQ} mono />
-      <Field label="Buyer" value="Bond" />
+      <Field label="Buyer" value="Siemens" />
       <Field label="Valid until" value={q.validUntil} mono />
       <Field label="Scope" value="Reline two 40 m³ vessels" />
       <Field label="Total quoted" value={q.total} mono />
@@ -320,7 +320,7 @@ const masterDraftDoc = (
         { label: "Correspondence language", value: "Español" },
       ],
       purchasing: [
-        { label: "Purchasing org", value: "1000 · Bond Procurement" },
+        { label: "Purchasing org", value: "1000 · Siemens Procurement" },
         { label: "Category", value: CAT },
         { label: "Payment terms", value: "Net 30 · as quoted" },
         { label: "Bank account", value: "Held back — verified by callback, never from a message" },
@@ -367,7 +367,7 @@ export const onboardingSteps: RunStep[] = [
     title: "Find suppliers & get quotes",
     sub: "Searches the market, writes the RFQ, collects the quotes",
     aiThought:
-      "Westport needs two mixing vessels relined during the September shutdown, and we have no approved supplier for vessel coating at all. There is nothing to compare against, so let me search the market and put a proper request for quote out.",
+      "Fürth needs two mixing vessels relined during the September shutdown, and we have no approved supplier for vessel coating at all. There is nothing to compare against, so let me search the market and put a proper request for quote out.",
     reasoning: [
       "No approved supplier in this category — the buy cannot be routed to anyone",
       "Searching the market for specialist vessel-coating contractors",
@@ -385,7 +385,7 @@ export const onboardingSteps: RunStep[] = [
     rfq: {
       fields: [
         { label: "Category", value: CAT },
-        { label: "Scope", value: "Reline two 40 m³ mixing vessels · Westport" },
+        { label: "Scope", value: "Reline two 40 m³ mixing vessels · Fürth" },
         { label: "Window", value: "2026-09-07 → 2026-09-25 · plant shutdown" },
         { label: "Terms sought", value: "Net 30 · fixed price" },
         { label: "Approved suppliers", value: "None in this category" },
@@ -406,7 +406,7 @@ export const onboardingSteps: RunStep[] = [
           name: WINNER,
           via: "specialist contractor · web",
           draft: {
-            subject: `${RFQ} — vessel relining, Westport · request for quote`,
+            subject: `${RFQ} — vessel relining, Fürth · request for quote`,
             lines: [
               "Please quote for relining two 40 m³ mixing vessels during our September shutdown (7–25 September), fixed price, Net 30.",
             ],
@@ -438,7 +438,7 @@ export const onboardingSteps: RunStep[] = [
           name: RUNNER,
           via: "specialist contractor · web",
           draft: {
-            subject: `${RFQ} — vessel relining, Westport · request for quote`,
+            subject: `${RFQ} — vessel relining, Fürth · request for quote`,
             lines: [
               "Please quote for relining two 40 m³ mixing vessels during our September shutdown (7–25 September), fixed price, Net 30.",
             ],

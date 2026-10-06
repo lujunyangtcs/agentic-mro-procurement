@@ -8,7 +8,7 @@
  *   · BudgetApprovalDoc          — read-only doc (signed=true for the reply attachment)
  *   · BudgetApprovalSignableModal — the doc + interactive signature pad + sign & send
  *
- * Presentational only. Operating entity is the fictional Bond
+ * Presentational only. Operating entity is Siemens
  */
 
 import * as React from "react";

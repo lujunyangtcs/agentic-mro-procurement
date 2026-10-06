@@ -1,6 +1,6 @@
 /**
  * Cockpit (hub) data — the orchestrator's view of the MRO procurement workforce
- * for Bond. Numbers are seeded for the demo and tie out across
+ * for Siemens. Numbers are seeded for the demo and tie out across
  * the cockpit panels. Dual narrative: the left tiles carry the CFO money story
  * (off-contract avoided · duplicate spend caught), the right tiles read the
  * operational health (touchless release · capacity freed).
@@ -60,7 +60,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "PR-48630",
     type: "PR intake & validation · MRO",
-    site: "Dispersion · Mixing Line 2",
+    site: "Dispersion · Assembly Line 2",
     urgency: "critical",
     title: "Mechanical-seal request — line down; specification needs confirmation to release",
     dueLabel: "Confirm",
@@ -70,7 +70,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "RISK-49001",
     type: "Predictive risk · auto-procurement",
-    site: "Northgate · Utilities line",
+    site: "Amberg · Utilities line",
     urgency: "high",
     title: "Drive-gearbox seal kit — projected shortage in 9 days; early purchase recommended",
     dueLabel: "Pre-empt",
@@ -90,7 +90,7 @@ export const pendingDecisions: PendingDecision[] = [
   {
     id: "PR-48655",
     type: "PR intake & validation · MRO",
-    site: "Dispersion · Bead Mill 3",
+    site: "Dispersion · SMT Line 3",
     urgency: "high",
     title: "Grinding-media request — mostly covered by existing stock and warranty",
     dueLabel: "Review",
@@ -147,11 +147,11 @@ export type OverdueRow = {
 };
 
 export const overduePayments = {
-  alert: { count: 5, amount: "$148K", lead: "Bead Mill 3 · $708 · grinding media in stock + warranty · 2 days" },
+  alert: { count: 5, amount: "$148K", lead: "SMT Line 3 · $708 · grinding media in stock + warranty · 2 days" },
   rows: [
     {
       id: "PR-48655",
-      customer: "Bead Mill 3 · grinding media",
+      customer: "SMT Line 3 · grinding media",
       aging: "2 days open",
       amount: "$708",
       tier: "Transfer + warranty claim",
@@ -162,7 +162,7 @@ export const overduePayments = {
     },
     {
       id: "PR-48641",
-      customer: "Bead Mill 3 · grinding media",
+      customer: "SMT Line 3 · grinding media",
       aging: "6 days open",
       amount: "$708",
       tier: "Duplicate of PR-48655",
@@ -174,7 +174,7 @@ export const overduePayments = {
       customer: "Boiler house · pump seals",
       aging: "4 days open",
       amount: "$2.2K",
-      tier: "6 EA at Eastbrook store",
+      tier: "6 EA at Erlangen store",
       status: "transfer suggested",
       tone: "high",
     },
@@ -189,7 +189,7 @@ export const overduePayments = {
     },
     {
       id: "PR-48588",
-      customer: "Mixing Line 2 · agitator seals",
+      customer: "Assembly Line 2 · agitator seals",
       aging: "3 days open",
       amount: "$1.1K",
       tier: "On-hand at this plant",
@@ -198,7 +198,7 @@ export const overduePayments = {
     },
     {
       id: "PR-48571",
-      customer: "Filling Line · hydraulic hoses",
+      customer: "Test & Pack Line · hydraulic hoses",
       aging: "7 days open",
       amount: "$780",
       tier: "Duplicate of PR-48560",
@@ -210,7 +210,7 @@ export const overduePayments = {
       customer: "Bead mill · drive gearbox",
       aging: "8 days open",
       amount: "$1.3K",
-      tier: "4 EA at Westport store",
+      tier: "4 EA at Fürth store",
       status: "transfer routed",
       tone: "medium",
     },

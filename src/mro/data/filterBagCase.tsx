@@ -63,7 +63,7 @@ const TIERS = [
 export const filterFreeText = (
   <MultilingualEmailDoc
     from="Verfahrenstechnik · Dispersion Plant"
-    fromAddr="prozess@bondgroup.com"
+    fromAddr="prozess@siemens.com"
     to="Procurement intake"
     sent="2026-06-20 · 09:04"
     sourceLang="de"
@@ -95,7 +95,7 @@ const structuredDoc = (
       createdOn: "2026-06-20 · 09:06",
       materialCode: MAT,
       description: "Filter Bag · 25 Micron · Polypropylene · Size 2",
-      plant: "Northgate · Dispersion Plant",
+      plant: "Amberg · Electronics Works",
       costCenter: "10034 · Dispersion Plant Maintenance",
       glAccount: "600420 · Spare parts consumed",
       item: [
@@ -115,7 +115,7 @@ const structuredDoc = (
       ],
       prType: "NB · Standard requisition",
       requestor: "Process engineer · Let-down Line 1",
-      purchOrg: "1000 · Bond Procurement",
+      purchOrg: "1000 · Siemens Procurement",
     }}
   />
 );
@@ -174,10 +174,10 @@ const stockDoc = (
       createdOn: "2026-06-20 · 09:12",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Northgate · Dispersion Plant", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
-        { plant: "Northgate · Resin Plant", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
-        { plant: "Westport · Filling & Packaging", storageLoc: "Main store", onHand: "60", safety: "60", uom: "EA" },
-        { plant: "Lianhe · Coatings Works", storageLoc: "Main store", onHand: "110", safety: "100", uom: "EA" },
+        { plant: "Amberg · Electronics Works", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
+        { plant: "Amberg · Device Works", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
+        { plant: "Fürth · Assembly & Packaging", storageLoc: "Main store", onHand: "60", safety: "60", uom: "EA" },
+        { plant: "Chengdu · Electronic Works", storageLoc: "Main store", onHand: "110", safety: "100", uom: "EA" },
       ],
       note: "Each site holds an independent buffer and none is sufficient for a 400 EA change — the profile of a category purchased site by site rather than as a network.",
     }}
@@ -194,7 +194,7 @@ const priceSheet = (
           columns: ["Order quantity", "Unit price", "Discount vs base", "Where we sit"],
           usedNote: `→ ${QTY} EA on this order`,
           rows: [
-            { cells: [TIERS[0].band, TIERS[0].unit, "base", "Westport and Lianhe order here"], matched: false },
+            { cells: [TIERS[0].band, TIERS[0].unit, "base", "Fürth and Chengdu order here"], matched: false },
             { cells: [TIERS[1].band, TIERS[1].unit, "−10%", "this order"], matched: true },
             { cells: [TIERS[2].band, TIERS[2].unit, "−20%", "one order for the network"], matched: false },
             { cells: [TIERS[3].band, TIERS[3].unit, "−27%", "a year in one call-off"], matched: false },
@@ -315,9 +315,9 @@ const signedAgreement = (
       parties: [
         {
           role: "the Buyer",
-          name: "Bond Chemicals GmbH",
+          name: "Siemens AG",
           detail:
-            "Purchasing organisation 1000 · acting for the Northgate, Westport and Lianhe manufacturing sites",
+            "Purchasing organisation 1000 · acting for the Amberg, Fürth and Chengdu manufacturing sites",
         },
         {
           role: "the Supplier",
@@ -405,16 +405,16 @@ const signedAgreement = (
           title: "Named sites and delivery points",
           columns: ["Site", "Delivery address", "Plant code"],
           rows: [
-            { cells: ["Northgate · Dispersion Plant", "Werkstrasse 4, Northgate", "1010"] },
-            { cells: ["Northgate · Resin Plant", "Werkstrasse 11, Northgate", "1020"] },
-            { cells: ["Westport · Filling & Packaging", "Poligono Industrial 7, Westport", "2010"] },
-            { cells: ["Lianhe · Coatings Works", "Lianhe Industrial Park, Building 3", "3010"] },
+            { cells: ["Amberg · Electronics Works", "Werkstrasse 4, Amberg", "1010"] },
+            { cells: ["Amberg · Device Works", "Werkstrasse 11, Amberg", "1020"] },
+            { cells: ["Fürth · Assembly & Packaging", "Poligono Industrial 7, Fürth", "2010"] },
+            { cells: ["Chengdu · Electronic Works", "Chengdu Hi-Tech Zone, Building 3", "3010"] },
           ],
         },
       ],
       signatures: [
         {
-          forParty: "Bond Chemicals GmbH",
+          forParty: "Siemens AG",
           name: "M. Reinhardt",
           title: "Head of Indirect Procurement",
           signedOn: "18 December 2025",
@@ -473,10 +473,10 @@ const demandRecord = (
           columns: ["Site", "Orders placed", "Typical order size", "Annual volume", "Break reached"],
           usedNote: "→ 4,000 EA across the network",
           rows: [
-            { cells: ["Northgate · Dispersion Plant", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
-            { cells: ["Northgate · Resin Plant", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
-            { cells: ["Lianhe · Coatings Works", "4", "200 EA", "800 EA", "1–249 EA"], matched: false },
-            { cells: ["Westport · Filling & Packaging", "4", "150 EA", "600 EA", "1–249 EA"], matched: false },
+            { cells: ["Amberg · Electronics Works", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
+            { cells: ["Amberg · Device Works", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
+            { cells: ["Chengdu · Electronic Works", "4", "200 EA", "800 EA", "1–249 EA"], matched: false },
+            { cells: ["Fürth · Assembly & Packaging", "4", "150 EA", "600 EA", "1–249 EA"], matched: false },
             { cells: ["Network", "16", "—", "4,000 EA", "2,500 EA and above"], matched: false },
           ],
         },
@@ -715,7 +715,7 @@ export const filterBagSteps: RunStep[] = [
         title: "Catalogue match & account assignment",
         fields: [
           { label: "Catalogue item", value: "Yes · listed since 2021" },
-          { label: "Plant", value: "Northgate · Dispersion Plant" },
+          { label: "Plant", value: "Amberg · Electronics Works" },
           { label: "Cost center", value: "10034 · Dispersion Plant Maintenance" },
           { label: "G/L account", value: "600420 · Spare parts consumed" },
           { label: "Agreement price", value: `$${UNIT} / EA` },
@@ -766,10 +766,10 @@ export const filterBagSteps: RunStep[] = [
       spec: {
         totalLabel: "4,000 EA a year across the network",
         rows: [
-          { site: "Northgate · Dispersion Plant", qty: "1,600 EA", share: 40 },
-          { site: "Northgate · Resin Plant", qty: "1,000 EA", share: 25 },
-          { site: "Lianhe · Coatings Works", qty: "800 EA", share: 20 },
-          { site: "Westport · Filling & Packaging", qty: "600 EA", share: 15 },
+          { site: "Amberg · Electronics Works", qty: "1,600 EA", share: 40 },
+          { site: "Amberg · Device Works", qty: "1,000 EA", share: 25 },
+          { site: "Chengdu · Electronic Works", qty: "800 EA", share: 20 },
+          { site: "Fürth · Assembly & Packaging", qty: "600 EA", share: 15 },
         ],
         detail: demandRecord,
         detailTitle: "Network consumption & outline agreement SA-MRO-07",
@@ -802,7 +802,7 @@ export const filterBagSteps: RunStep[] = [
       kind: "pricing",
       spec: {
         tiers: [
-          { band: TIERS[0].band, unit: TIERS[0].unit, note: "Current order size at Westport and Lianhe" },
+          { band: TIERS[0].band, unit: TIERS[0].unit, note: "Current order size at Fürth and Chengdu" },
           { band: TIERS[1].band, unit: TIERS[1].unit, note: "This requisition · 400 EA", state: "current" },
           { band: TIERS[2].band, unit: TIERS[2].unit, note: "Three open requisitions combined" },
           { band: TIERS[3].band, unit: TIERS[3].unit, note: "Annual network demand under one call-off", state: "best" },
