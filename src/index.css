@@ -1,0 +1,304 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@import "tailwindcss";
+
+/*
+ * HR Concierge — enterprise design system tokens
+ * Foundation tokens captured from the source design system.
+ * Extended below with AI-motion contracts for agentic UI primitives.
+ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-surface-mint: var(--surface-mint);
+  --color-surface-sage: var(--surface-sage);
+  --color-surface-rose: var(--surface-rose);
+  --color-surface-fog: var(--surface-fog);
+  --color-surface-deep: var(--accent-green-deep);
+  --color-surface-navy: var(--accent-navy);
+
+  --color-ink: var(--ink);
+  --color-ink-inverse: var(--ink-inverse);
+  --color-mute: var(--mute);
+  --color-divider: var(--divider);
+
+  --color-accent-green: var(--accent-green);
+  --color-accent-green-deep: var(--accent-green-deep);
+  --color-accent-sage: var(--surface-sage);
+  --color-accent-navy: var(--accent-navy);
+  --color-mark-red: var(--mark-red);
+
+  --font-sans: "DM Sans", sans-serif;
+
+  --spacing-section: var(--section-pad-y);
+
+  --radius-flat: 0px;
+  --radius-pill: 9999px;
+  --radius-dot: 50%;
+
+  --duration-hover: var(--motion-duration-hover);
+  --duration-menu: var(--motion-duration-menu);
+  --duration-slideshow: var(--motion-duration-slideshow);
+  --duration-stream: var(--motion-duration-stream);
+  --duration-spring: var(--motion-duration-spring);
+  --duration-pulse: var(--motion-duration-pulse);
+  --ease-hover: var(--motion-ease-hover);
+  --ease-menu: var(--motion-ease-menu);
+  --ease-slideshow: var(--motion-ease-slideshow);
+  --ease-spring: var(--motion-ease-spring);
+}
+
+:root {
+  /* Foundation neutrals */
+  --background: #ffffff;
+  --foreground: #000000;
+
+  --ink: #000000;
+  --ink-inverse: #ffffff;
+  --mute: #262626;
+  --divider: #f0f0f0;
+
+  /* Brand surfaces */
+  --surface-mint: #c3e6e1;
+  --surface-sage: #44b4a1;
+  --surface-rose: #ccbcb8;
+  --surface-fog: #f7f7f7;
+
+  /* Brand accents */
+  --accent-green: #277e6e;
+  --accent-green-deep: #084337;
+  --accent-navy: #123456;
+  --mark-red: #a6192e;
+
+  /* Section rhythm */
+  --section-pad-y: 80px;
+
+  /* Motion contracts (captured from the source design system) */
+  --motion-duration-hover: 180ms;
+  --motion-duration-menu: 300ms;
+  --motion-duration-slideshow: 500ms;
+  --motion-ease-hover: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-menu: ease;
+  --motion-ease-slideshow: linear;
+
+  /* AI motion extensions (same family, additive) */
+  --motion-duration-stream: 80ms;
+  --motion-duration-spring: 420ms;
+  --motion-duration-pulse: 1800ms;
+  --motion-ease-spring: cubic-bezier(0.34, 1.32, 0.64, 1);
+
+  /* Pill-CTA tokens */
+  --cta-radius: 9999px;
+  --cta-padding-y-default: 9px;
+  --cta-padding-y-lg: 11px;
+  --cta-padding-x-primary: 21px;
+  --cta-padding-x-secondary: 15px;
+  --cta-padding-x-lg: 19px;
+  --cta-font-size-primary: 16px;
+  --cta-font-size-secondary: 14px;
+  --cta-font-weight: 700;
+  --cta-letter-spacing: normal;
+  --cta-text-transform: none;
+}
+
+/* Reveal-on-scroll contract */
+[data-reveal] {
+  opacity: 0;
+  transition: opacity var(--motion-duration-menu) var(--motion-ease-menu);
+}
+[data-reveal][data-revealed="true"] {
+  opacity: 1;
+}
+
+/* AI pulse — agent thinking */
+@keyframes hr-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.5; }
+}
+.ai-pulse {
+  animation: hr-pulse var(--motion-duration-pulse) var(--motion-ease-menu) infinite;
+}
+
+/* Stream-in stagger (rows appear) */
+@keyframes hr-stream-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.ai-stream {
+  animation: hr-stream-in var(--motion-duration-menu) var(--motion-ease-menu) backwards;
+}
+
+/* Spring scale-in (decision card) */
+@keyframes hr-spring-in {
+  0% { opacity: 0; transform: scale(0.94); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.ai-spring {
+  animation: hr-spring-in var(--motion-duration-spring) var(--motion-ease-spring) both;
+}
+
+/* Confetti — fall + sway + rotate from above the modal */
+@keyframes hr-confetti {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--hr-confetti-x, 0px), 110vh, 0)
+      rotate(var(--hr-confetti-rot, 720deg));
+    opacity: 0;
+  }
+}
+.hr-confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation-name: hr-confetti;
+  animation-timing-function: cubic-bezier(0.16, 0.84, 0.44, 1);
+  animation-fill-mode: forwards;
+}
+
+/* Flow conveyor — agent-pipeline links march forward */
+@keyframes hr-flow {
+  to { stroke-dashoffset: -48; }
+}
+.hr-flow {
+  stroke-dasharray: 14 10;
+  animation: hr-flow 1s linear infinite;
+}
+.hr-flow-soft {
+  stroke-dasharray: 5 7;
+  animation: hr-flow 2.4s linear infinite;
+}
+
+/* Handoff — the produced doc rides the conveyor to the next agent */
+@keyframes hr-handoff-doc {
+  0%   { transform: translateX(0) scale(0.9); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(82px) scale(0.9); opacity: 0; }
+}
+.hr-handoff-doc {
+  animation: hr-handoff-doc 1.25s ease-in-out infinite;
+}
+
+/* Typewriter caret */
+@keyframes hr-caret {
+  50% { opacity: 0; }
+}
+.ai-caret::after {
+  content: "▍";
+  margin-left: 1px;
+  color: var(--accent-green-deep);
+  animation: hr-caret 700ms steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal][data-revealed="true"],
+  .ai-pulse,
+  .ai-stream,
+  .ai-spring,
+  .ai-caret::after,
+  .hr-flow,
+  .hr-flow-soft,
+  .hr-handoff-doc {
+    opacity: 1;
+    animation: none;
+    transform: none;
+    transition: none;
+  }
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background: var(--background);
+  }
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  h1 {
+    font-family: inherit;
+    font-size: 72px;
+    line-height: 80px;
+    font-weight: 700;
+    letter-spacing: -1.44px;
+    margin: 0;
+  }
+  h2 {
+    font-family: inherit;
+    font-size: 48px;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.96px;
+    margin: 0;
+  }
+  h3 {
+    font-family: inherit;
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.64px;
+    margin: 0;
+  }
+  *:focus-visible {
+    outline: 2px solid var(--accent-green-deep);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* Pill-CTA hover micro-shift */
+.ui-pill {
+  transition:
+    background-color var(--motion-duration-hover) var(--motion-ease-hover),
+    color var(--motion-duration-hover) var(--motion-ease-hover),
+    transform var(--motion-duration-hover) var(--motion-ease-hover);
+}
+.ui-pill:hover {
+  transform: translateY(-1px);
+}
+.ui-pill:active {
+  transform: scale(0.96);
+  transition-duration: 75ms;
+}
+
+/* ── The way in ───────────────────────────────────────────────────────────
+   The entry page assembles itself: the three cover panels wipe up in turn,
+   their photographs drift in behind, and the type and cards rise after. */
+@keyframes entry-panel-in {
+  from { opacity: 0; transform: translateY(26px) scaleY(0.94); transform-origin: bottom; }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes entry-photo-in {
+  from { opacity: 0; transform: scale(1.14); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes entry-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes entry-card-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.975); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [style*="entry-panel-in"], [style*="entry-photo-in"],
+  [style*="entry-rise"], [style*="entry-card-in"] { animation: none !important; }
+}
