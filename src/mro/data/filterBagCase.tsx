@@ -62,21 +62,21 @@ const TIERS = [
 
 export const filterFreeText = (
   <MultilingualEmailDoc
-    from="Verfahrenstechnik · Dispersion Plant"
-    fromAddr="prozess@bondgroup.com"
+    from="Verfahrenstechnik · Deburring Plant"
+    fromAddr="prozess@orvantec.com"
     to="Procurement intake"
     sent="2026-06-20 · 09:04"
     sourceLang="de"
     original={{
-      subject: "Filterwechsel Q3 — Let-down-Linie 1",
+      subject: "Filterwechsel Q3 — Entgratlinie 1",
       lines: [
         "Für den Filterwechsel im dritten Quartal brauchen wir wieder 400 Filterbeutel, 25 Mikron, Polypropylen, Größe 2.",
-        "Das ist der übliche Beutel für die Let-down-Linien, wir bestellen ihn jedes Quartal. Materialnummer MRO-FILT-BAG-25UM-PP.",
+        "Das ist der übliche Beutel für die Entgratlinien, wir bestellen ihn jedes Quartal. Materialnummer MRO-FILT-BAG-25UM-PP.",
         "Bis Anfang Juli reicht völlig, es ist kein Eilfall.",
       ],
     }}
     translated={{
-      subject: "Q3 filter change — Let-down Line 1",
+      subject: "Q3 filter change — Deburring Line 1",
       lines: [
         "For the third-quarter filter change we need 400 filter bags again, 25 micron, polypropylene, size 2.",
         "It is the usual bag for the let-down lines and we order it every quarter. Material number MRO-FILT-BAG-25UM-PP.",
@@ -95,8 +95,8 @@ const structuredDoc = (
       createdOn: "2026-06-20 · 09:06",
       materialCode: MAT,
       description: "Filter Bag · 25 Micron · Polypropylene · Size 2",
-      plant: "Northgate · Dispersion Plant",
-      costCenter: "10034 · Dispersion Plant Maintenance",
+      plant: "Lindfeld · Electronics Works",
+      costCenter: "10034 · Deburring & Finishing Maintenance",
       glAccount: "600420 · Spare parts consumed",
       item: [
         { label: "Rating", value: "25 micron" },
@@ -114,8 +114,8 @@ const structuredDoc = (
         "The submission stated the material number — a repeat catalogue line rather than a new specification.",
       ],
       prType: "NB · Standard requisition",
-      requestor: "Process engineer · Let-down Line 1",
-      purchOrg: "1000 · Bond Procurement",
+      requestor: "Process engineer · Deburring Line 1",
+      purchOrg: "1000 · Orvantec Procurement",
     }}
   />
 );
@@ -141,7 +141,7 @@ const materialMaster = (
       accounting: [
         { label: "Valuation class", value: "3030 · Consumables" },
         { label: "Standard price", value: `$${UNIT} / EA` },
-        { label: "Plant", value: "Dispersion Plant" },
+        { label: "Plant", value: "Deburring Plant" },
       ],
     }}
   />
@@ -174,10 +174,10 @@ const stockDoc = (
       createdOn: "2026-06-20 · 09:12",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Northgate · Dispersion Plant", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
-        { plant: "Northgate · Resin Plant", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
-        { plant: "Westport · Filling & Packaging", storageLoc: "Main store", onHand: "60", safety: "60", uom: "EA" },
-        { plant: "Lianhe · Coatings Works", storageLoc: "Main store", onHand: "110", safety: "100", uom: "EA" },
+        { plant: "Lindfeld · Electronics Works", storageLoc: "LD1 · line store", onHand: "40", safety: "120", uom: "EA", tone: "short" },
+        { plant: "Lindfeld · Drive Systems Works", storageLoc: "Main store", onHand: "95", safety: "90", uom: "EA" },
+        { plant: "Riomar · Assembly & Packaging", storageLoc: "Main store", onHand: "60", safety: "60", uom: "EA" },
+        { plant: "Lianhe · Electronics Works", storageLoc: "Main store", onHand: "110", safety: "100", uom: "EA" },
       ],
       note: "Each site holds an independent buffer and none is sufficient for a 400 EA change — the profile of a category purchased site by site rather than as a network.",
     }}
@@ -194,7 +194,7 @@ const priceSheet = (
           columns: ["Order quantity", "Unit price", "Discount vs base", "Where we sit"],
           usedNote: `→ ${QTY} EA on this order`,
           rows: [
-            { cells: [TIERS[0].band, TIERS[0].unit, "base", "Westport and Lianhe order here"], matched: false },
+            { cells: [TIERS[0].band, TIERS[0].unit, "base", "Riomar and Lianhe order here"], matched: false },
             { cells: [TIERS[1].band, TIERS[1].unit, "−10%", "this order"], matched: true },
             { cells: [TIERS[2].band, TIERS[2].unit, "−20%", "one order for the network"], matched: false },
             { cells: [TIERS[3].band, TIERS[3].unit, "−27%", "a year in one call-off"], matched: false },
@@ -238,7 +238,7 @@ const approvalScore = (
       createdBy: "Approval & routing agent",
       createdOn: "2026-06-20 · 09:31",
       checks: [
-        { label: "Cost centre and account assignment correct", detail: "10034 · Dispersion Plant Maintenance / 600420 · Spare parts consumed", ok: true },
+        { label: "Cost centre and account assignment correct", detail: "10034 · Deburring & Finishing Maintenance / 600420 · Spare parts consumed", ok: true },
         { label: "Within the plant delegation of authority", detail: `$${TOTAL} against a $10,000 plant-maintenance limit`, ok: true },
         { label: "Competitive bidding waived", detail: `On agreement ${SA} · published price list applies`, ok: true },
         { label: "Priced at the contracted rate", detail: `$${UNIT} / EA · matches the ${TIERS[1].band} break`, ok: true },
@@ -258,7 +258,7 @@ const routing = (
       summary: [
         { label: "Document", value: `${PR} · filter bags` },
         { label: "Value", value: `$${TOTAL}` },
-        { label: "Cost center", value: "10034 · Dispersion Plant Maintenance" },
+        { label: "Cost center", value: "10034 · Deburring & Finishing Maintenance" },
         { label: "Vendor", value: `${VENDOR} · ${SA}` },
       ],
       chain: [
@@ -285,9 +285,9 @@ const poDoc = (
         { label: "Incoterms", value: "DAP · plant" },
       ],
       items: [
-        { item: "10", material: MAT, description: "Filter bag · 25 micron · size 2 · Dispersion", qty: "400 EA", netPrice: "19.90", value: "7,960.00", delivDate: "2026-07-03" },
-        { item: "20", material: MAT, description: "Filter bag · 25 micron · size 2 · Resin Plant", qty: "380 EA", netPrice: "19.90", value: "7,562.00", delivDate: "2026-07-03" },
-        { item: "30", material: MAT, description: "Filter bag · 25 micron · size 2 · Coatings Works", qty: "260 EA", netPrice: "19.90", value: "5,174.00", delivDate: "2026-07-03" },
+        { item: "10", material: MAT, description: "Filter bag · 25 micron · size 2 · Lindfeld", qty: "400 EA", netPrice: "19.90", value: "7,960.00", delivDate: "2026-07-03" },
+        { item: "20", material: MAT, description: "Filter bag · 25 micron · size 2 · Winding Plant", qty: "380 EA", netPrice: "19.90", value: "7,562.00", delivDate: "2026-07-03" },
+        { item: "30", material: MAT, description: "Filter bag · 25 micron · size 2 · Electronics Works", qty: "260 EA", netPrice: "19.90", value: "5,174.00", delivDate: "2026-07-03" },
       ],
       conditions: [
         { label: "Order quantity", value: "1,040 EA" },
@@ -315,9 +315,9 @@ const signedAgreement = (
       parties: [
         {
           role: "the Buyer",
-          name: "Bond Chemicals GmbH",
+          name: "Orvantec AG",
           detail:
-            "Purchasing organisation 1000 · acting for the Northgate, Westport and Lianhe manufacturing sites",
+            "Purchasing organisation 1000 · acting for the Lindfeld, Riomar and Lianhe manufacturing sites",
         },
         {
           role: "the Supplier",
@@ -405,16 +405,16 @@ const signedAgreement = (
           title: "Named sites and delivery points",
           columns: ["Site", "Delivery address", "Plant code"],
           rows: [
-            { cells: ["Northgate · Dispersion Plant", "Werkstrasse 4, Northgate", "1010"] },
-            { cells: ["Northgate · Resin Plant", "Werkstrasse 11, Northgate", "1020"] },
-            { cells: ["Westport · Filling & Packaging", "Poligono Industrial 7, Westport", "2010"] },
-            { cells: ["Lianhe · Coatings Works", "Lianhe Industrial Park, Building 3", "3010"] },
+            { cells: ["Lindfeld · Electronics Works", "Werkstrasse 4, Lindfeld", "1010"] },
+            { cells: ["Lindfeld · Drive Systems Works", "Werkstrasse 11, Lindfeld", "1020"] },
+            { cells: ["Riomar · Assembly & Packaging", "Poligono Industrial 7, Riomar", "2010"] },
+            { cells: ["Lianhe · Electronics Works", "Lianhe Industrial Park, Building 3", "3010"] },
           ],
         },
       ],
       signatures: [
         {
-          forParty: "Bond Chemicals GmbH",
+          forParty: "Orvantec AG",
           name: "M. Reinhardt",
           title: "Head of Indirect Procurement",
           signedOn: "18 December 2025",
@@ -473,10 +473,10 @@ const demandRecord = (
           columns: ["Site", "Orders placed", "Typical order size", "Annual volume", "Break reached"],
           usedNote: "→ 4,000 EA across the network",
           rows: [
-            { cells: ["Northgate · Dispersion Plant", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
-            { cells: ["Northgate · Resin Plant", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
-            { cells: ["Lianhe · Coatings Works", "4", "200 EA", "800 EA", "1–249 EA"], matched: false },
-            { cells: ["Westport · Filling & Packaging", "4", "150 EA", "600 EA", "1–249 EA"], matched: false },
+            { cells: ["Lindfeld · Electronics Works", "4", "400 EA", "1,600 EA", "250–999 EA"], matched: true },
+            { cells: ["Lindfeld · Drive Systems Works", "4", "250 EA", "1,000 EA", "250–999 EA"], matched: false },
+            { cells: ["Lianhe · Electronics Works", "4", "200 EA", "800 EA", "1–249 EA"], matched: false },
+            { cells: ["Riomar · Assembly & Packaging", "4", "150 EA", "600 EA", "1–249 EA"], matched: false },
             { cells: ["Network", "16", "—", "4,000 EA", "2,500 EA and above"], matched: false },
           ],
         },
@@ -497,9 +497,9 @@ const splitWorking = (
         columns: ["Requisition", "Site", "Quantity", "Break", "Unit price", "Goods value"],
         usedNote: "→ each order priced on its own quantity",
         rows: [
-          { cells: [PR, "Dispersion Plant", "400 EA", "250–999 EA", `$${UNIT}`, "$8,960.00"], matched: true },
-          { cells: ["PR-48705", "Resin Plant", "380 EA", "250–999 EA", `$${UNIT}`, "$8,512.00"], matched: false },
-          { cells: ["PR-48708", "Coatings Works", "260 EA", "250–999 EA", `$${UNIT}`, "$5,824.00"], matched: false },
+          { cells: [PR, "Deburring Plant", "400 EA", "250–999 EA", `$${UNIT}`, "$8,960.00"], matched: true },
+          { cells: ["PR-48705", "Winding Plant", "380 EA", "250–999 EA", `$${UNIT}`, "$8,512.00"], matched: false },
+          { cells: ["PR-48708", "Electronics Works", "260 EA", "250–999 EA", `$${UNIT}`, "$5,824.00"], matched: false },
           { cells: ["Goods value", "—", "1,040 EA", "—", "—", "$23,296.00"], matched: false },
           { cells: ["Order processing", "3 purchase orders", "—", "—", "$75 each", "$225.00"], matched: false },
           { cells: ["Total", "—", "1,040 EA", "—", "—", "$23,521.00"], matched: false },
@@ -519,9 +519,9 @@ const joinedWorking = (
         columns: ["Line", "Delivery point", "Quantity", "Break", "Unit price", "Goods value"],
         usedNote: `→ ${PO} · one order, three delivery points`,
         rows: [
-          { cells: ["10", "Dispersion Plant", "400 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$7,960.00"], matched: true },
-          { cells: ["20", "Resin Plant", "380 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$7,562.00"], matched: true },
-          { cells: ["30", "Coatings Works", "260 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$5,174.00"], matched: true },
+          { cells: ["10", "Deburring Plant", "400 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$7,960.00"], matched: true },
+          { cells: ["20", "Winding Plant", "380 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$7,562.00"], matched: true },
+          { cells: ["30", "Electronics Works", "260 EA", "1,000–2,499 EA", `$${ORDER_UNIT}`, "$5,174.00"], matched: true },
           { cells: ["Goods value", "—", "1,040 EA", "—", "—", `$${ORDER_TOTAL}`], matched: false },
           { cells: ["Order processing", "1 purchase order", "—", "—", "$75", "$75.00"], matched: false },
           { cells: ["Total", "—", "1,040 EA", "—", "—", "$20,771.00"], matched: false },
@@ -551,9 +551,9 @@ const grDoc = (
           rows: [
             { label: "PO reference", value: PO },
             { label: "Material", value: MAT },
-            { label: "Dispersion Plant", value: "400 EA · posted" },
-            { label: "Resin Plant", value: "380 EA · posted" },
-            { label: "Coatings Works", value: "260 EA · posted" },
+            { label: "Deburring Plant", value: "400 EA · posted" },
+            { label: "Winding Plant", value: "380 EA · posted" },
+            { label: "Electronics Works", value: "260 EA · posted" },
             { label: "Total received", value: `${ORDER_QTY.toLocaleString("en-US")} EA` },
           ],
         },
@@ -682,9 +682,9 @@ export const filterBagSteps: RunStep[] = [
     title: "Structure & code the request",
     sub: "Structures the request against the catalogue",
     aiThought:
-      "A quarterly filter change has been submitted by Let-down Line 1 for 400 bags, with the material number stated. It should structure directly against the catalogue. The point worth noting is the channel it arrived on.",
+      "A quarterly filter change has been submitted by Deburring Line 1 for 400 bags, with the material number stated. It should structure directly against the catalogue. The point worth noting is the channel it arrived on.",
     reasoning: [
-      "Reading the submission from Let-down Line 1",
+      "Reading the submission from Deburring Line 1",
       "Matching the request to the catalogue item on the material master",
       "Coding cost centre 10034 · GL 600420",
       "Reviewing how this category's demand normally reaches procurement",
@@ -706,7 +706,7 @@ export const filterBagSteps: RunStep[] = [
           { label: "Quantity", value: `${QTY} EA` },
           { label: "UoM", value: "EA" },
           { label: "Delivery date", value: "2026-07-03" },
-          { label: "Requisitioner", value: "Process engineer · Let-down Line 1" },
+          { label: "Requisitioner", value: "Process engineer · Deburring Line 1" },
         ],
       },
       {
@@ -715,8 +715,8 @@ export const filterBagSteps: RunStep[] = [
         title: "Catalogue match & account assignment",
         fields: [
           { label: "Catalogue item", value: "Yes · listed since 2021" },
-          { label: "Plant", value: "Northgate · Dispersion Plant" },
-          { label: "Cost center", value: "10034 · Dispersion Plant Maintenance" },
+          { label: "Plant", value: "Lindfeld · Electronics Works" },
+          { label: "Cost center", value: "10034 · Deburring & Finishing Maintenance" },
           { label: "G/L account", value: "600420 · Spare parts consumed" },
           { label: "Agreement price", value: `$${UNIT} / EA` },
           { label: "Line value", value: `$${TOTAL}` },
@@ -766,10 +766,10 @@ export const filterBagSteps: RunStep[] = [
       spec: {
         totalLabel: "4,000 EA a year across the network",
         rows: [
-          { site: "Northgate · Dispersion Plant", qty: "1,600 EA", share: 40 },
-          { site: "Northgate · Resin Plant", qty: "1,000 EA", share: 25 },
-          { site: "Lianhe · Coatings Works", qty: "800 EA", share: 20 },
-          { site: "Westport · Filling & Packaging", qty: "600 EA", share: 15 },
+          { site: "Lindfeld · Electronics Works", qty: "1,600 EA", share: 40 },
+          { site: "Lindfeld · Drive Systems Works", qty: "1,000 EA", share: 25 },
+          { site: "Lianhe · Electronics Works", qty: "800 EA", share: 20 },
+          { site: "Riomar · Assembly & Packaging", qty: "600 EA", share: 15 },
         ],
         detail: demandRecord,
         detailTitle: "Network consumption & outline agreement SA-MRO-07",
@@ -802,7 +802,7 @@ export const filterBagSteps: RunStep[] = [
       kind: "pricing",
       spec: {
         tiers: [
-          { band: TIERS[0].band, unit: TIERS[0].unit, note: "Current order size at Westport and Lianhe" },
+          { band: TIERS[0].band, unit: TIERS[0].unit, note: "Current order size at Riomar and Lianhe" },
           { band: TIERS[1].band, unit: TIERS[1].unit, note: "This requisition · 400 EA", state: "current" },
           { band: TIERS[2].band, unit: TIERS[2].unit, note: "Three open requisitions combined" },
           { band: TIERS[3].band, unit: TIERS[3].unit, note: "Annual network demand under one call-off", state: "best" },
@@ -826,7 +826,7 @@ export const filterBagSteps: RunStep[] = [
     title: "Approval, routing & order strategy",
     sub: "Releases the requisition and sets the order strategy",
     aiThought:
-      "All controls pass and no signature is required, so this would normally release unattended. Before it does: the Resin Plant and the Coatings Works both have open requisitions for the same item this week.",
+      "All controls pass and no signature is required, so this would normally release unattended. Before it does: the Winding Plant and the Electronics Works both have open requisitions for the same item this week.",
     reasoning: [
       "Confirming cost centre 10034 / GL 600420",
       `On agreement — competitive bidding not required`,
@@ -850,7 +850,7 @@ export const filterBagSteps: RunStep[] = [
         split: {
           title: "Three separate purchase orders",
           total: "$23,521",
-          sub: "Dispersion 400 EA · Resin 380 EA · Coatings 260 EA",
+          sub: "Lindfeld 400 EA · Winding 380 EA · Electronics 260 EA",
           caption: "Each priced at the 250–999 EA break",
           detail: splitWorking,
         },
@@ -877,7 +877,7 @@ export const filterBagSteps: RunStep[] = [
       subject: `${PO} — 1,040 filter bags, three delivery points`,
       lines: [
         "Please process this as a single order against SA-MRO-07 at the 1,000+ break.",
-        "1,040 filter bags, 25 micron, size 2 — 400 to Dispersion, 380 to Resin, 260 to the Coatings Works, all for 3 July.",
+        "1,040 filter bags, 25 micron, size 2 — 400 to Lindfeld, 380 to Winding, 260 to the Electronics Works, all for 3 July.",
         "Purchase order PO-77351 is attached. Please confirm the delivery date.",
       ],
       attachmentLabel: `${PO} · ME23N`,

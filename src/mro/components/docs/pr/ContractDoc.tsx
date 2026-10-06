@@ -17,7 +17,7 @@ import { cn } from "@/mro/lib/utils";
 export type ContractData = {
   reference: string;
   title: string;
-  /** "Bond" and the supplier, with the capacity each signs in. */
+  /** "Orvantec" and the supplier, with the capacity each signs in. */
   parties: { role: string; name: string; detail: string }[];
   effective: string;
   expires: string;
@@ -39,7 +39,7 @@ export function ContractDoc({ d }: { d: ContractData }) {
       {/* Letterhead */}
       <div className="border-b-2 border-ink px-10 pb-5 pt-8">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-ink">Bond</span>
+          <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-ink">Orvantec</span>
           <span className="text-[11px] uppercase tracking-[0.1em] text-mute">
             {d.reference}
           </span>

@@ -6,7 +6,7 @@
  * honest way to buy it is to go to the market and take real quotes.
  *
  * The suppliers are mostly German, because the plant is — you do not source a
- * pigment grade for a coatings line from four different suppliers. Three
+ * lamination grade for a winding line from four different suppliers. Three
  * local firms and one overseas manufacturer is what the market actually looks
  * like, and it is why three of the four requests go out in German.
  *
@@ -58,7 +58,7 @@ const Q = {
     terms: "Net 30",
     /** Settlement discount for paying early, as a share of the goods value. */
     settle: { pct: 0, days: 0 },
-    incoterm: "DAP · Resin Plant (Incoterms 2020)",
+    incoterm: "DAP · Winding Plant (Incoterms 2020)",
     /** What lands on the invoice on top of the goods. */
     freight: 0,
     freightNote: "Carriage included · part load",
@@ -99,7 +99,7 @@ const Q = {
     validDays: 30,
     terms: "Net 30",
     settle: { pct: 3, days: 14 },
-    incoterm: "DAP · Resin Plant (Incoterms 2020)",
+    incoterm: "DAP · Winding Plant (Incoterms 2020)",
     freight: 0,
     freightNote: "Carriage included · full truckload to plant",
     build: "Ex stock · full 12 t available, ships this week",
@@ -169,7 +169,7 @@ const noAgreementDoc = (
           band: "What was searched",
           rows: [
             { label: "Material", value: REC.material },
-            { label: "Material group", value: "MRO · Raw materials · pigments" },
+            { label: "Material group", value: "MRO · Raw materials · electrical steel" },
             { label: "Outline agreements", value: "None covering this material" },
             { label: "Source list", value: "No entry" },
             { label: "Info records", value: "None" },
@@ -191,7 +191,7 @@ const rfqDoc = (
       tname: "Create RFQ",
       number: RFQ,
       status: "Sent · awaiting quotes",
-      docType: "Request for quotation · rutile titanium dioxide · 12 t",
+      docType: "Request for quotation · grain-oriented electrical steel · 12 t",
       system: "Purchasing · RFQ",
       createdOn: "2026-06-20 · 11:05",
       createdBy: "Sourcing & contract agent",
@@ -201,7 +201,7 @@ const rfqDoc = (
           rows: [
             { label: "Material", value: REC.material },
             { label: "Quantity", value: `${REC.qty} ${REC.uom}` },
-            { label: "Specification", value: "Rutile · surface-treated · 25 kg bags" },
+            { label: "Specification", value: "Grain-oriented · C5 insulation coated · coil stock" },
             { label: "Need-by", value: `${NEED_BY} · line down` },
             { label: "Terms sought", value: "Net 30 · FCA" },
           ],
@@ -209,10 +209,10 @@ const rfqDoc = (
         {
           band: "Suppliers solicited",
           rows: [
-            { label: "Rheinpigment Handel GmbH", value: "Germany · distributor" },
+            { label: "Rheinstahl Elektroblech GmbH", value: "Germany · distributor" },
             { label: "Nordfarben Chemie GmbH", value: "Germany · distributor" },
-            { label: "Süddeutsche Pigmentwerke", value: "Germany · manufacturer" },
-            { label: "Hengtai Chemical (Jiangsu)", value: "China · manufacturer" },
+            { label: "Süddeutsche Elektrobleche", value: "Germany · manufacturer" },
+            { label: "Hengtai Electrical Steel (Jiangsu)", value: "China · manufacturer" },
           ],
         },
       ],
@@ -223,11 +223,11 @@ const rfqDoc = (
 /* ── The outgoing request, and the four that come back ──────────────────── */
 
 const DE_LINES = [
-  `Wir bitten um ein Angebot über ${REC.qty} t Titandioxid, Rutil, oberflächenbehandelt, in 25-kg-Säcken.`,
+  `Wir bitten um ein Angebot über ${REC.qty} t kornorientiertes Elektroblech, M4, C5-isoliert, als Coil.`,
   `Lieferung bis ${NEED_BY} — die Linie steht still. Bitte Preis, Lieferzeit und Zahlungsziel angeben.`,
 ];
 const EN_LINES = [
-  `Please quote for ${REC.qty} tonnes of titanium dioxide, rutile, surface-treated, in 25 kg bags.`,
+  `Please quote for ${REC.qty} tonnes of grain-oriented electrical steel, M4 grade, C5 insulation coated, in coil.`,
   `Delivery by ${NEED_BY} — the line is down. Please state price, lead time and payment terms.`,
 ];
 
@@ -235,12 +235,12 @@ const outgoing = (name: string, lang: "de" | "zh", addr: string): InboundEmail =
   from: `To: ${name}`,
   fromAddr: addr,
   receivedMeta: "Outbound · 2026-06-20 · 11:08",
-  subject: lang === "de" ? `${RFQ} — Anfrage Titandioxid rutil, 12 t` : `${RFQ} — 钛白粉 12 吨询价`,
+  subject: lang === "de" ? `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t` : `${RFQ} — 电工钢 12 吨询价`,
   lines:
     lang === "de"
       ? DE_LINES
       : [
-          `请就 ${REC.qty} 吨金红石型钛白粉（表面处理，25 公斤袋装）报价。`,
+          `请就 ${REC.qty} 吨取向电工钢（M4 牌号，C5 绝缘涂层，卷装）报价。`,
           `交付期限 ${NEED_BY} —— 产线目前停机。请提供价格、交货周期与付款条件。`,
         ],
   attachment: rfqDoc,
@@ -337,7 +337,7 @@ const reply = (o: {
     <MultilingualEmailDoc
       from={o.name}
       fromAddr={o.addr}
-      to="Procurement · Bond"
+      to="Procurement · Orvantec"
       sent={o.meta}
       sourceLang={o.lang}
       original={{ subject: o.subject, lines: o.lines }}
@@ -351,21 +351,21 @@ const reply = (o: {
 });
 
 const rheinReply = reply({
-  name: "Rheinpigment Handel GmbH",
-  addr: "vertrieb@rheinpigment.example",
+  name: "Rheinstahl Elektroblech GmbH",
+  addr: "vertrieb@rheinstahl.example",
   meta: "Outlook · 2026-06-20 · 14:20",
   lang: "de",
   subject: `AW: ${RFQ} — unser Angebot`,
   lines: [
-    `Vielen Dank für Ihre Anfrage. Wir bieten das Titandioxid zu ${usd(Q.rhein.unit)} / t an, ab Händlerlager Köln.`,
+    `Vielen Dank für Ihre Anfrage. Wir bieten das Elektroblech zu ${usd(Q.rhein.unit)} / t an, ab Händlerlager Köln.`,
     `Staffelpreise: ${Q.rhein.tiers.map((t) => `${t.from}${t.to ? `–${t.to}` : "+"} t ${usd(t.unit)}`).join(", ")}.`,
     `Lieferzeit ${Q.rhein.lead} ab Bestellung, Zahlungsziel 30 Tage netto ohne Skonto. Lieferung DAP Harzanlage, Fracht ab $2.000 Warenwert inklusive.`,
     `Stornierung bis Versand möglich, danach 20% Wiedereinlagerungsgebühr. Analysenzertifikat je Charge, Haltbarkeit 12 Monate. Angebot ${Q.rhein.validDays} Tage bindend. Eine Verzugspönale können wir nicht anbieten.`,
   ],
   en: [
-    `Thank you for the enquiry. We offer the titanium dioxide at ${usd(Q.rhein.unit)} each, from distributor stock in Cologne.`,
+    `Thank you for the enquiry. We offer the grain-oriented electrical steel at ${usd(Q.rhein.unit)} each, from distributor stock in Cologne.`,
     `Price breaks: ${Q.rhein.tiers.map(tierText).join(", ")}.`,
-    `Lead time ${Q.rhein.lead} from order, payment Net 30 with no settlement discount. Delivery DAP Resin Plant, carriage included above $2,000.`,
+    `Lead time ${Q.rhein.lead} from order, payment Net 30 with no settlement discount. Delivery DAP Winding Plant, carriage included above $2,000.`,
     `Cancellable up to dispatch, 20% restocking after that. Certificate of analysis per batch, 12 months shelf life. Quotation firm for ${Q.rhein.validDays} days. We cannot offer a late-delivery penalty.`,
   ],
   quote: { no: "QT-2026-4471", q: Q.rhein },
@@ -376,7 +376,7 @@ const nordwestReply = reply({
   addr: "angebot@nordfarben.example",
   meta: "Outlook · 2026-06-20 · 15:05",
   lang: "de",
-  subject: `AW: ${RFQ} — Angebot Titandioxid rutil`,
+  subject: `AW: ${RFQ} — Angebot kornorientiertes Elektroblech`,
   lines: [
     `Gern bieten wir an: ${usd(Q.nordwest.unit)} / t, unser bester Preis.`,
     `Staffelpreise: ${Q.nordwest.tiers.map((t) => `${t.from}${t.to ? `–${t.to}` : "+"} t ${usd(t.unit)}`).join(", ")}.`,
@@ -395,8 +395,8 @@ const nordwestReply = reply({
 });
 
 const suedReply = reply({
-  name: "Süddeutsche Pigmentwerke",
-  addr: "sales@sued-pigmentwerke.example",
+  name: "Süddeutsche Elektrobleche",
+  addr: "sales@sued-elektrobleche.example",
   meta: "Outlook · 2026-06-20 · 15:40",
   lang: "de",
   subject: `AW: ${RFQ} — Angebot, Ware ab Lager`,
@@ -411,24 +411,24 @@ const suedReply = reply({
     `We quote ${usd(Q.sued.unit)} each. The full 12 t is available from stock.`,
     `Price breaks: ${Q.sued.tiers.map(tierText).join(", ")}.`,
     `Lead time ${Q.sued.lead}. We understand your line is down — we can ship this week.`,
-    `Payment Net 30, with ${Q.sued.settle.pct}% settlement discount if paid within ${Q.sued.settle.days} days. Delivery DAP Resin Plant, carriage and export packing included.`,
+    `Payment Net 30, with ${Q.sued.settle.pct}% settlement discount if paid within ${Q.sued.settle.days} days. Delivery DAP Winding Plant, carriage and export packing included.`,
     `Cancellation is free up to dispatch. Certificate of analysis per batch, 18 months shelf life. We stand behind the date: ${Q.sued.lateTerms}. Quotation firm for ${Q.sued.validDays} days.`,
   ],
   quote: { no: "QT-2026-4473", q: Q.sued },
 });
 
 const hengtaiReply = reply({
-  name: "Hengtai Chemical (Jiangsu)",
-  addr: "sales@hengtai-chem.example",
+  name: "Hengtai Electrical Steel (Jiangsu)",
+  addr: "sales@hengtai-steel.example",
   meta: "Outlook · 2026-06-21 · 03:15",
   lang: "zh",
   subject: `回复：${RFQ} —— 暂无法承接`,
   lines: [
-    "感谢贵司询价。很遗憾，本季度我方钛白粉产线本季度排期已满，无法在贵司要求的交付日期前交货。",
+    "感谢贵司询价。很遗憾，本季度我方电工钢产线排期已满，无法在贵司要求的交付日期前交货。",
     "如贵司可将交期放宽至九月，我们可以重新报价。",
   ],
   en: [
-    "Thank you for the enquiry. Unfortunately our silicon-carbide line is fully booked this quarter and we cannot deliver before your required date.",
+    "Thank you for the enquiry. Unfortunately our electrical steel line is fully booked this quarter and we cannot deliver before your required date.",
     "If the date could move to September we would be glad to quote again.",
   ],
   declined: true,
@@ -443,7 +443,7 @@ const poDoc = (
       tname: "Display Purchase Order",
       number: "PO-77318",
       status: "Awaiting release",
-      docType: "Purchase order · rutile titanium dioxide · 12 t",
+      docType: "Purchase order · grain-oriented electrical steel · 12 t",
       system: "Purchasing · orders",
       createdOn: "2026-06-20 · 16:10",
       createdBy: "Approval & routing agent",
@@ -451,7 +451,7 @@ const poDoc = (
         {
           band: "Order header",
           rows: [
-            { label: "Supplier", value: "Süddeutsche Pigmentwerke" },
+            { label: "Supplier", value: "Süddeutsche Elektrobleche" },
             { label: "Sourced by", value: `${RFQ} · competitive quotation` },
             { label: "Agreement", value: "None — bought off contract" },
             { label: "Terms", value: "Net 30 · FCA" },
@@ -492,7 +492,7 @@ const orderConfirmation = (
       docType: "Order confirmation · AB-2026-0418",
       system: "Purchasing · orders",
       createdOn: "2026-06-20 · 17:05",
-      createdBy: "Süddeutsche Pigmentwerke",
+      createdBy: "Süddeutsche Elektrobleche",
       sections: [
         {
           band: "Confirmation",
@@ -515,11 +515,11 @@ const orderConfirmation = (
 );
 
 const poReply = {
-  from: "Süddeutsche Pigmentwerke · Vertrieb",
+  from: "Süddeutsche Elektrobleche · Vertrieb",
   receivedMeta: "Outlook · 2026-06-20 · 17:05",
   subject: "AW: PO-77318 — Auftragsbestätigung",
   lines: [
-    `Vielen Dank für Ihre Bestellung. Wir bestätigen PO-77318 über ${REC.qty} t Titandioxid rutil zu ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
+    `Vielen Dank für Ihre Bestellung. Wir bestätigen PO-77318 über ${REC.qty} t kornorientiertes Elektroblech zu ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
     "Versand erfolgt am 24.06. ab Lager — damit sind Sie vor Ihrem Termin. Unsere Auftragsbestätigung AB-2026-0418 finden Sie im Anhang.",
   ],
   source: {
@@ -529,22 +529,22 @@ const poReply = {
     kind: "sap" as const,
     body: (
       <MultilingualEmailDoc
-        from="Süddeutsche Pigmentwerke · Vertrieb"
-        fromAddr="sales@sued-pigmentwerke.example"
-        to="Procurement · Bond"
+        from="Süddeutsche Elektrobleche · Vertrieb"
+        fromAddr="sales@sued-elektrobleche.example"
+        to="Procurement · Orvantec"
         sent="2026-06-20 · 17:05"
         sourceLang="de"
         original={{
           subject: "AW: PO-77318 — Auftragsbestätigung",
           lines: [
-            `Vielen Dank für Ihre Bestellung. Wir bestätigen PO-77318 über ${REC.qty} t Titandioxid rutil zu ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
+            `Vielen Dank für Ihre Bestellung. Wir bestätigen PO-77318 über ${REC.qty} t kornorientiertes Elektroblech zu ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
             "Versand erfolgt am 24.06. ab Lager — damit sind Sie vor Ihrem Termin.",
           ],
         }}
         translated={{
           subject: "RE: PO-77318 — order confirmation",
           lines: [
-            `Thank you for your order. We confirm PO-77318 for ${REC.qty} t of rutile titanium dioxide at ${usd(Q.sued.unit)} / t, payment terms Net 30.`,
+            `Thank you for your order. We confirm PO-77318 for ${REC.qty} t of grain-oriented electrical steel at ${usd(Q.sued.unit)} / t, payment terms Net 30.`,
             "Shipping on 24 June from stock — that puts you ahead of your date.",
           ],
         }}
@@ -565,7 +565,7 @@ export const offContractSteps: RunStep[] = [
     aiThought:
       "The engineer's note is in German and there is no part number in it. Let me structure the request first, then look for something that covers this grade — an agreement, a source list, an old price. If there is nothing, this has to go to market.",
     reasoning: [
-      "Reading the engineer's note from Mixing Line 2",
+      "Reading the engineer's note from Assembly Line 2",
       "Coding it to a material and a plant",
       "Searching outline agreements for this material — nothing",
       "Searching the source list and info records — nothing",
@@ -604,7 +604,7 @@ export const offContractSteps: RunStep[] = [
       "No agreement means no shortlist either, so let me search for suppliers who actually make this grade. Most of them will be here in Germany — I will write to them in German, and to the one overseas manufacturer in their own language.",
     reasoning: [
       "Searching the supplier master and the web",
-      "Four suppliers make or stock this rutile grade",
+      "Four suppliers make or stock this lamination grade",
       "Three are German · one manufacturer is in China",
       "Writing each request in the language they work in",
       "Sending, and collecting what comes back",
@@ -618,30 +618,30 @@ export const offContractSteps: RunStep[] = [
       fields: [
         { label: "Material", value: REC.material },
         { label: "Quantity", value: `${REC.qty} ${REC.uom}` },
-        { label: "Specification", value: "Rutile · surface-treated · 25 kg bags" },
+        { label: "Specification", value: "Grain-oriented · C5 insulation coated · coil stock" },
         { label: "Need-by", value: `${NEED_BY} · line down` },
         { label: "Agreement", value: "None — buying off contract" },
         { label: "Suppliers to solicit", value: "4 · mostly local" },
       ],
       search: {
-        query: "surface-treated rutile titanium dioxide · producers and distributors in Germany",
+        query: "C5 insulation coated grain-oriented electrical steel · producers and distributors in Germany",
         results: [
-          { name: "Rheinpigment Handel GmbH", via: "web · distributor", note: "Germany · 40 km away" },
+          { name: "Rheinstahl Elektroblech GmbH", via: "web · distributor", note: "Germany · 40 km away" },
           { name: "Nordfarben Chemie GmbH", via: "web · distributor", note: "Germany · made to order" },
-          { name: "Süddeutsche Pigmentwerke", via: "web · manufacturer", note: "Germany · holds stock" },
-          { name: "Hengtai Chemical (Jiangsu)", via: "web · manufacturer", note: "China · low cost" },
+          { name: "Süddeutsche Elektrobleche", via: "web · manufacturer", note: "Germany · holds stock" },
+          { name: "Hengtai Electrical Steel (Jiangsu)", via: "web · manufacturer", note: "China · low cost" },
         ],
       },
       rfqDoc,
       vendors: [
         {
           id: "rhein",
-          name: "Rheinpigment Handel GmbH",
+          name: "Rheinstahl Elektroblech GmbH",
           via: "distributor · web",
           country: "Germany",
-          draft: { subject: `${RFQ} — rutile titanium dioxide · 12 t`, lines: EN_LINES },
-          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage Titandioxid rutil, 12 t`, lines: DE_LINES },
-          draftEmail: outgoing("Rheinpigment Handel GmbH", "de", "vertrieb@rheinpigment.example"),
+          draft: { subject: `${RFQ} — grain-oriented electrical steel · 12 t`, lines: EN_LINES },
+          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t`, lines: DE_LINES },
+          draftEmail: outgoing("Rheinstahl Elektroblech GmbH", "de", "vertrieb@rheinstahl.example"),
           quote: {
             headline: `${usd(Q.rhein.unit)} / EA · ${Q.rhein.lead}`,
             lines: ["Off the shelf at a distributor price."],
@@ -654,8 +654,8 @@ export const offContractSteps: RunStep[] = [
           via: "distributor · web",
           country: "Germany",
           negotiating: true,
-          draft: { subject: `${RFQ} — rutile titanium dioxide · 12 t`, lines: EN_LINES },
-          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage Titandioxid rutil, 12 t`, lines: DE_LINES },
+          draft: { subject: `${RFQ} — grain-oriented electrical steel · 12 t`, lines: EN_LINES },
+          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t`, lines: DE_LINES },
           draftEmail: outgoing("Nordfarben Chemie GmbH", "de", "angebot@nordfarben.example"),
           quote: {
             headline: `${usd(Q.nordwest.unit)} / EA · ${Q.nordwest.lead}`,
@@ -665,12 +665,12 @@ export const offContractSteps: RunStep[] = [
         },
         {
           id: "sued",
-          name: "Süddeutsche Pigmentwerke",
+          name: "Süddeutsche Elektrobleche",
           via: "manufacturer · web",
           country: "Germany",
-          draft: { subject: `${RFQ} — rutile titanium dioxide · 12 t`, lines: EN_LINES },
-          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage Titandioxid rutil, 12 t`, lines: DE_LINES },
-          draftEmail: outgoing("Süddeutsche Pigmentwerke", "de", "sales@sued-pigmentwerke.example"),
+          draft: { subject: `${RFQ} — grain-oriented electrical steel · 12 t`, lines: EN_LINES },
+          local: { lang: "Deutsch", subject: `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t`, lines: DE_LINES },
+          draftEmail: outgoing("Süddeutsche Elektrobleche", "de", "sales@sued-elektrobleche.example"),
           quote: {
             headline: `${usd(Q.sued.unit)} / EA · ${Q.sued.lead}`,
             lines: ["From stock — can ship this week."],
@@ -679,20 +679,20 @@ export const offContractSteps: RunStep[] = [
         },
         {
           id: "hengtai",
-          name: "Hengtai Chemical (Jiangsu)",
+          name: "Hengtai Electrical Steel (Jiangsu)",
           via: "manufacturer · web",
           country: "China",
           negotiating: true,
-          draft: { subject: `${RFQ} — rutile titanium dioxide · 12 t`, lines: EN_LINES },
+          draft: { subject: `${RFQ} — grain-oriented electrical steel · 12 t`, lines: EN_LINES },
           local: {
             lang: "简体中文",
-            subject: `${RFQ} —— 钛白粉 12 吨询价`,
+            subject: `${RFQ} —— 电工钢 12 吨询价`,
             lines: [
-              `请就 ${REC.qty} 吨金红石型钛白粉（表面处理，25 公斤袋装）报价。`,
+              `请就 ${REC.qty} 吨取向电工钢（M4 牌号，C5 绝缘涂层，卷装）报价。`,
               `交付期限 ${NEED_BY} —— 产线目前停机。请提供价格、交货周期与付款条件。`,
             ],
           },
-          draftEmail: outgoing("Hengtai Chemical (Jiangsu)", "zh", "sales@hengtai-chem.example"),
+          draftEmail: outgoing("Hengtai Electrical Steel (Jiangsu)", "zh", "sales@hengtai-steel.example"),
           quote: { headline: "No quote", lines: ["Capacity full this quarter — cannot meet the date."] },
           reply: hengtaiReply,
         },
@@ -716,7 +716,7 @@ export const offContractSteps: RunStep[] = [
     docLabel: "Quotation comparison",
     document: rfqDoc,
     sources: [{ id: "oc-compare", label: `${RFQ} · quotes`, meta: "ME47 · comparison", kind: "sap", body: rfqDoc }],
-    recommendation: `Süddeutsche Pigmentwerke at ${usd(Q.sued.unit)} — from stock, shipping this week. It is ${usd(EXTRA)} more than the cheapest quote and four days sooner, and four days of a stopped mixing line costs considerably more than ${usd(EXTRA)}.`,
+    recommendation: `Süddeutsche Elektrobleche at ${usd(Q.sued.unit)} — from stock, shipping this week. It is ${usd(EXTRA)} more than the cheapest quote and four days sooner, and four days of a stopped winding line costs considerably more than ${usd(EXTRA)}.`,
     quotes: {
       thinkMs: 5000,
       lines: [
@@ -724,7 +724,7 @@ export const offContractSteps: RunStep[] = [
         `On the tonne price they are within ${usd(EXTRA)} of each other · ${usd(Q.nordwest.unit)} to ${usd(Q.sued.unit)} a tonne`,
         `At ${REC.qty} t that is a ${usd(EXTRA * REC.qty)} spread on the sticker — worth reading the clauses before believing it`,
         `Nordwest is EXW, so ${usd(Q.nordwest.freight)} of haulage lands on us; the other two deliver carriage paid`,
-        `Settlement discounts differ — ${Q.sued.settle.pct}% in ${Q.sued.settle.days} days against ${Q.nordwest.settle.pct}% in ${Q.nordwest.settle.days}, and none at all from Rheinpigment`,
+        `Settlement discounts differ — ${Q.sued.settle.pct}% in ${Q.sued.settle.days} days against ${Q.nordwest.settle.pct}% in ${Q.nordwest.settle.days}, and none at all from Rheinstahl`,
         `All-in the three land at ${usd(landed(Q.nordwest, REC.qty))}, ${usd(landed(Q.rhein, REC.qty))} and ${usd(landed(Q.sued, REC.qty))} — a ${usd(Math.abs(landed(Q.sued, REC.qty) - landed(Q.nordwest, REC.qty)))} spread, not ${usd(EXTRA * REC.qty)}`,
         "The cheapest is also the only one that cannot be cancelled and offers no delivery penalty",
         `All three quote a ${Q.sued.tiers[2].from} t break — we are ordering exactly ${REC.qty} t, so the break is already in the price`,
@@ -732,7 +732,7 @@ export const offContractSteps: RunStep[] = [
       replies: [
         {
           id: "rhein",
-          vendor: "Rheinpigment Handel GmbH",
+          vendor: "Rheinstahl Elektroblech GmbH",
           country: "Germany · distributor",
           headline: `${usd(Q.rhein.unit)} / t`,
           lead: `${Q.rhein.lead} lead`,
@@ -760,7 +760,7 @@ export const offContractSteps: RunStep[] = [
         },
         {
           id: "sued",
-          vendor: "Süddeutsche Pigmentwerke",
+          vendor: "Süddeutsche Elektrobleche",
           country: "Germany · manufacturer",
           headline: `${usd(Q.sued.unit)} / t`,
           lead: `${Q.sued.lead} lead`,
@@ -774,18 +774,18 @@ export const offContractSteps: RunStep[] = [
         },
         {
           id: "hengtai",
-          vendor: "Hengtai Chemical (Jiangsu)",
+          vendor: "Hengtai Electrical Steel (Jiangsu)",
           country: "China · manufacturer",
           headline: "No quote",
           lead: "Declined",
-          note: "Titanium dioxide line fully booked this quarter — would requote for September.",
+          note: "Electrical steel line fully booked this quarter — would requote for September.",
           declined: true,
           email: hengtaiReply,
         },
       ],
       verdict: {
         pickId: PICK,
-        headline: `Süddeutsche Pigmentwerke — ${usd(Q.sued.unit)} / t, ${usd(landed(Q.sued, REC.qty))} all-in, ${REC.qty} t ex stock`,
+        headline: `Süddeutsche Elektrobleche — ${usd(Q.sued.unit)} / t, ${usd(landed(Q.sued, REC.qty))} all-in, ${REC.qty} t ex stock`,
         body: `They are the only one holding the full ${REC.qty} t on the shelf, they deliver carriage paid, and they take ${Q.sued.settle.pct}% off if we settle in ${Q.sued.settle.days} days. Cancellable up to dispatch and ${Q.sued.lateTerms.toLowerCase()} if the date slips — for a line that is down, that is what we are buying.`,
         against: `Nordwest looks ${usd(EXTRA * REC.qty)} cheaper on the sticker, but ex works it adds ${usd(Q.nordwest.freight)} of haulage and lands at ${usd(landed(Q.nordwest, REC.qty))} — ${usd(Math.abs(landed(Q.sued, REC.qty) - landed(Q.nordwest, REC.qty)))} apart, not ${usd(EXTRA * REC.qty)}. For that we would take a nine-day wait, a batch we cannot cancel once the campaign is scheduled, no penalty if it slips, and three months less shelf life.`,
       },
@@ -826,19 +826,19 @@ export const offContractSteps: RunStep[] = [
     docLabel: "PO-77318 · purchase order",
     document: poDoc,
     sources: [{ id: "oc-po", label: "PO-77318", meta: "ME23N · purchase order", kind: "sap", body: poDoc }],
-    recommendation: `PO-77318 raised to Süddeutsche Pigmentwerke for ${usd(Q.sued.unit * REC.qty)}, with three competitive quotes on file behind the price. One signature releases it, and the confirmation goes out in German.`,
+    recommendation: `PO-77318 raised to Süddeutsche Elektrobleche for ${usd(Q.sued.unit * REC.qty)}, with three competitive quotes on file behind the price. One signature releases it, and the confirmation goes out in German.`,
     email: {
       cta: "Review & send the order",
-      to: "Süddeutsche Pigmentwerke · Vertrieb",
-      subject: "PO-77318 — Bestellung Titandioxid rutil, 12 t",
+      to: "Süddeutsche Elektrobleche · Vertrieb",
+      subject: "PO-77318 — Bestellung kornorientiertes Elektroblech, 12 t",
       lines: [
-        `Vielen Dank für Ihr Angebot. Wir bestellen hiermit ${REC.qty} t Titandioxid, Rutil, oberflächenbehandelt, zum Preis von ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
+        `Vielen Dank für Ihr Angebot. Wir bestellen hiermit ${REC.qty} t kornorientiertes Elektroblech, M4, C5-isoliert, zum Preis von ${usd(Q.sued.unit)} / t, Zahlungsziel 30 Tage netto.`,
         `Bitte bestätigen Sie den Versand in dieser Woche — die Linie steht still. Die Bestellung PO-77318 finden Sie im Anhang.`,
       ],
       review: {
-        subject: "PO-77318 — order for 12 t of rutile titanium dioxide",
+        subject: "PO-77318 — order for 12 t of grain-oriented electrical steel",
         body: [
-          `Thank you for your quotation. We hereby order ${REC.qty} tonnes of titanium dioxide, rutile, surface-treated, at ${usd(Q.sued.unit)} each, payment terms Net 30.`,
+          `Thank you for your quotation. We hereby order ${REC.qty} tonnes of grain-oriented electrical steel, M4 grade, C5 insulation coated, at ${usd(Q.sued.unit)} each, payment terms Net 30.`,
           "Please confirm shipment this week — the line is stopped. Purchase order PO-77318 is attached.",
         ],
         sendingIn: "Deutsch",
@@ -846,7 +846,7 @@ export const offContractSteps: RunStep[] = [
       attachment: poDoc,
       attachmentLabel: "PO-77318 · purchase order",
       toastTitle: "Order sent",
-      toastBody: "PO-77318 sent to Süddeutsche Pigmentwerke in German · waiting on their confirmation.",
+      toastBody: "PO-77318 sent to Süddeutsche Elektrobleche in German · waiting on their confirmation.",
       reply: poReply,
       resolvedDocument: orderConfirmation,
     },
@@ -854,7 +854,7 @@ export const offContractSteps: RunStep[] = [
 ];
 
 export const offContractPick = {
-  vendor: "Süddeutsche Pigmentwerke",
+  vendor: "Süddeutsche Elektrobleche",
   value: Q.sued.unit * REC.qty,
   extra: EXTRA,
 };

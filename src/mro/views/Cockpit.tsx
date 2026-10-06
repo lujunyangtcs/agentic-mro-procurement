@@ -112,11 +112,11 @@ type AlertNote = {
 };
 
 const alertNotes: AlertNote[] = [
-  { flow: "pump", tone: "critical", lead: "Mechanical-seal request", finding: "line down — spec needs confirmation", meta: "PR-48630 · Mixing Line 2" },
+  { flow: "pump", tone: "critical", lead: "Mechanical-seal request", finding: "line down — spec needs confirmation", meta: "PR-48630 · Assembly Line 2" },
   { flow: "risk", tone: "high", lead: "Drive-gearbox seal kit", finding: "stock-out predicted in 9 days", meta: "RISK-49001 · pre-empt" },
   { flow: "compliance", tone: "high", lead: "Gearbox rebuild kit", finding: "validated — waiting to become an order", meta: "PR-48690 · $42,000" },
-  { flow: "gearbox", tone: "high", lead: "MRO-MEDIA-ZRO2-1.2MM", finding: "rebalancing need found", meta: "PR-48655 · 6 EA surplus at Eastbrook" },
-  { flow: "off-catalogue", tone: "high", lead: "Mechanical-seal request", finding: "nothing on contract covers it", meta: "PR-48696 · Reactor Train 1" },
+  { flow: "gearbox", tone: "high", lead: "MRO-MEDIA-ZRO2-1.2MM", finding: "rebalancing need found", meta: "PR-48655 · 6 EA surplus at Clairmont" },
+  { flow: "off-catalogue", tone: "high", lead: "Mechanical-seal request", finding: "nothing on contract covers it", meta: "PR-48696 · Winding Line 1" },
 ];
 
 const toneDot: Record<AlertNote["tone"], string> = {

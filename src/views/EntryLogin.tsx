@@ -52,7 +52,7 @@ const HERO_COLUMNS: HeroColumn[] = [
     accent: "#2dd4bf",
   },
   {
-    label: "Coating & finishing",
+    label: "Assembly & finishing",
     src: "/cover-coating.jpg",
     focus: "42% 50%",
     base: "#111827",
@@ -60,7 +60,7 @@ const HERO_COLUMNS: HeroColumn[] = [
     accent: "#94a3b8",
   },
   {
-    label: "Colour & finish",
+    label: "Precision & finish",
     src: "/cover-product.jpg",
     focus: "50% 56%",
     base: "#1b1206",
@@ -196,7 +196,7 @@ function HeroBackground({ heavyOverlay = false }: { heavyOverlay?: boolean }) {
                     WebkitMaskImage: "linear-gradient(to top, black 5%, transparent 78%)",
                   }}
                 />
-                {/* A single soft band, like light across a wet coating. */}
+                {/* A single soft band, like light across a polished surface. */}
                 <div
                   className="absolute inset-x-0 h-[42%] bottom-[18%]"
                   style={{
