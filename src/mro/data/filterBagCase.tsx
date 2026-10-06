@@ -184,27 +184,6 @@ const stockDoc = (
   />
 );
 
-/* Sourcing reads as a worksheet too — the price list it actually read. */
-const priceSheet = (
-  <LookupSheetDoc
-    sheets={[
-        {
-          file: "SA-MRO-07-pricelist.xlsx",
-          tab: "Filtration",
-          columns: ["Order quantity", "Unit price", "Discount vs base", "Where we sit"],
-          usedNote: `→ ${QTY} EA on this order`,
-          rows: [
-            { cells: [TIERS[0].band, TIERS[0].unit, "base", "Riomar and Lianhe order here"], matched: false },
-            { cells: [TIERS[1].band, TIERS[1].unit, "−10%", "this order"], matched: true },
-            { cells: [TIERS[2].band, TIERS[2].unit, "��20%", "one order for the network"], matched: false },
-            { cells: [TIERS[3].band, TIERS[3].unit, "−27%", "a year in one call-off"], matched: false },
-          ],
-        },
-    ]}
-    footer={<>The requisition is priced correctly at {`$${UNIT}`} / EA — the agreement price for a {QTY} EA order. It is correct, and it is also two breaks above what the network's own volume would pay.</>}
-  />
-);
-
 const outlineAgreement = (
   <OutlineAgreementDoc
     a={{
@@ -792,8 +771,7 @@ export const filterBagSteps: RunStep[] = [
       "Applying the network's annual volume to the same table",
     ],
     docLabel: "Agreement price & published breaks",
-    document: priceSheet,
-    sources: [
+      sources: [
       { id: "fb-src-handoff", label: "VAL-48702-MD", meta: "from Master Data", kind: "sap", handoff: true, body: masterDataScore },
       { id: "fb-agreement", label: `ME33K · ${SA}`, meta: "price · vendor · terms", kind: "contract", body: outlineAgreement },
     ],
@@ -837,8 +815,7 @@ export const filterBagSteps: RunStep[] = [
     docLabel: "VAL-48702-APR · approval",
     document: approvalScore,
     sources: [
-      { id: "fb-apr-handoff", label: "Price & breaks", meta: "from Sourcing", kind: "sap", handoff: true, body: priceSheet },
-      { id: "fb-routing", label: "DOA release routing", meta: "WF-48702-REL", kind: "policy", body: routing },
+          { id: "fb-routing", label: "DOA release routing", meta: "WF-48702-REL", kind: "policy", body: routing },
       { id: "fb-po", label: PO, meta: "SAP ME23N", kind: "sap", body: poDoc },
     ],
     recommendation:
