@@ -28,11 +28,11 @@ type Pattern = { en: RegExp; de: string; zh: string; es: string; fr: string };
  */
 const PATTERNS: Pattern[] = [
   {
-    en: /^please quote for (.+?) tonnes of titanium dioxide,? rutile,? surface-treated,? in (.+?) bags\.?$/i,
-    de: "Wir bitten um ein Angebot über {0} t Titandioxid, Rutil, oberflächenbehandelt, in {1}-Säcken.",
-    zh: "请就 {0} 吨金红石型钛白粉（表面处理，{1} 袋装）报价。",
-    es: "Solicitamos oferta por {0} toneladas de dióxido de titanio rutilo, con tratamiento superficial, en sacos de {1}.",
-    fr: "Nous vous prions de nous remettre une offre pour {0} tonnes de dioxyde de titane rutile, traité en surface, en sacs de {1}.",
+    en: /^please quote for (.+?) tonnes of grain-oriented electrical steel,? M4 grade,? C5 insulation coated,? in (.+?) coil\.?$/i,
+    de: "Wir bitten um ein Angebot über {0} t kornorientiertes Elektroblech, M4, C5-isoliert, als {1}-Coil.",
+    zh: "请就 {0} 吨取向电工钢（M4 牌号，C5 绝缘涂层，{1} 卷装）报价。",
+    es: "Solicitamos oferta por {0} toneladas de acero eléctrico de grano orientado, grado M4, aislamiento C5, en bobina de {1}.",
+    fr: "Nous vous prions de nous remettre une offre pour {0} tonnes de tôle électrique à grains orientés, grade M4, isolation C5, en bobine de {1}.",
   },
   {
     en: /^delivery by (.+?) — the line is down\.? please state price,? lead time and payment terms\.?$/i,
@@ -80,11 +80,11 @@ const PATTERNS: Pattern[] = [
     fr: "Nous vous remercions de votre offre.",
   },
   {
-    en: /^we hereby order (.+?) tonnes of titanium dioxide,? rutile,? surface-treated,? at (.+?) (?:per tonne|\/ t|a tonne),? payment terms (.+?)\.?$/i,
-    de: "Wir bestellen hiermit {0} t Titandioxid, Rutil, oberflächenbehandelt, zum Preis von {1} / t, Zahlungsziel {2}.",
-    zh: "现向贵司订购 {0} 吨金红石型钛白粉（表面处理），单价 {1} / 吨，付款条件 {2}。",
-    es: "Por la presente pedimos {0} toneladas de dióxido de titanio rutilo, tratado en superficie, a {1} la tonelada, condiciones de pago {2}.",
-    fr: "Nous commandons par la présente {0} tonnes de dioxyde de titane rutile, traité en surface, au prix de {1} la tonne, conditions de paiement {2}.",
+    en: /^we hereby order (.+?) tonnes of grain-oriented electrical steel,? M4 grade,? C5 insulation coated,? at (.+?) (?:per tonne|\/ t|a tonne),? payment terms (.+?)\.?$/i,
+    de: "Wir bestellen hiermit {0} t kornorientiertes Elektroblech, M4, C5-isoliert, zum Preis von {1} / t, Zahlungsziel {2}.",
+    zh: "现向贵司订购 {0} 吨取向电工钢（M4 牌号，C5 绝缘涂层），单价 {1} / 吨，付款条件 {2}。",
+    es: "Por la presente pedimos {0} toneladas de acero eléctrico de grano orientado, grado M4, aislamiento C5, a {1} la tonelada, condiciones de pago {2}.",
+    fr: "Nous commandons par la présente {0} tonnes de tôle électrique à grains orientés, grade M4, isolation C5, au prix de {1} la tonne, conditions de paiement {2}.",
   },
   {
     en: /^please confirm shipment this week — the line is stopped\.?$/i,

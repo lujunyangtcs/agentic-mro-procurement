@@ -13,8 +13,8 @@
  *   · a tile's count is a filter over `requisitions` — never stored
  *   · an invoice's variance is invoice − contract — never stored
  *
- * Operating entity is the fictional "Siemens" — a specialty
- * coatings and resins manufacturer whose plant engineers raise maintenance,
+ * Operating entity is the fictional "Orvantec" — a specialty
+ * electronics and industrial automation manufacturer whose plant engineers raise maintenance,
  * repair and operations (MRO) purchase requisitions. The AI structures,
  * validates, recommends and routes; a human approves every real decision.
  */
@@ -227,11 +227,11 @@ export type Requisition = {
   note?: string;
 };
 
-const CC_DISPERSION = "10034 · Dispersion Plant Maintenance";
-const CC_RESIN = "10031 · Resin Plant Maintenance";
+const CC_DISPERSION = "10034 · Deburring & Finishing Maintenance";
+const CC_RESIN = "10031 · Drive Systems Maintenance";
 const CC_FILLING = "10052 · Test & Pack Line Maintenance";
 const CC_UTIL = "10061 · Utilities Maintenance";
-const CC_COATING = "10071 · Coatings Line Maintenance";
+const CC_COATING = "10071 · Electronics Assembly Maintenance";
 const GL_REPAIR = "600450 · Repairs & Maintenance";
 const GL_SPARES = "600420 · Spare parts consumed";
 
@@ -250,7 +250,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-SEAL-MECH-50MM-SIC",
     description: 'Mechanical seal — cartridge — 50 mm shaft — silicon carbide faces',
     requestor: "Plant engineer · Assembly Line 2",
-    plant: "Amberg · Electronics Works",
+    plant: "Lindfeld · Electronics Works",
     line: "Assembly Line 2",
     qty: 1,
     uom: "EA",
@@ -274,9 +274,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48655",
     material: "MRO-MEDIA-ZRO2-1.2MM",
     description: "Grinding media — zirconia — 1.2 mm — 25 kg bag",
-    requestor: "Plant engineer · SMT Line 3",
-    plant: "Amberg · Electronics Works",
-    line: "SMT Line 3",
+    requestor: "Plant engineer · Deburring Line 3",
+    plant: "Lindfeld · Electronics Works",
+    line: "Deburring Line 3",
     qty: 8,
     uom: "BAG",
     unitPrice: 118,
@@ -301,9 +301,9 @@ export const requisitions: Requisition[] = [
     flow: "catalogue",
     material: "MRO-FILT-BAG-25UM-PP",
     description: "Filter bag — 25 micron — polypropylene — size 2",
-    requestor: "Process engineer · Let-down Line 1",
-    plant: "Amberg · Electronics Works",
-    line: "Let-down Line 1",
+    requestor: "Process engineer · Deburring Line 1",
+    plant: "Lindfeld · Electronics Works",
+    line: "Deburring Line 1",
     qty: 400,
     uom: "EA",
     unitPrice: 22.4,
@@ -323,11 +323,11 @@ export const requisitions: Requisition[] = [
   /* ── Validated · waiting to become an order (the compliance run) ─────── */
   {
     id: "PR-48690",
-    material: "MRO-GBOX-KIT-REACTOR",
-    description: "Gearbox rebuild kit — reactor drive — seal & bearing set",
-    requestor: "Reliability engineer · Reactor Train 1",
-    plant: "Amberg · Device Works",
-    line: "Reactor Train 1",
+    material: "MRO-GBOX-KIT-WINDER",
+    description: "Gearbox rebuild kit — winder drive — seal & bearing set",
+    requestor: "Reliability engineer · Winding Line 1",
+    plant: "Lindfeld · Drive Systems Works",
+    line: "Winding Line 1",
     qty: 1,
     uom: "EA",
     unitPrice: 42000,
@@ -347,11 +347,11 @@ export const requisitions: Requisition[] = [
   /* ── Held · off-contract ─────────────────────────────────────────────── */
   {
     id: "PR-48696",
-    material: "RAW-TIO2-RUTILE-SFC",
-    description: "Titanium dioxide — rutile — surface-treated — 25 kg bags",
-    requestor: "Formulation lead · Let-down Line 1",
-    plant: "Amberg · Electronics Works",
-    line: "Let-down Line 1",
+    material: "RAW-ELSTEEL-M4-030MM",
+    description: "Grain-oriented electrical steel — M4 grade — C5 insulation coated — 0.30 mm coil",
+    requestor: "Materials engineer · Deburring Line 1",
+    plant: "Lindfeld · Electronics Works",
+    line: "Deburring Line 1",
     qty: 12,
     uom: "T",
     unitPrice: 3255,
@@ -369,11 +369,11 @@ export const requisitions: Requisition[] = [
 
   {
     id: "PR-48662",
-    material: "MRO-VISC-PROBE-INLINE",
-    description: "Inline viscometer probe — DN50 flange — 0–20,000 cP",
-    requestor: "Instrument technician · Let-down Line 1",
-    plant: "Amberg · Electronics Works",
-    line: "Let-down Line 1",
+    material: "MRO-VIB-SENSOR-INLINE",
+    description: "Inline vibration sensor — accelerometer — 4–20 mA output",
+    requestor: "Instrument technician · Deburring Line 1",
+    plant: "Lindfeld · Electronics Works",
+    line: "Deburring Line 1",
     qty: 2,
     uom: "EA",
     unitPrice: 6450,
@@ -395,9 +395,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48668",
     material: "MRO-MOTOR-IE3-15KW",
     description: "Electric motor — IE3 — 15 kW — flange mount",
-    requestor: "Reliability engineer · Resin Plant",
-    plant: "Erlangen · Drives & Power",
-    line: "Reactor Train 2",
+    requestor: "Reliability engineer · Winding Plant",
+    plant: "Clairmont · Drives & Power",
+    line: "Winding Line 2",
     qty: 3,
     uom: "EA",
     unitPrice: 5240,
@@ -417,10 +417,10 @@ export const requisitions: Requisition[] = [
   /* ── Held · duplicate ────────────────────────────────────────────────── */
   {
     id: "PR-48671",
-    material: "MRO-HOSE-CHEM-2IN-EPDM",
-    description: "Chemical transfer hose — 2 in — EPDM lined — 6 m",
+    material: "MRO-HOSE-COOL-2IN-EPDM",
+    description: "Coolant transfer hose — 2 in — EPDM lined — 6 m",
     requestor: "Maintenance planner · Test & Pack Line 2",
-    plant: "Fürth · Assembly & Packaging",
+    plant: "Riomar · Assembly & Packaging",
     line: "Test & Pack Line 2",
     qty: 6,
     uom: "EA",
@@ -444,9 +444,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48674",
     material: "MRO-FILT-BAG-25UM-PP",
     description: "Filter bag — 25 micron — polypropylene — size 2",
-    requestor: "Plant engineer · Let-down Line 2",
-    plant: "Chengdu · Electronic Works",
-    line: "Let-down Line 2",
+    requestor: "Plant engineer · Deburring Line 2",
+    plant: "Lianhe · Electronics Works",
+    line: "Deburring Line 2",
     qty: 40,
     uom: "EA",
     unitPrice: 46,
@@ -461,7 +461,7 @@ export const requisitions: Requisition[] = [
     agreement: SA07,
     sourceLang: "zh",
     avoidedSpend: 1104,
-    note: "The Erlangen plant holds twenty-four of these in its store and can transfer them this week.",
+    note: "The Clairmont plant holds twenty-four of these in its store and can transfer them this week.",
   },
 
   /* ── In flight ───────────────────────────────────────────────────────── */
@@ -469,9 +469,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48679",
     material: "MRO-VALVE-BFLY-DN80-PTFE",
     description: "Butterfly valve — DN80 — PTFE lined — lever operated",
-    requestor: "Maintenance planner · Resin Plant",
-    plant: "Amberg · Device Works",
-    line: "Reactor Train 1",
+    requestor: "Maintenance planner · Winding Plant",
+    plant: "Lindfeld · Drive Systems Works",
+    line: "Winding Line 1",
     qty: 4,
     uom: "EA",
     unitPrice: 612,
@@ -491,7 +491,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-PUMP-DIAPH-AODD-2IN",
     description: "Air-operated double-diaphragm pump — 2 in — PTFE fitted",
     requestor: "Plant engineer · Test & Pack Line 1",
-    plant: "Fürth · Assembly & Packaging",
+    plant: "Riomar · Assembly & Packaging",
     line: "Test & Pack Line 1",
     qty: 1,
     uom: "EA",
@@ -511,9 +511,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48683",
     material: "MRO-TEMP-RTD-PT100",
     description: "Temperature probe — RTD Pt100 — 6 mm — DN25 flange",
-    requestor: "Instrument technician · Reactor Train 2",
-    plant: "Erlangen · Drives & Power",
-    line: "Reactor Train 2",
+    requestor: "Instrument technician · Winding Line 2",
+    plant: "Clairmont · Drives & Power",
+    line: "Winding Line 2",
     qty: 6,
     uom: "EA",
     unitPrice: 214,
@@ -536,7 +536,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-DIAPH-PTFE-2IN",
     description: "Diaphragm — PTFE — 2 in transfer pump",
     requestor: "Maintenance planner · Assembly Line 1",
-    plant: "Amberg · Electronics Works",
+    plant: "Lindfeld · Electronics Works",
     line: "Assembly Line 1",
     qty: 6,
     uom: "EA",
@@ -560,7 +560,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-DIAPH-PTFE-15IN",
     description: "Diaphragm — PTFE — 1.5 in dosing pump",
     requestor: "Maintenance planner · SMT Line 1",
-    plant: "Amberg · Electronics Works",
+    plant: "Lindfeld · Electronics Works",
     line: "SMT Line 1",
     qty: 10,
     uom: "EA",
@@ -580,9 +580,9 @@ export const requisitions: Requisition[] = [
     id: "PR-48614",
     material: "MRO-GASKET-PTFE-DN80",
     description: "Gasket — PTFE envelope — DN80 — full face",
-    requestor: "Maintenance planner · Resin Plant",
-    plant: "Erlangen · Drives & Power",
-    line: "Reactor Train 1",
+    requestor: "Maintenance planner · Winding Plant",
+    plant: "Clairmont · Drives & Power",
+    line: "Winding Line 1",
     qty: 25,
     uom: "EA",
     unitPrice: 19,
@@ -602,7 +602,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-COUPL-FLEX-80MM",
     description: "Flexible coupling — 80 mm — elastomer insert",
     requestor: "Plant engineer · SMT Line 2",
-    plant: "Chengdu · Electronic Works",
+    plant: "Lianhe · Electronics Works",
     line: "SMT Line 2",
     qty: 2,
     uom: "EA",
@@ -620,10 +620,10 @@ export const requisitions: Requisition[] = [
   },
   {
     id: "PR-48622",
-    material: "MRO-SEAL-KIT-AGIT-40MM",
-    description: "Seal kit — agitator — 40 mm — elastomer and face set",
+    material: "MRO-SEAL-KIT-GBOX-40MM",
+    description: "Seal kit — gear reducer — 40 mm — elastomer and face set",
     requestor: "Plant engineer · Assembly Line 1",
-    plant: "Amberg · Electronics Works",
+    plant: "Lindfeld · Electronics Works",
     line: "Assembly Line 1",
     qty: 2,
     uom: "EA",
@@ -644,7 +644,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-FILT-BAG-25UM-PP",
     description: "Filter bag — 25 micron — polypropylene — size 2",
     requestor: "Maintenance planner · Test & Pack Line 1",
-    plant: "Fürth · Assembly & Packaging",
+    plant: "Riomar · Assembly & Packaging",
     line: "Test & Pack Line 1",
     qty: 30,
     uom: "EA",
@@ -665,7 +665,7 @@ export const requisitions: Requisition[] = [
     material: "MRO-VALVE-BFLY-DN80-PTFE",
     description: "Butterfly valve — DN80 — PTFE lined — lever operated",
     requestor: "Maintenance planner · Utilities",
-    plant: "Erlangen · Drives & Power",
+    plant: "Clairmont · Drives & Power",
     line: "Utilities",
     qty: 2,
     uom: "EA",
@@ -804,8 +804,8 @@ export const invoiceTieouts: InvoiceTieout[] = [
     id: "BPI-5581",
     vendor: APEX,
     prId: "PR-48622",
-    material: "MRO-SEAL-KIT-AGIT-40MM",
-    description: "Seal kit — agitator — 40 mm",
+    material: "MRO-SEAL-KIT-GBOX-40MM",
+    description: "Seal kit — gear reducer — 40 mm",
     receivedOn: "2026-06-24",
     terms: "Net 30",
     invoice: { reference: "BPI-5581", qty: 2, unitPrice: 845 },

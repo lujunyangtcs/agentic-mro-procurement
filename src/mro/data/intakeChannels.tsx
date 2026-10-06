@@ -145,7 +145,7 @@ const filterSpec: IntakeSpec = {
   originalMeta: "Intake portal · written in German · 09:04",
   think: 2600,
   lines: [
-    "Reading the note — it is in German, from Let-down Line 1",
+    "Reading the note — it is in German, from Deburring Line 1",
     "This is the quarterly filter change, not a breakdown",
     "The engineer gave the material number outright",
     "It has been on the catalogue for five years",
@@ -193,12 +193,12 @@ const mediaSpec: IntakeSpec = {
   originalMeta: "Supplier portal · Chinese · 11:20",
   think: 1800,
   lines: [
-    "Reading the request from SMT Line 3",
+    "Reading the request from Deburring Line 3",
     "Matching the media grade and bag size",
     "Checking what is already open for this line",
   ],
   conclusion:
-    "Grinding media for SMT Line 3. I have coded it — but something very like it is already open, so that is worth looking at first.",
+    "Grinding media for Deburring Line 3. I have coded it — but something very like it is already open, so that is worth looking at first.",
   fields: formFields("gearbox", { why: "Media worn — mill throughput dropping" }),
   stagger: 0,
   receipt: step0("gearbox").document,
@@ -228,7 +228,7 @@ export const channels: Channel[] = [
     open: { text: "Pump diaphragms for a mixing line", lang: "de", spec: bearingSpec },
     history: [
       { text: "Coupling inserts for a drive", note: "Released last week" },
-      { text: "Temperature probe for a reactor", note: "Being validated" },
+      { text: "Temperature probe for a winding line", note: "Being validated" },
     ],
   },
   {
@@ -238,7 +238,7 @@ export const channels: Channel[] = [
     meta: "Suppliers and plants writing in",
     open: { text: "Grinding media for the mill", lang: "zh", spec: mediaSpec },
     history: [
-      { text: "Filter bags for the coating line", note: "Covered from another plant" },
+      { text: "Filter bags for the deburring line", note: "Covered from another plant" },
       { text: "Valve seals for a filling line", note: "Released last week" },
     ],
   },

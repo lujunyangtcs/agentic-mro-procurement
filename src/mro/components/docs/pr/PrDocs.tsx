@@ -10,7 +10,7 @@
  *     routing) where each checked row reads pass or flagged. One component drives
  *     steps 2–5 so the two examples (mechanical seal · grinding media) stay in lockstep.
  *
- * Operating entity is Siemens; vendors anonymised.
+ * Operating entity is Orvantec; vendors anonymised.
  */
 
 import { DocShell, DocTitleBand, DocTabs, SectionBand, Field } from "@/mro/components/docs/sap/parts";
@@ -39,7 +39,7 @@ export type StructuredPr = {
   /** PR document type, e.g. "NB · Standard requisition". */
   prType?: string;
   requestor?: string;
-  /** Purchasing org, e.g. "1000 · Siemens Procurement". */
+  /** Purchasing org, e.g. "1000 · Orvantec Procurement". */
   purchOrg?: string;
   /** Purchasing group, e.g. "200 · MRO / Maintenance". */
   purchGroup?: string;

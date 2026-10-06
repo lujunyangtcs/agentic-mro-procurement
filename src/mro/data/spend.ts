@@ -27,10 +27,10 @@ export type Site = {
 };
 
 export const sites: Site[] = [
-  { country: "DE", countryName: "Germany", site: "Amberg · Electronics Works", lang: "de" },
-  { country: "ES", countryName: "Spain", site: "Fürth · Assembly & Packaging", lang: "es" },
-  { country: "FR", countryName: "France", site: "Erlangen · Drives & Power", lang: "fr" },
-  { country: "CN", countryName: "China", site: "Chengdu · Electronic Works", lang: "zh" },
+  { country: "DE", countryName: "Germany", site: "Lindfeld · Electronics Works", lang: "de" },
+  { country: "ES", countryName: "Spain", site: "Riomar · Assembly & Packaging", lang: "es" },
+  { country: "FR", countryName: "France", site: "Clairmont · Drives & Power", lang: "fr" },
+  { country: "CN", countryName: "China", site: "Lianhe · Electronics Works", lang: "zh" },
   { country: "US", countryName: "United States", site: "Riverbend · Technical Centre", lang: "en" },
 ];
 
@@ -212,7 +212,7 @@ export const spendLines: SpendLine[] = [
   L("ES", "motors", "reliability-engineer", "off-contract", "Motores Del Sur", 63_800),
   L("ES", "services", "buyer-desk", "contract", "Nordwerk Services", 51_500),
 
-  /* France — resin and additives */
+  /* France — windings and drives */
   L("FR", "seals", "plant-engineer", "contract", "Apex Industrial Supply", 102_600),
   L("FR", "media", "plant-engineer", "contract", "ZirCore Materials", 84_900),
   L("FR", "instruments", "instrument-technician", "contract", "Precision Instrument Partners", 76_300),

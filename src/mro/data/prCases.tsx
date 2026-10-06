@@ -34,7 +34,7 @@ import { MultilingualEmailDoc } from "@/mro/components/docs/pr/MultilingualEmail
 import { LookupSheetDoc } from "@/mro/components/docs/pr/LookupSheet";
 import { BudgetApprovalDoc, type BudgetApproval } from "@/mro/components/workspace/BudgetApprovalSignable";
 
-const COST_CENTER = "10034 · Dispersion Plant Maintenance";
+const COST_CENTER = "10034 · Deburring & Finishing Maintenance";
 const GL = "600450 · Repairs & Maintenance";
 /** SAP payment-term codes — the editable dropdown options on the terms field. */
 const PAYMENT_TERMS = ["NT30 · Net 30", "NT45 · Net 45", "NT60 · Net 60", "NT90 · Net 90"];
@@ -65,12 +65,12 @@ const buildCodingRef = (material: string, line: string, confidence: string, open
         file: "cost-centers.xlsx",
         tab: "Plant maintenance",
         columns: ["Cost center", "Description", "Plant"],
-        usedNote: `→ ${line} rolls up to Dispersion`,
+        usedNote: `→ ${line} rolls up to Lindfeld`,
         rows: [
-          { cells: ["10031", "Resin Plant Maintenance", "Amberg"], matched: false },
-          { cells: ["10034", "Dispersion Plant Maintenance", "Amberg"], matched: true },
-          { cells: ["10052", "Test & Pack Line Maintenance", "Fürth"], matched: false },
-          { cells: ["10061", "Utilities Maintenance", "Amberg"], matched: false },
+          { cells: ["10031", "Drive Systems Maintenance", "Lindfeld"], matched: false },
+          { cells: ["10034", "Deburring & Finishing Maintenance", "Lindfeld"], matched: true },
+          { cells: ["10052", "Test & Pack Line Maintenance", "Riomar"], matched: false },
+          { cells: ["10061", "Utilities Maintenance", "Lindfeld"], matched: false },
         ],
       },
       {
@@ -98,12 +98,12 @@ const beltCodingRef = buildCodingRef(
   "MRO-SEAL-MECH-50MM-SIC",
   "Assembly Line 2",
   "86%",
-  <>The request gave a shaft range (“45–50 mm”) and no part number; the agent read the installed agitator off the equipment record for Assembly Line 2 and resolved it to 50 mm.</>,
+  <>The request gave a shaft range (“45–50 mm”) and no part number; the agent read the installed gear reducer off the equipment record for Assembly Line 2 and resolved it to 50 mm.</>,
 );
 
 const rollerCodingRef = buildCodingRef(
   "MRO-MEDIA-ZRO2-1.2MM",
-  "SMT Line 3",
+  "Deburring Line 3",
   "94%",
   <>The 1.2 mm zirconia grinding media maps cleanly to the standard SKU.</>,
 );
@@ -119,14 +119,14 @@ const buildRequestorRef = (match: string) => (
         columns: ["Requestor", "Plant", "Purch org", "Purch grp", "PR type"],
         usedNote: `→ ${match}`,
         rows: [
-          { cells: ["Plant engineer · SMT Line 3", "Dispersion · BM3", "1000", "200 · MRO", "NB"], matched: match === "BM3" },
-          { cells: ["Plant engineer · Assembly Line 2", "Dispersion · ML2", "1000", "200 · MRO", "NB"], matched: match === "ML2" },
-          { cells: ["Reliability eng · Filling Plant", "Fürth · Test & Pack Line 2", "1000", "200 · MRO", "NB"], matched: match === "Pulping" },
+          { cells: ["Plant engineer · Deburring Line 3", "Lindfeld · BM3", "1000", "200 · MRO", "NB"], matched: match === "BM3" },
+          { cells: ["Plant engineer · Assembly Line 2", "Lindfeld · ML2", "1000", "200 · MRO", "NB"], matched: match === "ML2" },
+          { cells: ["Reliability eng · Filling Plant", "Riomar · Test & Pack Line 2", "1000", "200 · MRO", "NB"], matched: match === "Pulping" },
           { cells: ["Reliability eng · Utilities line", "Utilities line", "1000", "200 · MRO", "NB"], matched: match === "Recovery" },
         ],
       },
     ]}
-    footer={<>Purchasing org 1000 (Siemens Procurement) and group 200 (MRO / Maintenance) are the plant defaults; PR type NB is the standard requisition.</>}
+    footer={<>Purchasing org 1000 (Orvantec Procurement) and group 200 (MRO / Maintenance) are the plant defaults; PR type NB is the standard requisition.</>}
   />
 );
 
@@ -146,7 +146,7 @@ export const beltStructuredDoc = (
       createdOn: "2026-06-20 · 10:46",
       materialCode: "MRO-SEAL-MECH-50MM-SIC",
       description: "Mechanical Seal — 50 mm Shaft — Silicon Carbide — Cartridge",
-      plant: "Dispersion Plant · Assembly Line 2",
+      plant: "Deburring Plant · Assembly Line 2",
       costCenter: COST_CENTER,
       glAccount: GL,
       item: [
@@ -163,12 +163,12 @@ export const beltStructuredDoc = (
       ],
       confidence: "97% · spec resolved",
       flags: [
-        "Free text gave a shaft-diameter range (45–50 mm) and no part number — the equipment record for Assembly Line 2 has a 50 mm agitator shaft, so it is coded to 50 mm.",
+        "Free text gave a shaft-diameter range (45–50 mm) and no part number — the equipment record for Assembly Line 2 has a 50 mm gear reducer shaft, so it is coded to 50 mm.",
         "Requester said \"previously Apex but not sure\" — the agreement confirms Apex is the supplier on record for this seal.",
       ],
       prType: "NB · Standard requisition",
       requestor: "Plant engineer · Assembly Line 2",
-      purchOrg: "1000 · Siemens Procurement",
+      purchOrg: "1000 · Orvantec Procurement",
       purchGroup: "200 · MRO / Maintenance",
       valuation: [
         { label: "Unit price", value: "$4,180.00 / EA" },
@@ -201,7 +201,7 @@ const beltStructuredDocOffContract = (
       createdOn: "2026-06-20 · 10:46",
       materialCode: "MRO-SEAL-MECH-50MM-SIC",
       description: "Mechanical Seal — 50 mm Shaft — Silicon Carbide — Cartridge",
-      plant: "Dispersion Plant · Assembly Line 2",
+      plant: "Deburring Plant · Assembly Line 2",
       costCenter: COST_CENTER,
       glAccount: GL,
       item: [
@@ -218,12 +218,12 @@ const beltStructuredDocOffContract = (
       ],
       confidence: "97% · spec resolved",
       flags: [
-        "Free text gave a shaft-diameter range (45–50 mm) and no part number — the equipment record for Assembly Line 2 has a 50 mm agitator shaft, so it is coded to 50 mm.",
+        "Free text gave a shaft-diameter range (45–50 mm) and no part number — the equipment record for Assembly Line 2 has a 50 mm gear reducer shaft, so it is coded to 50 mm.",
         "Sourcing off-contract — vendor, price and source of supply are pending the competitive RFQ in the sourcing step.",
       ],
       prType: "NB · Standard requisition",
       requestor: "Plant engineer · Assembly Line 2",
-      purchOrg: "1000 · Siemens Procurement",
+      purchOrg: "1000 · Orvantec Procurement",
       purchGroup: "200 · MRO / Maintenance",
       // valuation + sourceOfSupply intentionally omitted → those sections stay hidden.
       deliveryTerms: [
@@ -243,14 +243,14 @@ const beltStructuredDocOffContract = (
 export const beltFreeText = (
   <MultilingualEmailDoc
     from="Plant engineer · Assembly Line 2"
-    fromAddr="engineer@siemens.com"
+    fromAddr="engineer@orvantec.com"
     to="Procurement intake"
     sent="2026-06-20 · 10:40"
     sourceLang="de"
     original={{
-      subject: "Neue Gleitringdichtung — Mischlinie 2",
+      subject: "Neue Gleitringdichtung — Montagelinie 2",
       lines: [
-        "Wir benötigen eine neue Gleitringdichtung für Mischlinie 2. Die vorhandene Dichtung ist beschädigt und undicht.",
+        "Wir benötigen eine neue Gleitringdichtung für Montagelinie 2. Die vorhandene Dichtung ist beschädigt und undicht.",
         "Angaben: Welle etwa 45–50 mm, Gleitflächen aus Siliziumkarbid, schwere Ausführung. Früher über Apex bezogen, die Teilenummer ist mir aber nicht bekannt.",
         "Wird dringend benötigt, sonst steht die Produktion.",
       ],
@@ -369,7 +369,7 @@ const beltApprovalDoc = (
             { label: "Cost center / GL", expected: "Correct plant / class", found: "10034 / 600450 · correct", ok: true },
             { label: "Competitive bidding", expected: "3 quotes if > threshold", found: "On-contract · not required", ok: true },
             { label: "DOA approval", expected: "Plant-level", found: "Plant maintenance · in limit", ok: true },
-            { label: "Spec sign-off", expected: "Diameter resolved", found: "50 mm · Assembly Line 2 agitator", ok: true },
+            { label: "Spec sign-off", expected: "Diameter resolved", found: "50 mm · Assembly Line 2 gear reducer", ok: true },
           ],
         },
       ],
@@ -415,7 +415,7 @@ export const beltMaterialMaster = (
       createdBy: "Master data steward",
       basic: [
         { label: "Material type", value: "ERSA · Spare part" },
-        { label: "Industry sector", value: "Chemical industry" },
+        { label: "Industry sector", value: "Electronics & industrial automation" },
         { label: "Material group", value: "MRO · Seals & packing" },
         { label: "Base UoM", value: "EA" },
         { label: "Gross weight", value: "6 kg" },
@@ -447,9 +447,9 @@ const beltStockOverview = (
       createdOn: "2026-06-20 · 10:48",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Amberg · Electronics", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA", tone: "short" },
-        { plant: "Erlangen plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
-        { plant: "Fürth", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Lindfeld · Electronics", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA", tone: "short" },
+        { plant: "Clairmont plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Riomar", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
       ],
       note: "Seal is line-specific (50 mm shaft diameter) — no on-hand and no interplant stock to transfer; a new buy is justified.",
     }}
@@ -467,9 +467,9 @@ const beltStockSheet = (
         columns: ["Plant", "Material", "On-hand", "Safety stock", "UoM"],
         usedNote: "→ 0 on-hand · 0 safety · no interplant cover",
         rows: [
-          { cells: ["Amberg · Assembly Line 2", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: true },
-          { cells: ["Erlangen plant", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
-          { cells: ["Fürth", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
+          { cells: ["Lindfeld · Assembly Line 2", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: true },
+          { cells: ["Clairmont plant", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
+          { cells: ["Riomar", "MRO-SEAL-MECH-50MM-SIC", "0", "0", "EA"], matched: false },
         ],
       },
     ]}
@@ -490,10 +490,10 @@ const beltOpenPrList = (
       createdBy: "Master Data agent",
       scope: "Open PRs · plant 1000 · material group MRO · not yet released",
       rows: [
-        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Dispersion · ML2", created: "2026-06-19" },
+        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Lindfeld · ML2", created: "2026-06-19" },
         { pr: "PR-48631", item: "10", material: "MRO-PUMP-SEAL-STD", qty: "2 EA", plant: "Utilities", created: "2026-06-20" },
-        { pr: "PR-48633", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "4 BAG", plant: "Dispersion · BM3", created: "2026-06-20" },
-        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Dispersion · BM3", created: "2026-06-18" },
+        { pr: "PR-48633", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "4 BAG", plant: "Lindfeld · BM3", created: "2026-06-20" },
+        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Lindfeld · BM3", created: "2026-06-18" },
       ],
       note: "No open PR carries MRO-SEAL-MECH-50MM-SIC — no duplicate for the mechanical seal. PR-48630 is the only demand for this material.",
     }}
@@ -508,9 +508,9 @@ const beltWarrantyRecord = (
       createdOn: "2026-06-20 · 10:50",
       createdBy: "Warranty & coverage desk",
       object: [
-        { label: "Equipment", value: "Assembly Line 2 agitator" },
+        { label: "Equipment", value: "Assembly Line 2 gear reducer" },
         { label: "Functional loc.", value: "NGT-DSP-ML2" },
-        { label: "Component", value: "Agitator seal (wear part)" },
+        { label: "Component", value: "gear reducer seal (wear part)" },
         { label: "Commissioned", value: "2021-08-04" },
       ],
       coverage: [
@@ -538,7 +538,7 @@ export const beltOutlineAgreement = (
       header: [
         { label: "Vendor", value: "Apex Industrial Supply" },
         { label: "Vendor code", value: "0001000207" },
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Valid from", value: "2026-01-01" },
         { label: "Valid to", value: "2026-12-31" },
         { label: "Target value", value: "$420,000" },
@@ -569,7 +569,7 @@ const beltVendorRecord = (
         { label: "Tax / reg.", value: "Compliant · on file" },
       ],
       purchasing: [
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Order currency", value: "USD" },
         { label: "Payment terms", value: "Net 30" },
         { label: "Preferred", value: "Yes · MRO seals" },
@@ -617,16 +617,16 @@ const rollerStructuredDoc = (
       createdOn: "2026-06-20 · 11:10",
       materialCode: "MRO-MEDIA-ZRO2-1.2MM",
       description: "Grinding Media — Zirconia — 1.2 mm — 25 kg Bag",
-      plant: "Dispersion Plant · SMT Line 3",
+      plant: "Deburring Plant · Deburring Line 3",
       costCenter: COST_CENTER,
       glAccount: GL,
       item: [
         { label: "Size", value: "1.2 mm · zirconia · 25 kg bag" },
         { label: "Quantity", value: "8 BAG (from \"6–8\")" },
         { label: "UoM", value: "BAG" },
-        { label: "Same as", value: "SMT Line 3 charge" },
+        { label: "Same as", value: "Deburring Line 3 charge" },
         { label: "Delivery", value: "Urgent · grind fineness dropping" },
-        { label: "Requisitioner", value: "Plant engineer · SMT Line 3" },
+        { label: "Requisitioner", value: "Plant engineer · Deburring Line 3" },
       ],
       assignment: [
         { label: "Material group", value: "MRO · Milling & media" },
@@ -637,8 +637,8 @@ const rollerStructuredDoc = (
         "Requested 8 BAG, but inventory and warranty checks below change the recommended buy quantity — see the validation report.",
       ],
       prType: "NB · Standard requisition",
-      requestor: "Plant engineer · SMT Line 3",
-      purchOrg: "1000 · Siemens Procurement",
+      requestor: "Plant engineer · Deburring Line 3",
+      purchOrg: "1000 · Orvantec Procurement",
       purchGroup: "200 · MRO / Maintenance",
       valuation: [
         { label: "Unit price", value: "$118.00 / BAG" },
@@ -662,7 +662,7 @@ const rollerStructuredDoc = (
 const rollerFreeText = (
   <MultilingualEmailDoc
     from="车间工程师 · 三号球磨机"
-    fromAddr="engineer@siemens.com"
+    fromAddr="engineer@orvantec.com"
     to="Procurement intake"
     sent="2026-06-20 · 11:04"
     sourceLang="zh"
@@ -675,10 +675,10 @@ const rollerFreeText = (
       ],
     }}
     translated={{
-      subject: "Replacement grinding media — SMT Line 3",
+      subject: "Replacement grinding media — Deburring Line 3",
       lines: [
-        "Need replacement grinding media for SMT Line 3. Media wearing out far too fast and dropping the grind fineness.",
-        "Approx 6–8 bags required. Same as currently installed in SMT Line 3.",
+        "Need replacement grinding media for Deburring Line 3. Media wearing out far too fast and dropping the grind fineness.",
+        "Approx 6–8 bags required. Same as currently installed in Deburring Line 3.",
         "Urgent to avoid further breakdown.",
       ],
     }}
@@ -706,7 +706,7 @@ const rollerMasterDataDoc = (
           band: "Inventory & interplant",
           rows: [
             { label: "On-hand stock", expected: "Check before buy", found: "0 BAG at this plant", ok: true },
-            { label: "Interplant availability", expected: "Check sister plants", found: "6 BAG at Erlangen plant store", ok: false },
+            { label: "Interplant availability", expected: "Check sister plants", found: "6 BAG at Clairmont plant store", ok: false },
           ],
         },
       ],
@@ -734,7 +734,7 @@ const rollerWarrantyDoc = (
           ],
         },
       ],
-      verdict: { ok: false, text: "SMT Line 3 is inside its 12-month parts warranty — raise a claim on the early-worn media rather than buying it." },
+      verdict: { ok: false, text: "Deburring Line 3 is inside its 12-month parts warranty — raise a claim on the early-worn media rather than buying it." },
     }}
   />
 );
@@ -783,7 +783,7 @@ const rollerApprovalDoc = (
         {
           band: "Recommended action",
           rows: [
-            { label: "Interplant transfer", expected: "Use available stock", found: "6 BAG from Erlangen plant", ok: true },
+            { label: "Interplant transfer", expected: "Use available stock", found: "6 BAG from Clairmont plant", ok: true },
             { label: "Warranty claim", expected: "Claim covered defects", found: "Early-worn media · ZirCore", ok: true },
             { label: "Residual buy", expected: "Only the shortfall", found: "2 BAG · Apex · $236", ok: true },
             { label: "Cancel duplicate", expected: "Close PR-48641", found: "Cancellation drafted", ok: true },
@@ -808,7 +808,7 @@ const rollerApprovalDocResolved = (
         {
           band: "Recommended action",
           rows: [
-            { label: "Interplant transfer", expected: "Use available stock", found: "Routed · 6 BAG from Erlangen", ok: true },
+            { label: "Interplant transfer", expected: "Use available stock", found: "Routed · 6 BAG from Clairmont", ok: true },
             { label: "Warranty claim", expected: "Claim covered defects", found: "Raised · ZirCore", ok: true },
             { label: "Residual buy", expected: "Only the shortfall", found: "Released · 2 BAG · $236", ok: true },
             { label: "Cancel duplicate", expected: "Close PR-48641", found: "Cancelled", ok: true },
@@ -832,7 +832,7 @@ const rollerMaterialMaster = (
       createdBy: "Master data steward",
       basic: [
         { label: "Material type", value: "ERSA · Spare part" },
-        { label: "Industry sector", value: "Chemical industry" },
+        { label: "Industry sector", value: "Electronics & industrial automation" },
         { label: "Material group", value: "MRO · Milling & media" },
         { label: "Base UoM", value: "BAG" },
         { label: "Gross weight", value: "11 kg" },
@@ -857,7 +857,7 @@ const rollerMaterialMaster = (
 );
 
 /* Cross-plant inventory the Master Data agent reads — an Excel view of enterprise
- * stock, with the Erlangen surplus row highlighted + the agent's transfer recommendation. */
+ * stock, with the Clairmont surplus row highlighted + the agent's transfer recommendation. */
 export const rollerInventorySheet = (
   <LookupSheetDoc
     sheets={[
@@ -865,17 +865,17 @@ export const rollerInventorySheet = (
         file: "stock-on-hand.xlsx",
         tab: "MRO inventory · media",
         columns: ["Plant", "Material", "On-hand", "Safety", "UoM"],
-        usedNote: "→ 6 BAG surplus at Erlangen · transfer before buying",
+        usedNote: "→ 6 BAG surplus at Clairmont · transfer before buying",
         rows: [
-          { cells: ["Amberg · SMT Line 3", "MRO-MEDIA-ZRO2-1.2MM", "0", "2", "BAG"], matched: false },
-          { cells: ["Erlangen plant", "MRO-MEDIA-ZRO2-1.2MM", "6", "2", "BAG"], matched: true },
-          { cells: ["Fürth", "MRO-MEDIA-ZRO2-1.2MM", "0", "0", "BAG"], matched: false },
+          { cells: ["Lindfeld · Deburring Line 3", "MRO-MEDIA-ZRO2-1.2MM", "0", "2", "BAG"], matched: false },
+          { cells: ["Clairmont plant", "MRO-MEDIA-ZRO2-1.2MM", "6", "2", "BAG"], matched: true },
+          { cells: ["Riomar", "MRO-MEDIA-ZRO2-1.2MM", "0", "0", "BAG"], matched: false },
         ],
       },
     ]}
     footer={
       <>
-        The network already holds what SMT Line 3 needs — <strong>6 BAG surplus at the Erlangen plant</strong>.
+        The network already holds what Deburring Line 3 needs — <strong>6 BAG surplus at the Clairmont plant</strong>.
         Transfer those 6 by interplant movement and buy only the 2-unit shortfall on-contract ($236), versus
         $944 to buy all 8 new — avoiding $708 of duplicate spend.
       </>
@@ -891,17 +891,17 @@ const rollerStockTransfer = (
       createdOn: "2026-06-20 · 11:18",
       createdBy: "Approval & routing",
       header: [
-        { label: "Supplying plant", value: "Erlangen plant · MRO-01" },
-        { label: "Receiving plant", value: "Amberg · SMT Line 3" },
+        { label: "Supplying plant", value: "Clairmont plant · MRO-01" },
+        { label: "Receiving plant", value: "Lindfeld · Deburring Line 3" },
         { label: "Movement type", value: "351 · interplant transfer" },
         { label: "Doc type", value: "UB · stock transport order" },
         { label: "Value redirected", value: "$708 (6 BAG)" },
         { label: "Lead time", value: "In-network · this week" },
       ],
       items: [
-        { item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", description: "Grinding media · zirconia 1.2 mm · 25 kg bag", qty: "6 BAG", from: "Erlangen", to: "Amberg" },
+        { item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", description: "Grinding media · zirconia 1.2 mm · 25 kg bag", qty: "6 BAG", from: "Clairmont", to: "Lindfeld" },
       ],
-      note: "Transfers the 6 BAG surplus from Erlangen instead of a fresh buy — avoids $708 of duplicate spend. On posting, Erlangen stock draws down and a goods receipt is scheduled at SMT Line 3, so inventory and logistics records update across both plants.",
+      note: "Transfers the 6 BAG surplus from Clairmont instead of a fresh buy — avoids $708 of duplicate spend. On posting, Clairmont stock draws down and a goods receipt is scheduled at Deburring Line 3, so inventory and logistics records update across both plants.",
     }}
   />
 );
@@ -913,8 +913,8 @@ export const rollerOpenPrList = (
       createdBy: "Master Data agent",
       scope: "Open PRs · plant 1000 · material group MRO · not yet released",
       rows: [
-        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Dispersion · ML2", created: "2026-06-19" },
-        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Dispersion · BM3", created: "2026-06-18", tone: "dup" },
+        { pr: "PR-48628", item: "10", material: "MRO-SEAL-GLAND-PACK", qty: "4 SET", plant: "Lindfeld · ML2", created: "2026-06-19" },
+        { pr: "PR-48641", item: "10", material: "MRO-MEDIA-ZRO2-1.2MM", qty: "6 BAG", plant: "Lindfeld · BM3", created: "2026-06-18", tone: "dup" },
         { pr: "PR-48650", item: "10", material: "MRO-DIAPH-PTFE-15IN", qty: "10 EA", plant: "Test & Pack Line", created: "2026-06-19" },
       ],
       note: "PR-48641 already requests 6 BAG of MRO-MEDIA-ZRO2-1.2MM for the same line — a duplicate of this requisition. Consolidate and cancel it.",
@@ -930,7 +930,7 @@ export const rollerWarrantyRecord = (
       createdOn: "2026-06-20 · 11:14",
       createdBy: "Warranty & coverage desk",
       object: [
-        { label: "Equipment", value: "SMT Line 3" },
+        { label: "Equipment", value: "Deburring Line 3" },
         { label: "Functional loc.", value: "NGT-DSP-BM3" },
         { label: "Component", value: "Grinding media charge" },
         { label: "Commissioned", value: "2026-01-15" },
@@ -960,7 +960,7 @@ export const rollerOutlineAgreement = (
       header: [
         { label: "Vendor", value: "Apex Industrial Supply" },
         { label: "Vendor code", value: "0001000207" },
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Valid from", value: "2026-01-01" },
         { label: "Valid to", value: "2026-12-31" },
         { label: "Target value", value: "$420,000" },
@@ -991,7 +991,7 @@ const rollerVendorRecord = (
         { label: "Tax / reg.", value: "Compliant · on file" },
       ],
       purchasing: [
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Order currency", value: "USD" },
         { label: "Payment terms", value: "Net 30" },
         { label: "Preferred", value: "Yes · MRO grinding media" },
@@ -1156,7 +1156,7 @@ const beltGrDoc = (
             { label: "Material", value: "MRO-SEAL-MECH-50MM-SIC" },
             { label: "Movement type", value: "101 · GR goods receipt" },
             { label: "Quantity received", value: "1 EA" },
-            { label: "Plant / SLoc", value: "Dispersion · Assembly Line 2" },
+            { label: "Plant / SLoc", value: "Lindfeld · Assembly Line 2" },
           ],
         },
       ],
@@ -1248,7 +1248,7 @@ export const beltPrSteps: RunStep[] = [
         fields: [
           { label: "PR type", value: "NB · Standard requisition" },
           { label: "Requestor", value: "Plant engineer · Assembly Line 2" },
-          { label: "Purch. org", value: "1000 · Siemens Procurement" },
+          { label: "Purch. org", value: "1000 · Orvantec Procurement" },
           { label: "Purch. group", value: "200 · MRO / Maintenance" },
         ],
       },
@@ -1258,7 +1258,7 @@ export const beltPrSteps: RunStep[] = [
         title: "Account assignment",
         fields: [
           { label: "Material code", value: "MRO-SEAL-MECH-50MM-SIC" },
-          { label: "Plant", value: "Dispersion Plant · Assembly Line 2" },
+          { label: "Plant", value: "Deburring Plant · Assembly Line 2" },
           { label: "Cost center", value: COST_CENTER },
           { label: "G/L account", value: GL },
           { label: "Material group", value: "MRO · Seals & packing" },
@@ -1269,10 +1269,10 @@ export const beltPrSteps: RunStep[] = [
         reasoning: "Reading the stock-on-hand workbook + the safety-stock policy",
         title: "Stock on hand",
         narrative:
-          "I read the stock-on-hand workbook: there's nothing to draw from — 0 EA on hand at Assembly Line 2 and 0 across the network (Erlangen plant, Fürth), and the seal is line-specific so there's no interplant unit to transfer in. A new buy is justified. I'd also flag that safety stock is set to 0 on this critical wear part — I recommend holding a safety stock of 1 EA so the next failure doesn't stop the line.",
+          "I read the stock-on-hand workbook: there's nothing to draw from — 0 EA on hand at Assembly Line 2 and 0 across the network (Clairmont plant, Riomar), and the seal is line-specific so there's no interplant unit to transfer in. A new buy is justified. I'd also flag that safety stock is set to 0 on this critical wear part — I recommend holding a safety stock of 1 EA so the next failure doesn't stop the line.",
         fields: [
           { label: "On-hand · this plant", value: "0 EA · Assembly Line 2" },
-          { label: "Interplant (Erlangen · Fürth)", value: "0 EA · no cover" },
+          { label: "Interplant (Clairmont · Riomar)", value: "0 EA · no cover" },
           { label: "Current safety stock", value: "0 EA" },
           { label: "Recommended safety stock", value: "1 EA · critical wear part" },
           { label: "Verdict", value: "No stock · new buy justified" },
@@ -1345,9 +1345,9 @@ export const beltPrSteps: RunStep[] = [
         reasoning: "Checking on-hand and interplant stock",
         title: "Stock overview · MB52",
         fields: [
-          { label: "On-hand · Amberg", value: "0 EA" },
-          { label: "Erlangen plant", value: "0 EA" },
-          { label: "Fürth", value: "0 EA" },
+          { label: "On-hand · Lindfeld", value: "0 EA" },
+          { label: "Clairmont plant", value: "0 EA" },
+          { label: "Riomar", value: "0 EA" },
           { label: "Transfer possible", value: "No · new buy justified" },
         ],
       },
@@ -1360,9 +1360,9 @@ export const beltPrSteps: RunStep[] = [
     title: "Warranty & coverage",
     sub: "Confirms it's a buy, not a claim",
     aiThought:
-      "Before I treat this as a new purchase, let me check whether the agitator is still under warranty — if the failure is a covered defect, this should be a claim, not a buy.",
+      "Before I treat this as a new purchase, let me check whether the gear reducer is still under warranty — if the failure is a covered defect, this should be a claim, not a buy.",
     reasoning: [
-      "Checking the agitator's OEM warranty status",
+      "Checking the gear reducer's OEM warranty status",
       "Seal is a wear part — not covered equipment",
       "Failure is wear & tear, not a covered defect",
       "Coverage — parts only, buy new",
@@ -1371,7 +1371,7 @@ export const beltPrSteps: RunStep[] = [
     document: beltWarrantyDoc,
     sources: [
       { id: "belt-md-handoff", label: "VAL-48630-MD", meta: "from Master Data", kind: "sap", handoff: true, body: beltMasterDataDoc },
-      { id: "belt-warranty-rec", label: "Warranty record", meta: "Assembly Line 2 agitator", kind: "kb", body: beltWarrantyRecord },
+      { id: "belt-warranty-rec", label: "Warranty record", meta: "Assembly Line 2 gear reducer", kind: "kb", body: beltWarrantyRecord },
     ],
     recommendation: "Wear-and-tear on a wear part — no warranty claim applies. Proceed as a new-buy.",
     stages: [
@@ -1380,7 +1380,7 @@ export const beltPrSteps: RunStep[] = [
         reasoning: "Reading the equipment warranty record",
         title: "Warranty & coverage · IQS3",
         fields: [
-          { label: "Equipment", value: "Assembly Line 2 agitator" },
+          { label: "Equipment", value: "Assembly Line 2 gear reducer" },
           { label: "OEM warranty", value: "Expired · > 12 mo" },
           { label: "Service contract", value: "None on the seal" },
           { label: "Failure type", value: "Wear & tear · not a defect" },
@@ -1455,7 +1455,7 @@ export const beltPrSteps: RunStep[] = [
       subject: "PR-48630 — mechanical seal on its way · releasing",
       lines: [
         "I've structured and coded your request to MRO-SEAL-MECH-50MM-SIC, on-contract via Apex at $4,180, Net 30 — everything checks out.",
-        "You gave a 45–50 mm shaft range with no part number; the equipment record for Assembly Line 2 has a 50 mm agitator shaft, so that is what has been ordered.",
+        "You gave a 45–50 mm shaft range with no part number; the equipment record for Assembly Line 2 has a 50 mm gear reducer shaft, so that is what has been ordered.",
         "I'm releasing PR-48630 to Apex now. Nothing is waiting on you.",
       ],
       toastTitle: "Confirmation sent",
@@ -1542,13 +1542,13 @@ export const rollerPrSteps: RunStep[] = [
     title: "Structure & code the request",
     sub: "Turns the free-text note into a coded PR",
     aiThought:
-      "The SMT Line 3 engineer has emailed in — the grinding media is wearing out far too fast in SMT Line 3 and they've asked for eight bags. It's free text, so let me read it and structure the requisition.",
+      "The Deburring Line 3 engineer has emailed in — the grinding media is wearing out far too fast in Deburring Line 3 and they've asked for eight bags. It's free text, so let me read it and structure the requisition.",
     reasoning: [
-      "Reading the engineer's free-text note from SMT Line 3",
+      "Reading the engineer's free-text note from Deburring Line 3",
       "Extracting — 1.2 mm zirconia grinding media, ~6–8 BAG",
       "Mapping to material code MRO-MEDIA-ZRO2-1.2MM",
       "Coding cost center 10034 · GL 600450",
-      "Noting it matches the SMT Line 3 charge",
+      "Noting it matches the Deburring Line 3 charge",
     ],
     docLabel: "PR-48655 · structured requisition",
     document: rollerStructuredDoc,
@@ -1559,7 +1559,7 @@ export const rollerPrSteps: RunStep[] = [
       { id: "roller-agreement", label: "ME33K · SA-MRO-07", meta: "price · vendor · terms", kind: "contract", body: rollerOutlineAgreement },
     ],
     recommendation:
-      "Structured and coded to MRO-MEDIA-ZRO2-1.2MM at 8 BAG. Matches the SMT Line 3 charge — the downstream checks will test whether all 8 should actually be bought.",
+      "Structured and coded to MRO-MEDIA-ZRO2-1.2MM at 8 BAG. Matches the Deburring Line 3 charge — the downstream checks will test whether all 8 should actually be bought.",
     stages: [
       {
         sourceId: "roller-freetext",
@@ -1569,10 +1569,10 @@ export const rollerPrSteps: RunStep[] = [
           { label: "Size", value: "1.2 mm · zirconia · 25 kg bag" },
           { label: "Quantity", value: "8 BAG (from \"6–8\")" },
           { label: "UoM", value: "BAG" },
-          { label: "Same as", value: "SMT Line 3 charge" },
+          { label: "Same as", value: "Deburring Line 3 charge" },
           { label: "Delivery", value: "Urgent · grind fineness dropping" },
           { label: "Delivery date", value: "2026-06-22", type: "date" },
-          { label: "Requisitioner", value: "Plant engineer · SMT Line 3" },
+          { label: "Requisitioner", value: "Plant engineer · Deburring Line 3" },
         ],
       },
       {
@@ -1581,8 +1581,8 @@ export const rollerPrSteps: RunStep[] = [
         title: "Requisition header",
         fields: [
           { label: "PR type", value: "NB · Standard requisition" },
-          { label: "Requestor", value: "Plant engineer · SMT Line 3" },
-          { label: "Purch. org", value: "1000 · Siemens Procurement" },
+          { label: "Requestor", value: "Plant engineer · Deburring Line 3" },
+          { label: "Purch. org", value: "1000 · Orvantec Procurement" },
           { label: "Purch. group", value: "200 · MRO / Maintenance" },
         ],
       },
@@ -1592,7 +1592,7 @@ export const rollerPrSteps: RunStep[] = [
         title: "Account assignment",
         fields: [
           { label: "Material code", value: "MRO-MEDIA-ZRO2-1.2MM" },
-          { label: "Plant", value: "Dispersion Plant · SMT Line 3" },
+          { label: "Plant", value: "Deburring Plant · Deburring Line 3" },
           { label: "Cost center", value: COST_CENTER },
           { label: "G/L account", value: GL },
           { label: "Material group", value: "MRO · Milling & media" },
@@ -1625,7 +1625,7 @@ export const rollerPrSteps: RunStep[] = [
       "Reading structured PR-48655",
       "Scanning open PRs — found PR-48641 for the same SKU",
       "Checking on-hand stock — none at this plant",
-      "Checking interplant — 6 BAG at the Erlangen plant store",
+      "Checking interplant — 6 BAG at the Clairmont plant store",
       "Flagging duplicate demand and available stock",
     ],
     docLabel: "VAL-48655-MD · master data",
@@ -1639,7 +1639,7 @@ export const rollerPrSteps: RunStep[] = [
       { id: "roller-sto", label: "ME23N · stock transfer", meta: "STO-48655 · 6 BAG", kind: "sap", body: rollerStockTransfer },
     ],
     recommendation:
-      "Two flags — a duplicate open PR (PR-48641) and 6 BAG available at the Erlangen plant store. Don't buy 8: transfer the 6 and cancel the duplicate.",
+      "Two flags — a duplicate open PR (PR-48641) and 6 BAG available at the Clairmont plant store. Don't buy 8: transfer the 6 and cancel the duplicate.",
     stages: [
       {
         sourceId: "roller-matmaster",
@@ -1668,11 +1668,11 @@ export const rollerPrSteps: RunStep[] = [
         reasoning: "Checking enterprise inventory across the plants",
         title: "Inventory across plants",
         narrative:
-          "I checked enterprise inventory across the plants: SMT Line 3 is at 0 on-hand, but the Erlangen plant store holds 6 surplus bags of this exact media. The network already has most of what's needed — I recommend transferring those 6 by interplant movement and buying only the 2-unit shortfall, instead of buying all 8 new. That avoids $708 of duplicate spend and draws down stock we've already paid for.",
+          "I checked enterprise inventory across the plants: Deburring Line 3 is at 0 on-hand, but the Clairmont plant store holds 6 surplus bags of this exact media. The network already has most of what's needed — I recommend transferring those 6 by interplant movement and buying only the 2-unit shortfall, instead of buying all 8 new. That avoids $708 of duplicate spend and draws down stock we've already paid for.",
         fields: [
-          { label: "On-hand · SMT Line 3", value: "0 BAG" },
-          { label: "Erlangen plant", value: "6 BAG · surplus" },
-          { label: "Fürth", value: "0 BAG" },
+          { label: "On-hand · Deburring Line 3", value: "0 BAG" },
+          { label: "Clairmont plant", value: "6 BAG · surplus" },
+          { label: "Riomar", value: "0 BAG" },
           { label: "Transfer possible", value: "Yes · move 6 BAG" },
           { label: "Residual buy", value: "2 BAG shortfall" },
         ],
@@ -1683,7 +1683,7 @@ export const rollerPrSteps: RunStep[] = [
         title: "Fulfillment plan · interplant vs buy",
         choice: {
           recommendation:
-            "We need 8 grinding media, but Erlangen plant already has 6 surplus in its store. I recommend transferring those 6 by interplant movement and buying only the 2-unit shortfall on-contract ($236) — versus $944 to buy all 8 new. It cuts spend ~75% and draws down stock we've already paid for.",
+            "We need 8 grinding media, but Clairmont plant already has 6 surplus in its store. I recommend transferring those 6 by interplant movement and buying only the 2-unit shortfall on-contract ($236) — versus $944 to buy all 8 new. It cuts spend ~75% and draws down stock we've already paid for.",
           recommendedId: "transfer",
           options: [
             {
@@ -1693,13 +1693,13 @@ export const rollerPrSteps: RunStep[] = [
               badges: ["Recommended", "Uses surplus"],
               stats: [
                 { label: "Cash buy", value: "$236" },
-                { label: "Transfer", value: "6 BAG · Erlangen" },
+                { label: "Transfer", value: "6 BAG · Clairmont" },
                 { label: "Lead", value: "This week" },
                 { label: "vs buy-all", value: "−75%" },
               ],
               fields: [
                 { label: "Plan", value: "Transfer 6 BAG + buy 2 BAG" },
-                { label: "Transfer from", value: "Erlangen plant store · STO-48655" },
+                { label: "Transfer from", value: "Clairmont plant store · STO-48655" },
                 { label: "Fresh buy", value: "2 BAG · $236 · Apex on-contract" },
                 { label: "Saving", value: "$708 vs buying all 8" },
               ],
@@ -1729,13 +1729,13 @@ export const rollerPrSteps: RunStep[] = [
               badges: ["Leaves a gap"],
               stats: [
                 { label: "Cash buy", value: "$0" },
-                { label: "Transfer", value: "6 BAG · Erlangen" },
+                { label: "Transfer", value: "6 BAG · Clairmont" },
                 { label: "Lead", value: "This week" },
                 { label: "vs buy-all", value: "−100%" },
               ],
               fields: [
                 { label: "Plan", value: "Transfer 6 BAG · no buy" },
-                { label: "Transfer from", value: "Erlangen plant store · STO-48655" },
+                { label: "Transfer from", value: "Clairmont plant store · STO-48655" },
                 { label: "Fresh buy", value: "None · 2 BAG still short" },
                 { label: "Saving", value: "$944, but 2 BAG unfilled" },
               ],
@@ -1752,9 +1752,9 @@ export const rollerPrSteps: RunStep[] = [
     title: "Warranty & coverage",
     sub: "Checks if the early wear is covered",
     aiThought:
-      "Let me check the bead mill's warranty — if this early wear is a covered defect, the worn media should be a claim, not a purchase.",
+      "Let me check the deburring line's warranty — if this early wear is a covered defect, the worn media should be a claim, not a purchase.",
     reasoning: [
-      "Reading SMT Line 3's commissioning date",
+      "Reading Deburring Line 3's commissioning date",
       "Commissioned 2026-01-15 — inside the 12-month parts warranty",
       "Premature attrition — possible covered defect",
       "Coverage — parts, ZirCore OEM",
@@ -1764,17 +1764,17 @@ export const rollerPrSteps: RunStep[] = [
     hasExceptions: true,
     sources: [
       { id: "roller-md-handoff", label: "VAL-48655-MD", meta: "from Master Data", kind: "sap", handoff: true, body: rollerMasterDataDoc },
-      { id: "roller-warranty-rec", label: "Warranty record", meta: "SMT Line 3 · in warranty", kind: "kb", body: rollerWarrantyRecord },
+      { id: "roller-warranty-rec", label: "Warranty record", meta: "Deburring Line 3 · in warranty", kind: "kb", body: rollerWarrantyRecord },
     ],
     recommendation:
-      "SMT Line 3 is inside its 12-month parts warranty and the early wear looks like a defect — raise a warranty claim on the covered bags rather than buying them.",
+      "Deburring Line 3 is inside its 12-month parts warranty and the early wear looks like a defect — raise a warranty claim on the covered bags rather than buying them.",
     stages: [
       {
         sourceId: "roller-warranty-rec",
         reasoning: "Reading the equipment warranty record",
         title: "Warranty & coverage · IQS3",
         fields: [
-          { label: "Equipment", value: "SMT Line 3" },
+          { label: "Equipment", value: "Deburring Line 3" },
           { label: "Commissioned", value: "2026-01-15" },
           { label: "OEM warranty", value: "In warranty · 12-mo parts" },
           { label: "Failure type", value: "Premature attrition · defect" },
@@ -1843,7 +1843,7 @@ export const rollerPrSteps: RunStep[] = [
       "I've re-scoped this from an eight-unit buy down to a transfer, a warranty claim and a two-unit buy. Let me send the plan and route it.",
     reasoning: [
       "Confirming cost center 10034 / GL 600450",
-      "Routing 6 BAG as an interplant transfer from Amberg",
+      "Routing 6 BAG as an interplant transfer from Lindfeld",
       "Raising a warranty claim on the early-worn media",
       "Re-scoping the buy to the 2 BAG shortfall · cancelling PR-48641",
     ],
@@ -1857,10 +1857,10 @@ export const rollerPrSteps: RunStep[] = [
       cta: "Send the re-scoped plan",
       attachment: rollerStructuredDoc,
       attachmentLabel: "PR-48655 · ME51N",
-      to: "Plant engineer · SMT Line 3",
+      to: "Plant engineer · Deburring Line 3",
       subject: "PR-48655 — re-scoped: transfer + warranty claim + 2-unit buy",
       lines: [
-        "Before raising an 8-unit buy: 6 of these bags are in stock at the Erlangen plant store, and SMT Line 3 is inside its 12-month parts warranty — so the early wear should be a warranty claim, not a purchase.",
+        "Before raising an 8-unit buy: 6 of these bags are in stock at the Clairmont plant store, and Deburring Line 3 is inside its 12-month parts warranty — so the early wear should be a warranty claim, not a purchase.",
         "Plan: transfer 6 BAG by interplant movement (here this week), raise a warranty claim with ZirCore on the early-worn media, and buy only the 2 BAG shortfall from Apex on-contract ($236). I've also drafted a cancellation for the duplicate PR-48641.",
         "I'm routing the transfer, the claim and the 2-unit PR now — flag me if you'd rather buy all 8.",
       ],
@@ -1886,14 +1886,14 @@ const SEAL_KIT = "MRO-PUMP-GEARBOX-SEALKIT-OEM";
 const riskSnopSignal = (
   <EmailDoc
     from="S&OP Planning · demand desk"
-    fromAddr="planning@siemens.com"
+    fromAddr="planning@orvantec.com"
     to="MRO risk sensing"
     sent="2026-06-24 · 07:15"
     subject="Demand signal — Utilities line ramp, FY-Q3"
     tone="inbound"
     lines={[
       "Flagging a forward demand change on the Utilities line for spares-coverage review.",
-      "The line is scheduled to ramp +18% next quarter under the new resin contract, which raises duty on its critical drives — including the boiler-feed-pump drive gearbox, classified A1 (single point of failure) on the asset register.",
+      "The line is scheduled to ramp +18% next quarter under the new production contract, which raises duty on its critical drives — including the boiler-feed-pump drive gearbox, classified A1 (single point of failure) on the asset register.",
       "Please confirm spares coverage on the gearbox's seal & bearing kit before the ramp begins.",
     ]}
   />
@@ -1902,7 +1902,7 @@ const riskSnopSignal = (
 const riskConsumptionFeed = (
   <EmailDoc
     from="Reliability · CMMS feed"
-    fromAddr="cmms@siemens.com"
+    fromAddr="cmms@orvantec.com"
     to="MRO risk sensing"
     sent="2026-06-24 · 07:18"
     subject="Coverage & consumption — drive-gearbox seal & bearing kit"
@@ -1918,7 +1918,7 @@ const riskConsumptionFeed = (
 const riskSupplierLead = (
   <EmailDoc
     from="Sourcing · supplier management"
-    fromAddr="sourcing@siemens.com"
+    fromAddr="sourcing@orvantec.com"
     to="MRO risk sensing"
     sent="2026-06-24 · 07:20"
     subject="Replenishment lead time — GearTech OEM seal & bearing kit"
@@ -1934,7 +1934,7 @@ const riskSupplierLead = (
 const riskCriticalitySignal = (
   <EmailDoc
     from="Asset Register · reliability engineering"
-    fromAddr="assets@siemens.com"
+    fromAddr="assets@orvantec.com"
     to="MRO risk sensing"
     sent="2026-06-24 · 07:16"
     subject="Criticality classification — boiler-feed-pump drive gearbox"
@@ -1950,7 +1950,7 @@ const riskCriticalitySignal = (
 const riskMarketSignal = (
   <EmailDoc
     from="Commodity desk · procurement market intelligence"
-    fromAddr="commodity@siemens.com"
+    fromAddr="commodity@orvantec.com"
     to="MRO risk sensing"
     sent="2026-06-24 · 07:22"
     subject="Market read — bearing alloy +7%, allocation tightening"
@@ -1996,7 +1996,7 @@ const riskSignalDoc = (
       createdOn: "2026-06-24 · 07:22",
       materialCode: SEAL_KIT,
       description: "Drive-Gearbox Mechanical Seal & Bearing Kit — GearTech OEM",
-      plant: "Amberg · Utilities line",
+      plant: "Lindfeld · Utilities line",
       costCenter: COST_CENTER,
       glAccount: GL,
       item: [
@@ -2042,8 +2042,8 @@ const riskPredictionDoc = (
           band: "Inventory & interplant",
           rows: [
             { label: "On-hand this plant", expected: "≥ safety stock", found: "1 EA · below safety", ok: false },
-            { label: "Erlangen plant store", expected: "Check sister plant", found: "0 EA · no cover", ok: true },
-            { label: "Fürth store", expected: "Check sister plant", found: "0 EA · no cover", ok: true },
+            { label: "Clairmont plant store", expected: "Check sister plant", found: "0 EA · no cover", ok: true },
+            { label: "Riomar store", expected: "Check sister plant", found: "0 EA · no cover", ok: true },
           ],
         },
       ],
@@ -2171,7 +2171,7 @@ const riskMaterialMaster = (
       createdBy: "Master data steward",
       basic: [
         { label: "Material type", value: "ERSA · Spare part" },
-        { label: "Industry sector", value: "Chemical industry" },
+        { label: "Industry sector", value: "Electronics & industrial automation" },
         { label: "Material group", value: "MRO · Pumps & drives" },
         { label: "Base UoM", value: "EA (kit)" },
         { label: "Gross weight", value: "12 kg" },
@@ -2203,9 +2203,9 @@ const riskStockOverview = (
       createdOn: "2026-06-24 · 07:24",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Amberg · Utilities line", storageLoc: "MRO-01", onHand: "1", safety: "2", uom: "EA", tone: "short" },
-        { plant: "Erlangen plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
-        { plant: "Fürth", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Lindfeld · Utilities line", storageLoc: "MRO-01", onHand: "1", safety: "2", uom: "EA", tone: "short" },
+        { plant: "Clairmont plant", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Riomar", storageLoc: "MRO-01", onHand: "0", safety: "0", uom: "EA" },
       ],
       note: "On-hand 1 EA is below the 2 EA safety stock (0.5× cover) and no sister plant carries the kit — no interplant transfer is possible. With a 9-week single-source lead, the reorder point fires too late; a proactive pre-buy is justified.",
     }}
@@ -2250,7 +2250,7 @@ const riskOutlineAgreement = (
       header: [
         { label: "Vendor", value: "GearTech (OEM)" },
         { label: "Vendor code", value: "0001000341" },
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Valid from", value: "2026-01-01" },
         { label: "Valid to", value: "2026-12-31" },
         { label: "Target value", value: "$184,000" },
@@ -2281,7 +2281,7 @@ const riskVendorRecord = (
         { label: "Tax / reg.", value: "Compliant · on file" },
       ],
       purchasing: [
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Order currency", value: "USD" },
         { label: "Payment terms", value: "Net 60" },
         { label: "Preferred", value: "Yes · sole OEM source" },
@@ -2402,7 +2402,7 @@ export const riskPrSteps: RunStep[] = [
       "Reading the RISK-49001 signal brief",
       "Deterministic reorder point fires at on-hand 0 — too late for a 9-week lead",
       "Predicting the stock-out at day 9, before any supply lands",
-      "Checking interplant — 0 EA at Erlangen and Fürth",
+      "Checking interplant — 0 EA at Clairmont and Riomar",
       "Overriding the reorder logic toward a proactive pre-buy",
     ],
     docLabel: "VAL-49001-RISK · prediction",
@@ -2433,8 +2433,8 @@ export const riskPrSteps: RunStep[] = [
         title: "Stock overview · MB52",
         fields: [
           { label: "On-hand · Utilities", value: "1 EA · below safety" },
-          { label: "Erlangen plant", value: "0 EA" },
-          { label: "Fürth", value: "0 EA" },
+          { label: "Clairmont plant", value: "0 EA" },
+          { label: "Riomar", value: "0 EA" },
           { label: "Transfer possible", value: "No · override reorder" },
         ],
       },
@@ -2497,7 +2497,7 @@ export const riskPrSteps: RunStep[] = [
               fields: [
                 { label: "Response", value: "Interplant transfer" },
                 { label: "Reorder logic", value: "n/a" },
-                { label: "Lands by", value: "No stock at Erlangen or Fürth" },
+                { label: "Lands by", value: "No stock at Clairmont or Riomar" },
                 { label: "Working capital", value: "$0 · not feasible" },
               ],
             },
@@ -2616,7 +2616,7 @@ export const riskPrSteps: RunStep[] = [
       cta: "Review & send for authorization",
       attachment: <BudgetApprovalDoc a={riskPrebuyAuthorization} />,
       attachmentLabel: "Pre-buy authorization · WF-49001-REL",
-      to: "Reliability lead · Amberg Utilities line",
+      to: "Reliability lead · Lindfeld Utilities line",
       subject: "RISK-49001 — drive-gearbox seal kit predicted to stock out in 9 days · authorize pre-buy",
       lines: [
         "No PR was raised — I detected a stock-out risk on the A1-critical drive-gearbox seal kit by fusing five signals: the S&OP ramp, equipment criticality, rising consumption, a 9-week single-source lead and a tightening alloy market.",
@@ -2627,7 +2627,7 @@ export const riskPrSteps: RunStep[] = [
       toastBody: "The reliability lead signed the proactive pre-buy authorization — the override is approved.",
       resolvedDocument: riskApprovalDocResolved,
       reply: {
-        from: "Reliability lead · Amberg Utilities line",
+        from: "Reliability lead · Lindfeld Utilities line",
         receivedMeta: "Outlook · 08:05",
         subject: "RE: RISK-49001 — authorization signed",
         lines: ["Signed the attached authorization — pre-buy the 2 kits and protect the utilities line. Good catch ahead of the ramp."],
@@ -2639,8 +2639,8 @@ export const riskPrSteps: RunStep[] = [
           body: (
             <div className="space-y-3">
               <EmailDoc
-                from="Reliability lead · Amberg Utilities line"
-                fromAddr="reliability@siemens.com"
+                from="Reliability lead · Lindfeld Utilities line"
+                fromAddr="reliability@orvantec.com"
                 to="Approval & routing"
                 sent="2026-06-24 · 08:05"
                 subject="RE: RISK-49001 — authorization signed"
@@ -2660,7 +2660,7 @@ export const riskPrSteps: RunStep[] = [
 
 /* ════════════════════════════════════════════════════════════════════════
  * Example 4 — Compliance & Commercial Orchestrator (UC4)
- * A validated PR (PR-48690 · reactor drive-gearbox rebuild kit · $42,000) is
+ * A validated PR (PR-48690 · winder drive-gearbox rebuild kit · $42,000) is
  * ready for PO conversion. The orchestrator runs the final compliance &
  * commercial gate — contract compliance, HSE & insurance, GL/cost-center &
  * delivery feasibility, approval hierarchy & sourcing rules — then issues a
@@ -2677,8 +2677,8 @@ const complianceTriggerPr = (
       createdBy: "Sourcing & contract agent",
       createdOn: "2026-06-22 · 14:05",
       materialCode: "MRO-GEARBOX-REBUILD-KIT-OEM",
-      description: "Reactor Drive Gearbox — Rebuild Kit — GearTech OEM",
-      plant: "Fürth · Test & Pack Line 2",
+      description: "Winder Drive Gearbox — Rebuild Kit — GearTech OEM",
+      plant: "Riomar · Test & Pack Line 2",
       costCenter: CC,
       glAccount: "600450 · Repairs & Maintenance",
       item: [
@@ -2696,7 +2696,7 @@ const complianceTriggerPr = (
       confidence: "Validated · ready for PO",
       prType: "NB · Standard requisition",
       requestor: "Reliability engineer · Filling Plant",
-      purchOrg: "1000 · Siemens Procurement",
+      purchOrg: "1000 · Orvantec Procurement",
       purchGroup: "200 · MRO / Maintenance",
       valuation: [
         { label: "Unit price", value: "$42,000.00 / EA" },
@@ -2727,7 +2727,7 @@ const complianceAgreement = (
       header: [
         { label: "Vendor", value: "GearTech (OEM)" },
         { label: "Vendor code", value: "0001000341" },
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Valid from", value: "2025-07-21" },
         { label: "Valid to", value: "2026-07-20 · 28 days" },
         { label: "Target value", value: "$600,000" },
@@ -2755,7 +2755,7 @@ const complianceRenewedContract = (
       header: [
         { label: "Vendor", value: "GearTech (OEM)" },
         { label: "Vendor code", value: "0001000341" },
-        { label: "Purch. org", value: "1000 · Siemens Procurement" },
+        { label: "Purch. org", value: "1000 · Orvantec Procurement" },
         { label: "Valid from", value: "2026-07-21 · renewed" },
         { label: "Valid to", value: "2027-12-31 · +18 mo" },
         { label: "Target value", value: "$600,000" },
@@ -2861,7 +2861,7 @@ const complianceApprovalRouting = (
       createdBy: "Approval & routing",
       summary: [
         { label: "Document", value: "PR-48690 → PO-77412" },
-        { label: "Requestor", value: "Reliability eng · Resin Plant" },
+        { label: "Requestor", value: "Reliability eng · Winding Plant" },
         { label: "Category", value: "MRO · on-contract" },
         { label: "Amount", value: "$42,000.00" },
         { label: "Cost center / GL", value: "10052 / 600450" },
@@ -2907,7 +2907,7 @@ const complianceApprovalRoutingResolved = (
       createdBy: "Approval & routing",
       summary: [
         { label: "Document", value: "PR-48690 → PO-77412" },
-        { label: "Requestor", value: "Reliability eng · Resin Plant" },
+        { label: "Requestor", value: "Reliability eng · Winding Plant" },
         { label: "Category", value: "MRO · on-contract" },
         { label: "Amount", value: "$42,000.00" },
         { label: "Cost center / GL", value: "10052 / 600450" },
@@ -2925,7 +2925,7 @@ const complianceApprovalRoutingResolved = (
 const compliancePoFields = {
   header: [
     { label: "Vendor", value: "GearTech (OEM) · 0001000341" },
-    { label: "Ship-to", value: "Fürth · Test & Pack Line 2 dock" },
+    { label: "Ship-to", value: "Riomar · Test & Pack Line 2 dock" },
     { label: "Payment terms", value: "Net 60" },
     { label: "Incoterms", value: "FCA · GearTech works" },
     { label: "Currency", value: "USD" },
@@ -3119,7 +3119,7 @@ export const compliancePrSteps: RunStep[] = [
       "On-contract and price-compliant. The only flag is that SA-MRO-09 expires in 28 days — I've drafted a renewal to send the manager for approval, and I'd lock this PO under the current agreement now.",
     email: {
       cta: "Review & send the renewal",
-      to: "Procurement Manager · Resin Plant",
+      to: "Procurement Manager · Winding Plant",
       subject: "SA-MRO-09 expiring in 28 days — renewal for approval",
       lines: [
         "SA-MRO-09 (GearTech · drive-gearbox rebuild kit) expires in 28 days — before the PO-77412 delivery date. To avoid a lapse, I've drafted a renewal that extends the agreement to 2027-12-31 with price and terms unchanged.",
@@ -3245,8 +3245,8 @@ export const compliancePrSteps: RunStep[] = [
         kind: "email",
         body: (
           <EmailDoc
-            from="Procurement Manager · Resin Plant"
-            fromAddr="procurement@siemens.com"
+            from="Procurement Manager · Winding Plant"
+            fromAddr="procurement@orvantec.com"
             to="Approval & routing"
             sent="2026-06-22 · 14:18"
             subject="PR-48690 — proceed with the PO"
@@ -3268,7 +3268,7 @@ export const compliancePrSteps: RunStep[] = [
       "Everything is compliant; the one human decision is the L2 sign-off — $42K is over the plant DOA. I've drafted the request and the budget approval; sign it to authorise the over-DOA spend and release the PO.",
     email: {
       cta: "Review & send for sign-off",
-      to: "Procurement Manager · Resin Plant",
+      to: "Procurement Manager · Winding Plant",
       subject: "PR-48690 → PO-77412 — $42,000 over plant DOA · sign to release",
       lines: [
         "PR-48690 has cleared every compliance gate — contract on SA-MRO-09, HSE & insurance for the on-site rebuild, GL/cost-center, and delivery against the planned outage.",
@@ -3280,7 +3280,7 @@ export const compliancePrSteps: RunStep[] = [
       toastBody: "The Procurement Manager signed the over-DOA budget approval — the L2 sign-off is in.",
       resolvedDocument: complianceApprovalRoutingResolved,
       reply: {
-        from: "Procurement Manager · Resin Plant",
+        from: "Procurement Manager · Winding Plant",
         receivedMeta: "Outlook · 14:22",
         subject: "RE: PR-48690 — budget approval signed",
         lines: ["Approved — signed the attached budget approval. Release PO-77412 to GearTech."],
@@ -3292,8 +3292,8 @@ export const compliancePrSteps: RunStep[] = [
           body: (
             <div className="space-y-3">
               <EmailDoc
-                from="Procurement Manager · Resin Plant"
-                fromAddr="procurement@siemens.com"
+                from="Procurement Manager · Winding Plant"
+                fromAddr="procurement@orvantec.com"
                 to="Approval & routing"
                 sent="2026-06-22 · 14:22"
                 subject="RE: PR-48690 — budget approval signed"
@@ -3348,7 +3348,7 @@ export const compliancePrSteps: RunStep[] = [
       to: "Procurement Manager",
       subject: "PO-77412 — $42,000 over plant DOA · approve to release",
       lines: [
-        "PR-48690 (reactor drive-gearbox rebuild kit) has cleared every compliance gate — on-contract via GearTech on SA-MRO-09, HSE and insurance cleared for the on-site rebuild, GL/cost-center correct, and the 4-week lead clears the planned outage.",
+        "PR-48690 (winder drive-gearbox rebuild kit) has cleared every compliance gate — on-contract via GearTech on SA-MRO-09, HSE and insurance cleared for the on-site rebuild, GL/cost-center correct, and the 4-week lead clears the planned outage.",
         "I've converted it to PO-77412 ($42,000, Net 60); it cleared L2 in the budget approval, so I'm releasing it to GearTech now.",
         "PO-77412 is on its way to GearTech — flag me if anything needs to change before the rebuild.",
       ],

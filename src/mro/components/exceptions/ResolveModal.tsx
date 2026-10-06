@@ -55,7 +55,7 @@ function SealSizeCard({ picked, onPick }: { picked: "45" | "50"; onPick: (v: "45
     {
       id: "50" as const,
       title: "50 mm shaft",
-      lines: ["Matches the installed Assembly Line 2 agitator", "Active material · MRO-SEAL-MECH-50MM-SIC", "On the Apex agreement at $4,180"],
+      lines: ["Matches the installed Assembly Line 2 gear reducer", "Active material · MRO-SEAL-MECH-50MM-SIC", "On the Apex agreement at $4,180"],
       ok: true,
     },
   ];
@@ -130,7 +130,7 @@ function DraftToEngineer() {
           </p>
           <p className="mt-2 border-t border-divider pt-2 text-[12px] leading-[17px] text-mute">
             Quick confirmation: the 50 mm shaft seal is being ordered for Assembly Line 2 — matching
-            the installed agitator. If that is wrong, please say so today.
+            the installed gear reducer. If that is wrong, please say so today.
           </p>
         </div>
       )}
@@ -252,7 +252,7 @@ export function ResolveModal({
                     <SealSizeCard picked={picked} onPick={setPicked} />
                     <div className="space-y-1.5">
                       {[
-                        { label: "Equipment register", detail: "Assembly Line 2 agitator · shaft measured 50 mm" },
+                        { label: "Equipment register", detail: "Assembly Line 2 gear reducer · shaft measured 50 mm" },
                         { label: "Material master", detail: "50 mm seal active and stocked · no 45 mm variant exists" },
                         { label: "Original request", detail: "“Welle etwa 45–50 mm” — a range, no part number" },
                       ].map((e) => (

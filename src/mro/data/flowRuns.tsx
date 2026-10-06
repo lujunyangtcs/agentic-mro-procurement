@@ -1,7 +1,7 @@
 /**
  * Per-flow run registry — the gated agent runs the user opens from the cockpit.
  *
- *  ① belt    — HERO · inbound resin freight settlement · three-way check (steps in runSteps.tsx).
+ *  ① belt    — HERO · inbound copper freight settlement · three-way check (steps in runSteps.tsx).
  *  ② pump    — MRO PR intake & validation · mechanical seal example (steps in prCases.tsx).
  *  ③ gearbox — MRO PR intake & validation · grinding media example (steps in prCases.tsx).
  *  ④ collect — carrier overcharge recovery · dunning ladder (defined below).
@@ -71,7 +71,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
    */
   "off-catalogue": {
     id: "off-catalogue",
-    contextTitle: "Dispersion Plant · Let-down Line 1 · no agreement covers it",
+    contextTitle: "Deburring Plant · Deburring Line 1 · no agreement covers it",
     contextSub: "Nothing on contract · taken to market · four suppliers asked, three quoted",
     reviewPill: "Off-contract sourcing · in review",
     completeNote: `PO-77318 raised to ${offContractPick.vendor} · shipping this week`,
@@ -96,14 +96,14 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   onboarding: {
     id: "onboarding",
-    contextTitle: "Fürth · vessel relining · new supplier",
+    contextTitle: "Riomar · vessel relining · new supplier",
     contextSub: "No approved supplier in the category · quotes sought · winner onboarded",
     reviewPill: "Supplier onboarding · in review",
     completeNote: "Supplier prepared · one signature left · bank details by callback",
     steps: onboardingSteps,
     terminal: () => ({ label: "Prepared · awaiting one signature", kind: "ready" }),
     completion: {
-      title: "Ibérica Recubrimientos · sourced, screened and prepared",
+      title: "Calibraciones Ibéricas · sourced, screened and prepared",
       tone: "ready",
       routedTo: "Category manager",
       routedSub: "one signature",
@@ -119,7 +119,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   /* The catalogue buy — the run that opens from "New request". */
   catalogue: {
     id: "catalogue",
-    contextTitle: "Dispersion Plant · Let-down Line 1 · quarterly filter change",
+    contextTitle: "Deburring Plant · Deburring Line 1 · quarterly filter change",
     contextSub: "A catalogue line · bought again every quarter · four sites buying it apart",
     reviewPill: "Catalogue purchase · in review",
     completeNote: "Invoice matched · $20,696.00 cleared, billed at the consolidated break",
@@ -142,7 +142,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
 
   bearing: {
     id: "bearing",
-    contextTitle: "Dispersion · Assembly Line 1 · pump diaphragm PR",
+    contextTitle: "Lindfeld · Assembly Line 1 · pump diaphragm PR",
     contextSub: "Complete request · every check clean · released and paid without a person",
     reviewPill: "PR validation · running",
     completeNote: "Released by rule · four-way matched · scheduled for payment",
@@ -164,7 +164,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   pump: {
     id: "pump",
-    contextTitle: "Dispersion · Assembly Line 2 · mechanical seal PR",
+    contextTitle: "Lindfeld · Assembly Line 2 · mechanical seal PR",
     contextSub: "Free-text request · intake structured it, every check cleared · released on contract",
     reviewPill: "PR validation · in review",
     completeNote: "PR released · structured, coded and validated on-contract",
@@ -186,7 +186,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   gearbox: {
     id: "gearbox",
-    contextTitle: "Dispersion · SMT Line 3 · grinding media PR",
+    contextTitle: "Lindfeld · Deburring Line 3 · grinding media PR",
     contextSub: "Free-text request · intake found a duplicate, sister-plant stock and warranty cover",
     reviewPill: "PR validation · in review",
     completeNote: "Re-scoped · interplant transfer + warranty claim + 2-unit buy",
@@ -208,7 +208,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   risk: {
     id: "risk",
-    contextTitle: "Amberg · Utilities line · drive-gearbox seal kit · stock-out risk",
+    contextTitle: "Lindfeld · Utilities line · drive-gearbox seal kit · stock-out risk",
     contextSub: "No PR raised · agent predicted a stock-out from SNOP + consumption + lead-time signals · pre-buy recommended",
     reviewPill: "Risk pre-buy · in review",
     completeNote: "Pre-buy approved · proactive PR routed on-contract ahead of the stock-out",
@@ -233,7 +233,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
   },
   compliance: {
     id: "compliance",
-    contextTitle: "Resin Plant · Reactor Train · gearbox rebuild kit · PR → PO",
+    contextTitle: "Winding Plant · Winding Line · gearbox rebuild kit · PR → PO",
     contextSub: "PR-48690 validated · ready for PO conversion · the orchestrator runs the compliance & commercial gate",
     reviewPill: "Compliance gate · in review",
     completeNote: "PO released · compliant PO-77412 issued to GearTech on-contract",

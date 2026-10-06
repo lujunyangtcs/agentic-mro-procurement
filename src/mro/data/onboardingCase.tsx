@@ -29,10 +29,10 @@ import { LookupSheetDoc } from "@/mro/components/docs/pr/LookupSheet";
 import { DocShell, DocTitleBand, SectionBand, Field } from "@/mro/components/docs/sap/parts";
 
 /* The one place these numbers are written down. */
-const CAT = "Tank-lining and vessel-coating services";
+const CAT = "Robotic cell calibration and certification services";
 const RFQ = "RFQ-49010";
-const WINNER = "Ibérica Recubrimientos Industriales";
-const RUNNER = "Northline Surface Systems";
+const WINNER = "Calibraciones Ibéricas de Precisión";
+const RUNNER = "Nordpräzision Robotik";
 const WIN_PRICE = "$38,400";
 const RUN_PRICE = "$44,900";
 const VENDOR_NO = "0001000411";
@@ -55,7 +55,7 @@ const rfqDoc = (
           band: "RFQ header",
           rows: [
             { label: "Category", value: CAT },
-            { label: "Scope", value: "Reline two 40 m³ mixing vessels · Fürth" },
+            { label: "Scope", value: "Recalibrate two robotic weld cells · Riomar" },
             { label: "Window", value: "2026-09-07 → 2026-09-25 · plant shutdown" },
             { label: "Terms sought", value: "Net 30 · fixed price" },
           ],
@@ -95,9 +95,9 @@ const buildQuote = (q: {
     <div className="grid grid-cols-3 gap-x-4 gap-y-3 px-4 py-3">
       <Field label="Quote ref" value={q.quoteNo} mono />
       <Field label="In response to" value={RFQ} mono />
-      <Field label="Buyer" value="Siemens" />
+      <Field label="Buyer" value="Orvantec" />
       <Field label="Valid until" value={q.validUntil} mono />
-      <Field label="Scope" value="Reline two 40 m³ vessels" />
+      <Field label="Scope" value="Recalibrate two robotic weld cells" />
       <Field label="Total quoted" value={q.total} mono />
     </div>
     <SectionBand>Commercial terms</SectionBand>
@@ -117,7 +117,7 @@ const winnerQuoteDoc = buildQuote({
   validUntil: "2026-08-15",
   total: WIN_PRICE,
   terms: [
-    { label: "Price basis", value: "Fixed price · both vessels" },
+    { label: "Price basis", value: "Fixed price · both cells" },
     { label: "Payment terms", value: "Net 30" },
     { label: "Mobilisation", value: "Within the shutdown window" },
   ],
@@ -131,7 +131,7 @@ const runnerQuoteDoc = buildQuote({
   validUntil: "2026-09-01",
   total: RUN_PRICE,
   terms: [
-    { label: "Price basis", value: "Fixed price · both vessels" },
+    { label: "Price basis", value: "Fixed price · both cells" },
     { label: "Payment terms", value: "Net 45" },
     { label: "Mobilisation", value: "Two weeks' notice" },
   ],
@@ -172,12 +172,12 @@ const quoteComparisonDoc = (
 const submissionEmail = (
   <MultilingualEmailDoc
     from={`${WINNER} · Administración`}
-    fromAddr="admin@ibericarecubrimientos.example"
+    fromAddr="admin@calibracionesibericas.example"
     to="Supplier onboarding"
     sent="2026-07-17 · 10:05"
     sourceLang="es"
     original={{
-      subject: "Documentación de alta de proveedor — Ibérica Recubrimientos",
+        subject: "Documentación de alta de proveedor — Calibraciones Ibéricas",
       lines: [
         "Adjuntamos la documentación solicitada para darnos de alta como proveedor: escritura de constitución, certificado de identificación fiscal, póliza de responsabilidad civil y certificado bancario.",
         "Nuestro número de identificación fiscal es ESB87451209 y la cuenta para pagos figura en el certificado bancario adjunto.",
@@ -185,7 +185,7 @@ const submissionEmail = (
       ],
     }}
     translated={{
-      subject: "Supplier registration documents — Ibérica Recubrimientos",
+        subject: "Supplier registration documents — Calibraciones Ibéricas",
       lines: [
         "Attached is the documentation you asked for so we can be set up as a supplier: certificate of incorporation, tax identification certificate, public liability insurance policy and bank certificate.",
         "Our tax identification number is ESB87451209 and the account for payments is shown on the attached bank certificate.",
@@ -210,7 +210,7 @@ const extractedFieldsDoc = (
         {
           band: "Company",
           rows: [
-            { label: "Legal name", value: "Ibérica Recubrimientos Industriales S.L." },
+            { label: "Legal name", value: "Calibraciones Ibéricas de Precisión S.L." },
             { label: "Trading name", value: WINNER },
             { label: "Registered address", value: "Polígono Industrial Les Corts 14, Valencia, Spain" },
             { label: "Incorporated", value: "2011-04-08 · certificate of incorporation" },
@@ -314,13 +314,13 @@ const masterDraftDoc = (
       createdOn: "2026-07-17 · 10:24",
       createdBy: "Master Data agent",
       general: [
-        { label: "Legal name", value: "Ibérica Recubrimientos Industriales S.L." },
+        { label: "Legal name", value: "Calibraciones Ibéricas de Precisión S.L." },
         { label: "Address", value: "Polígono Industrial Les Corts 14, Valencia, Spain" },
         { label: "Tax ID", value: "ESB87451209" },
         { label: "Correspondence language", value: "Español" },
       ],
       purchasing: [
-        { label: "Purchasing org", value: "1000 · Siemens Procurement" },
+        { label: "Purchasing org", value: "1000 · Orvantec Procurement" },
         { label: "Category", value: CAT },
         { label: "Payment terms", value: "Net 30 · as quoted" },
         { label: "Bank account", value: "Held back — verified by callback, never from a message" },
@@ -367,10 +367,10 @@ export const onboardingSteps: RunStep[] = [
     title: "Find suppliers & get quotes",
     sub: "Searches the market, writes the RFQ, collects the quotes",
     aiThought:
-      "Fürth needs two mixing vessels relined during the September shutdown, and we have no approved supplier for vessel coating at all. There is nothing to compare against, so let me search the market and put a proper request for quote out.",
+      "Riomar needs two robotic weld cells recalibrated during the September shutdown, and we have no approved supplier for robotic calibration at all. There is nothing to compare against, so let me search the market and put a proper request for quote out.",
     reasoning: [
       "No approved supplier in this category — the buy cannot be routed to anyone",
-      "Searching the market for specialist vessel-coating contractors",
+      "Searching the market for specialist robotic calibration contractors",
       "Writing the request for quote from the shutdown scope",
       "Drafting the emails for you to send",
       "Collecting the quotes as they come back",
@@ -385,17 +385,17 @@ export const onboardingSteps: RunStep[] = [
     rfq: {
       fields: [
         { label: "Category", value: CAT },
-        { label: "Scope", value: "Reline two 40 m³ mixing vessels · Fürth" },
+        { label: "Scope", value: "Recalibrate two robotic weld cells · Riomar" },
         { label: "Window", value: "2026-09-07 → 2026-09-25 · plant shutdown" },
         { label: "Terms sought", value: "Net 30 · fixed price" },
         { label: "Approved suppliers", value: "None in this category" },
         { label: "Suppliers to solicit", value: "2 · found on the web" },
       ],
       search: {
-        query: "vessel lining and industrial coating contractors · Spain and Germany",
+        query: "robotic cell calibration and certification contractors · Spain and Germany",
         results: [
-          { name: WINNER, via: "web · specialist contractor", note: "Valencia · vessel relining" },
-          { name: RUNNER, via: "web · specialist contractor", note: "Hamburg · tank coatings" },
+          { name: WINNER, via: "web · specialist contractor", note: "Valencia · robot calibration" },
+          { name: RUNNER, via: "web · specialist contractor", note: "Hamburg · calibration services" },
           { name: "Apex Industrial Supply", via: "supplier master", note: "parts only — does not do this work" },
         ],
       },
@@ -406,9 +406,9 @@ export const onboardingSteps: RunStep[] = [
           name: WINNER,
           via: "specialist contractor · web",
           draft: {
-            subject: `${RFQ} — vessel relining, Fürth · request for quote`,
+            subject: `${RFQ} — robotic cell recalibration, Riomar · request for quote`,
             lines: [
-              "Please quote for relining two 40 m³ mixing vessels during our September shutdown (7–25 September), fixed price, Net 30.",
+              "Please quote for recalibrating two robotic weld cells during our September shutdown (7–25 September), fixed price, Net 30.",
             ],
           },
           negotiating: true,
@@ -418,11 +418,11 @@ export const onboardingSteps: RunStep[] = [
           },
           reply: {
             from: `${WINNER} · Comercial`,
-            fromAddr: "comercial@ibericarecubrimientos.example",
+            fromAddr: "comercial@calibracionesibericas.example",
             receivedMeta: "Outlook · 2026-07-16 · 15:20",
             subject: `RE: ${RFQ} — our quotation`,
             lines: [
-              "Thank you for the enquiry — our quotation for relining both vessels is attached.",
+              "Thank you for the enquiry — our quotation for recalibrating both cells is attached.",
               "We opened at $41,200 and have revised to $38,400 after arranging the crew so the work fits inside your shutdown without overtime. Payment terms Net 30.",
               "We are not currently registered as your supplier; we can send our registration documents straight away.",
             ],
@@ -434,13 +434,13 @@ export const onboardingSteps: RunStep[] = [
           },
         },
         {
-          id: "northline",
+          id: "nordprecision",
           name: RUNNER,
           via: "specialist contractor · web",
           draft: {
-            subject: `${RFQ} — vessel relining, Fürth · request for quote`,
+            subject: `${RFQ} — robotic cell recalibration, Riomar · request for quote`,
             lines: [
-              "Please quote for relining two 40 m³ mixing vessels during our September shutdown (7–25 September), fixed price, Net 30.",
+              "Please quote for recalibrating two robotic weld cells during our September shutdown (7–25 September), fixed price, Net 30.",
             ],
           },
           quote: {
@@ -449,11 +449,11 @@ export const onboardingSteps: RunStep[] = [
           },
           reply: {
             from: `${RUNNER} · Sales`,
-            fromAddr: "sales@northlinesurface.example",
+            fromAddr: "sales@nordpraezisionrobotik.example",
             receivedMeta: "Outlook · 2026-07-16 · 11:05",
             subject: `RE: ${RFQ} — quotation`,
             lines: [
-              "Please find our quotation attached for the two vessels.",
+              "Please find our quotation attached for the two cells.",
               "Firm price $44,900, payment terms Net 45. We would need two weeks' notice to mobilise, which puts our start after the seventh.",
               "Quote valid until 1 September.",
             ],
@@ -507,7 +507,7 @@ export const onboardingSteps: RunStep[] = [
         reasoning: "Pulling the supplier-master fields out of the documents",
         title: "Extracted fields",
         fields: [
-          { label: "Legal name", value: "Ibérica Recubrimientos Industriales S.L." },
+          { label: "Legal name", value: "Calibraciones Ibéricas de Precisión S.L." },
           { label: "Registered address", value: "Polígono Industrial Les Corts 14, Valencia" },
           { label: "Tax ID", value: "ESB87451209" },
           { label: "Public liability", value: "$6,000,000 · to 2027-03-31" },

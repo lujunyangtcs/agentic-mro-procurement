@@ -121,7 +121,7 @@ export function Sidebar() {
               {isSupplier ? t("sp.chip") : "MRO procurement"}
             </div>
             <div className="text-[12px] text-mute">
-              {isSupplier ? "Apex Industrial Supply" : "Siemens"}
+              {isSupplier ? "Apex Industrial Supply" : "Orvantec"}
             </div>
           </div>
         </div>

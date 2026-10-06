@@ -41,7 +41,7 @@ const SA = "SA-MRO-07";
 const PO = "PO-77342";
 const GR = "GR-77342";
 const INV = "BPI-5602";
-const COST_CENTER = "10034 · Dispersion Plant Maintenance";
+const COST_CENTER = "10034 · Deburring & Finishing Maintenance";
 const GL = "600420 · Spare parts consumed";
 
 /* ── The documents ──────────────────────────────────────────────────────── */
@@ -53,15 +53,15 @@ const GL = "600420 · Spare parts consumed";
  */
 export const bearingFreeText = (
   <MultilingualEmailDoc
-    from="Instandhaltungsplanung · Dispersion Plant"
-    fromAddr="planer@siemens.com"
+    from="Instandhaltungsplanung · Deburring Plant"
+    fromAddr="planer@orvantec.com"
     to="Procurement intake"
     sent="2026-06-26 · 08:12"
     sourceLang="de"
     original={{
-      subject: "Membranwechsel — Mischlinie 1, Zulaufpumpe",
+      subject: "Membranwechsel — Montagelinie 1, Zulaufpumpe",
       lines: [
-        "Bitte 6 PTFE-Membranen für die 2-Zoll-Doppelmembranpumpe an der Mischlinie 1 bestellen. Das ist unser übliches Wartungsersatzteil, Materialnummer MRO-DIAPH-PTFE-2IN.",
+        "Bitte 6 PTFE-Membranen für die 2-Zoll-Doppelmembranpumpe an der Montagelinie 1 bestellen. Das ist unser übliches Wartungsersatzteil, Materialnummer MRO-DIAPH-PTFE-2IN.",
         "Gleicher Artikel wie bei den letzten beiden Bestellungen, von Apex im Rahmen unseres Rahmenvertrags. Sechs Stück decken den planmäßigen Wechsel plus das Ersatzteil im Regal.",
         "Benötigt für den geplanten Stillstand am 10. Juli — vorher besteht kein Produktionsrisiko.",
       ],
@@ -85,13 +85,13 @@ export const bearingStructuredDoc = (
       createdBy: "PR Processing agent",
       materialCode: MAT,
       description: ITEM,
-      plant: "Dispersion Plant · Assembly Line 1",
+      plant: "Deburring Plant · Assembly Line 1",
       costCenter: COST_CENTER,
       glAccount: GL,
       confidence: "100%",
       prType: "NB · Standard requisition",
       requestor: "Maintenance planner · Assembly Line 1",
-      purchOrg: "1000 · Siemens Procurement",
+      purchOrg: "1000 · Orvantec Procurement",
       purchGroup: "200 · MRO / Maintenance",
       item: [
         { label: "Material", value: MAT },
@@ -102,7 +102,7 @@ export const bearingStructuredDoc = (
       assignment: [
         { label: "Cost center", value: COST_CENTER },
         { label: "G/L account", value: GL },
-        { label: "Plant", value: "Dispersion Plant · Assembly Line 1" },
+        { label: "Plant", value: "Deburring Plant · Assembly Line 1" },
       ],
       valuation: [
         { label: "Unit price", value: `$${UNIT} / EA` },
@@ -131,9 +131,9 @@ const bearingRequestorRef = (
         columns: ["Requestor", "Plant", "Purch org", "Purch grp", "PR type"],
         usedNote: "→ ML1",
         rows: [
-          { cells: ["Maintenance planner · Assembly Line 1", "Dispersion · ML1", "1000", "200 · MRO", "NB"], flag: true },
-          { cells: ["Plant engineer · Assembly Line 2", "Dispersion · ML2", "1000", "200 · MRO", "NB"], matched: false },
-          { cells: ["Plant engineer · SMT Line 3", "Dispersion · BM3", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Maintenance planner · Assembly Line 1", "Lindfeld · ML1", "1000", "200 · MRO", "NB"], flag: true },
+          { cells: ["Plant engineer · Assembly Line 2", "Lindfeld · ML2", "1000", "200 · MRO", "NB"], matched: false },
+          { cells: ["Plant engineer · Deburring Line 3", "Lindfeld · BM3", "1000", "200 · MRO", "NB"], matched: false },
         ],
       },
     ]}
@@ -164,10 +164,10 @@ const bearingCodingRef = (
         file: "coding-rules.xlsx",
         tab: "Cost centers",
         columns: ["Cost center", "Description", "Plant"],
-        usedNote: "→ 10034 · Dispersion Plant Maintenance",
+        usedNote: "→ 10034 · Deburring & Finishing Maintenance",
         rows: [
-          { cells: ["10034", "Dispersion Plant Maintenance", "Dispersion"], flag: true },
-          { cells: ["10031", "Resin Plant Maintenance", "Erlangen"], matched: false },
+          { cells: ["10034", "Deburring & Finishing Maintenance", "Lindfeld"], flag: true },
+          { cells: ["10031", "Drive Systems Maintenance", "Clairmont"], matched: false },
         ],
       },
     ]}
@@ -201,7 +201,7 @@ export const bearingMaterialMaster = (
       accounting: [
         { label: "Valuation class", value: "3040 · Spare parts" },
         { label: "Standard price", value: `$${UNIT} / EA` },
-        { label: "Plant", value: "Dispersion Plant" },
+        { label: "Plant", value: "Deburring Plant" },
       ],
     }}
   />
@@ -215,9 +215,9 @@ const bearingStockDoc = (
       createdOn: "2026-06-26 · 08:17",
       createdBy: "Master Data agent",
       rows: [
-        { plant: "Dispersion Plant", storageLoc: "ML1 · line store", onHand: "0", safety: "2", uom: "EA", tone: "short" },
-        { plant: "Erlangen · Drives & Power", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
-        { plant: "Fürth · Assembly & Packaging", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Deburring Plant", storageLoc: "ML1 · line store", onHand: "0", safety: "2", uom: "EA", tone: "short" },
+        { plant: "Clairmont · Drives & Power", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
+        { plant: "Riomar · Assembly & Packaging", storageLoc: "Main store", onHand: "0", safety: "0", uom: "EA" },
       ],
       note: "No stock anywhere in the network and none on order — buying is the only way to cover the shutdown.",
     }}
@@ -320,7 +320,7 @@ const bearingGrDoc = (
             { label: "Material", value: MAT },
             { label: "Movement type", value: "101 · GR goods receipt" },
             { label: "Quantity received", value: `${QTY} EA` },
-            { label: "Plant / SLoc", value: "Dispersion · Assembly Line 1" },
+            { label: "Plant / SLoc", value: "Lindfeld · Assembly Line 1" },
           ],
         },
       ],
@@ -472,7 +472,7 @@ export const bearingPrSteps: RunStep[] = [
         fields: [
           { label: "PR type", value: "NB · Standard requisition" },
           { label: "Requestor", value: "Maintenance planner · Assembly Line 1" },
-          { label: "Purch. org", value: "1000 · Siemens Procurement" },
+          { label: "Purch. org", value: "1000 · Orvantec Procurement" },
           { label: "Purch. group", value: "200 · MRO / Maintenance" },
         ],
       },
@@ -482,7 +482,7 @@ export const bearingPrSteps: RunStep[] = [
         title: "Account assignment",
         fields: [
           { label: "Material code", value: MAT },
-          { label: "Plant", value: "Dispersion Plant · Assembly Line 1" },
+          { label: "Plant", value: "Deburring Plant · Assembly Line 1" },
           { label: "Cost center", value: COST_CENTER },
           { label: "G/L account", value: GL },
         ],
@@ -527,9 +527,9 @@ export const bearingPrSteps: RunStep[] = [
         reasoning: "Checking every plant before buying anything",
         title: "Stock overview · MB52",
         fields: [
-          { label: "Dispersion · Assembly Line 1", value: "0 EA on hand · safety 2 EA" },
-          { label: "Erlangen", value: "0 EA · not stocked" },
-          { label: "Fürth", value: "0 EA · not stocked" },
+          { label: "Lindfeld · Assembly Line 1", value: "0 EA on hand · safety 2 EA" },
+          { label: "Clairmont", value: "0 EA · not stocked" },
+          { label: "Riomar", value: "0 EA · not stocked" },
           { label: "Verdict", value: "Nothing to transfer — the buy stands" },
         ],
       },

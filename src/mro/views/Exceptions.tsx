@@ -79,7 +79,7 @@ function recommendationFor(r: Requisition, type: ExceptionType): Recommendation 
         finding: "A sister plant already holds this item in its store.",
         action: "Transfer from the sister plant",
         evidence: [
-          { label: "Held at", detail: "Erlangen · maintenance store" },
+          { label: "Held at", detail: "Clairmont · maintenance store" },
           { label: "Needed at", detail: `${r.plant} · ${r.line}` },
           { label: "Why it matters", detail: "Buying what the network already owns is pure waste" },
         ],
@@ -125,7 +125,7 @@ function planFor(r: Requisition, type: ExceptionType): ResolutionPlan {
   const map: Record<ExceptionType, { apply: string; done: string }> = {
     "spec-incomplete": { apply: "Confirm and release", done: "Spec confirmed · 50 mm shaft" },
     "duplicate-demand": { apply: "Merge into the open request", done: "Merged into the open request" },
-    "stock-available": { apply: "Route the interplant transfer", done: "Transfer routed from Erlangen" },
+    "stock-available": { apply: "Route the interplant transfer", done: "Transfer routed from Clairmont" },
     "warranty-covered": { apply: "Raise the warranty claim", done: "Warranty claim raised" },
     "off-contract": { apply: "Move to the approved supplier", done: "Moved to the approved supplier" },
     "over-threshold": { apply: "Route for sign-off", done: "Signed off one level up" },
@@ -175,7 +175,7 @@ function buildRows(requisitions: Requisition[], only: ExceptionType | "all"): Ro
 type FillerRow = { id: string; desc: string; type: ExceptionType; action: string; value: number };
 
 const FILLERS: FillerRow[] = [
-  { id: "PR-48602", desc: "Pump seal kit — 40 mm — agitator", type: "duplicate-demand", action: "Merged", value: 612 },
+  { id: "PR-48602", desc: "Pump seal kit — 40 mm — gear reducer", type: "duplicate-demand", action: "Merged", value: 612 },
   { id: "PR-48598", desc: "Shaft sleeve — silicon carbide — 50 mm", type: "stock-available", action: "Transferred", value: 184 },
   { id: "PR-48588", desc: "Level transmitter — guided wave", type: "off-contract", action: "Moved to agreement", value: 2450 },
   { id: "PR-48579", desc: "Gasket set — DN50 — PTFE", type: "warranty-covered", action: "Claim settled", value: 96 },
