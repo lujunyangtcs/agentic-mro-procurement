@@ -100,7 +100,7 @@ const PERSONAS: Persona[] = [
     id: "mro",
     seat: "buyer",
     icon: Wrench,
-    badge: "MRO procurement",
+    badge: "Agentic Procurement",
     name: "Buyer",
     capabilities: [
       "Free-text purchase requests structured & validated",
