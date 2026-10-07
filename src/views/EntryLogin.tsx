@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronRight, ChevronLeft, ShoppingCart, Truck, Wrench, Lock, User as UserIcon } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, ChevronLeft, ShoppingCart, Truck, Wrench, Lock } from "lucide-react";
 import type { Product } from "@/Root";
 
 /**
  * Single entry sign-in, set in the the reference site corporate idiom: a white bar with
  * a centred wordmark, one inset photograph, and a frosted panel laid over it.
- * The hero panel gives way to the two sign-in cards on the same photograph.
+ * The hero panel gives way to a single sign-in card with a role picker.
  */
 
 type Persona = {
@@ -72,7 +72,12 @@ export function EntryLogin({ onPick }: { onPick: (p: Product, seat: "buyer" | "s
           )}
         />
 
-        <div className="relative z-10 flex w-full items-center justify-end py-10">
+        <div
+          className={cn(
+            "relative z-10 flex w-full items-center py-10",
+            phase === "hero" ? "justify-end" : "justify-center",
+          )}
+        >
           {phase === "hero" ? <HeroPanel onEnter={() => setPhase("personas")} /> : <SignInPanel onPick={onPick} />}
         </div>
       </main>
@@ -189,84 +194,163 @@ function HeroPanel({ onEnter }: { onEnter: () => void }) {
 }
 
 function SignInPanel({ onPick }: { onPick: (p: Product, seat: "buyer" | "supplier") => void }) {
-  return (
-    <div className="mx-4 flex w-full max-w-[880px] flex-col gap-5 sm:mx-10 lg:mr-14">
-      <div className="aap-fade-up flex flex-col gap-2">
-        <p className="aap-eyebrow text-ink-inverse/85">Choose your workspace</p>
-        <h2 className="aap-title text-[28px] leading-[36px] text-ink-inverse">Sign in</h2>
-      </div>
-      <div className="grid gap-3 md:grid-cols-2">
-        {PERSONAS.map((p, i) => (
-          <PersonaCard key={p.seat} persona={p} onPick={onPick} index={i} />
-        ))}
-      </div>
-      <p className="aap-eyebrow text-ink-inverse/80">Agents activate on sign-in · every action is audited</p>
-    </div>
-  );
-}
-
-function PersonaCard({
-  persona,
-  onPick,
-  index,
-}: {
-  persona: Persona;
-  onPick: (p: Product, seat: "buyer" | "supplier") => void;
-  index: number;
-}) {
-  const [user, setUser] = useState(persona.userId);
+  const [seat, setSeat] = useState<Persona["seat"]>("buyer");
   const [pwd, setPwd] = useState("agentic-demo");
+  const persona = PERSONAS.find((p) => p.seat === seat) ?? PERSONAS[0];
   const Icon = persona.icon;
 
   return (
-    <article
-      className="aap-glass aap-fade-up flex flex-col p-7"
-      style={{ animationDelay: `${140 + index * 140}ms` }}
-    >
-      <div className="flex items-center justify-between gap-3">
-        <span className="grid h-11 w-11 shrink-0 place-items-center border border-ink/25 text-ink">
-          <Icon size={18} aria-hidden />
-        </span>
-        <span className="aap-eyebrow text-mute">{persona.badge}</span>
+    <div className="mx-4 flex w-full max-w-[460px] flex-col items-center gap-6">
+      <div className="aap-fade-up flex flex-col items-center gap-3 text-center">
+        <p className="aap-eyebrow text-ink-inverse/85">Choose your workspace</p>
+        <h2 className="aap-title text-[30px] leading-[38px] text-ink-inverse">Sign in</h2>
       </div>
-
-      <h3 className="aap-title mt-6 text-[22px] leading-[28px] text-ink">{persona.name}</h3>
-      <span aria-hidden className="aap-rule mt-4 block h-px w-12 bg-ink" style={{ animationDelay: `${420 + index * 140}ms` }} />
-
-      <ul className="mt-5 flex flex-col gap-2.5">
-        {persona.capabilities.map((cap) => (
-          <li key={cap} className="flex items-start gap-2.5 text-[13.5px] font-light leading-[20px] text-ink">
-            <ChevronRight size={14} aria-hidden className="mt-[3px] shrink-0 text-steel" />
-            <span>{cap}</span>
-          </li>
-        ))}
-      </ul>
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
           onPick(persona.id, persona.seat);
         }}
-        className="mt-7 flex flex-col gap-3"
+        className="aap-glass aap-fade-up flex w-full flex-col gap-4 p-7"
+        style={{ animationDelay: "140ms" }}
       >
-        <Field icon={UserIcon} label="User ID" name={`${persona.seat}-user`} value={user} onChange={(e) => setUser(e.target.value)} />
-        <Field
-          icon={Lock}
-          label="Password"
-          name={`${persona.seat}-pwd`}
-          type="password"
-          value={pwd}
-          onChange={(e) => setPwd(e.target.value)}
-        />
+        <div className="flex items-center justify-between gap-3">
+          <span key={seat} className="aap-fade-up grid h-11 w-11 shrink-0 place-items-center border border-ink/25 text-ink">
+            <Icon size={18} aria-hidden />
+          </span>
+          <span id="signin-as-label" className="aap-eyebrow border border-ink/20 px-3 py-1.5 text-[11px] text-mute">
+            Sign in as
+          </span>
+        </div>
+
+        <RoleSelect value={seat} onChange={setSeat} labelledBy="signin-as-label" />
+
+        <Field icon={Lock} label="Password" name="password" type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} />
+
         <button
           type="submit"
-          className="ui-pill aap-cta mt-3 inline-flex items-center justify-between gap-2 bg-sand px-5 py-3.5 text-[13px] text-ink hover:bg-sand-deep"
+          className="ui-pill aap-cta mt-1 inline-flex items-center justify-center gap-3 bg-ink px-5 py-4 text-[13px] text-ink-inverse"
         >
-          Sign in as {persona.name}
+          Sign in
           <ChevronRight size={17} aria-hidden />
         </button>
       </form>
-    </article>
+
+      <p className="aap-eyebrow text-center text-ink-inverse/80">Agents activate on sign-in · every action is audited</p>
+    </div>
+  );
+}
+
+/** Role picker built as a listbox so it can match the square glass styling. */
+function RoleSelect({
+  value,
+  onChange,
+  labelledBy,
+}: {
+  value: Persona["seat"];
+  onChange: (seat: Persona["seat"]) => void;
+  labelledBy: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const selectedIndex = Math.max(
+    0,
+    PERSONAS.findIndex((p) => p.seat === value),
+  );
+  const [active, setActive] = useState(selectedIndex);
+  const selected = PERSONAS[selectedIndex];
+
+  const openList = () => {
+    setActive(selectedIndex);
+    setOpen(true);
+  };
+  const choose = (i: number) => {
+    onChange(PERSONAS[i].seat);
+    setOpen(false);
+  };
+
+  return (
+    <div
+      className="relative"
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
+      <button
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls="role-listbox"
+        aria-labelledby={`${labelledBy} role-select-value`}
+        aria-activedescendant={open ? `role-option-${PERSONAS[active].seat}` : undefined}
+        onClick={() => (open ? setOpen(false) : openList())}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+            e.preventDefault();
+            if (!open) return openList();
+            const step = e.key === "ArrowDown" ? 1 : -1;
+            setActive((i) => (i + step + PERSONAS.length) % PERSONAS.length);
+          } else if ((e.key === "Enter" || e.key === " ") && open) {
+            e.preventDefault();
+            choose(active);
+          } else if (e.key === "Escape" && open) {
+            e.preventDefault();
+            setOpen(false);
+          }
+        }}
+        className={cn(
+          "group flex w-full items-center justify-between gap-3 border bg-white/70 px-5 py-4 text-left transition-colors duration-150 ease-out",
+          open ? "border-ink" : "border-ink/30 hover:border-ink",
+        )}
+      >
+        <span id="role-select-value" className="flex min-w-0 flex-col">
+          <span className="truncate text-[20px] font-light leading-[26px] text-ink">{selected.name}</span>
+          <span className="aap-eyebrow truncate text-[10.5px] text-mute">{selected.badge}</span>
+        </span>
+        <ChevronDown
+          size={18}
+          aria-hidden
+          className={cn("shrink-0 text-ink transition-transform duration-300 ease-out", open && "rotate-180")}
+        />
+      </button>
+
+      {open && (
+        <ul
+          id="role-listbox"
+          role="listbox"
+          aria-labelledby={labelledBy}
+          tabIndex={-1}
+          className="aap-fade-up absolute inset-x-0 top-full z-20 mt-1 flex flex-col border border-ink/15 bg-white p-1 shadow-[0_18px_40px_-18px_rgb(12_18_28/0.45)]"
+          style={{ animationDuration: "220ms" }}
+        >
+          {PERSONAS.map((p, i) => {
+            const isSelected = i === selectedIndex;
+            const OptionIcon = p.icon;
+            return (
+              <li
+                key={p.seat}
+                id={`role-option-${p.seat}`}
+                role="option"
+                aria-selected={isSelected}
+                onMouseDown={(e) => e.preventDefault()}
+                onMouseEnter={() => setActive(i)}
+                onClick={() => choose(i)}
+                className={cn(
+                  "aap-nav-item flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors duration-150 ease-out",
+                  i === active ? "bg-surface-fog" : "bg-transparent",
+                )}
+              >
+                <Check size={15} aria-hidden className={cn("shrink-0 text-ink", !isSelected && "invisible")} />
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-[15px] leading-[21px] text-ink">{p.name}</span>
+                  <span className="truncate text-[12px] font-light leading-[17px] text-mute">{p.capabilities[0]}</span>
+                </span>
+                <OptionIcon size={16} aria-hidden className="shrink-0 text-steel" />
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }
 
