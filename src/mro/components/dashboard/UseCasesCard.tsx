@@ -1,7 +1,7 @@
 /**
- * The client use cases, opened from the dashboard. Each tile shows where its
- * case stands in the shared ledger, so a story run elsewhere reads the same
- * here. Stories with a guided playback are marked.
+ * New tickets: the five client use cases as rows on the dashboard. Each row
+ * shows where its case stands in the shared ledger, so a story run elsewhere
+ * reads the same here. Stories with a guided playback are marked.
  */
 
 import { ChevronRight, Layers, PlayCircle } from "lucide-react";
@@ -16,16 +16,18 @@ import { DashCard } from "@/mro/components/dashboard/cards";
 
 const COPY = {
   en: {
-    title: "Client use cases",
+    title: "New tickets",
     right: (n: number, done: number) => `${done} of ${n} closed`,
     guided: "Guided",
+    cols: { ticket: "Ticket", request: "Request", status: "Status" },
     status: { new: "Not started", running: "Agent running", waiting: "Waiting on a person", ready: "Ready to hand off", done: "Closed", ended: "Ended by decision" } as Record<StoryStatus, string>,
     open: (uc: string) => `Open ${uc}`,
   },
   de: {
-    title: "Kunden-Use-Cases",
+    title: "Neue Tickets",
     right: (n: number, done: number) => `${done} von ${n} abgeschlossen`,
     guided: "Geführt",
+    cols: { ticket: "Ticket", request: "Anfrage", status: "Status" },
     status: { new: "Nicht gestartet", running: "Agent läuft", waiting: "Wartet auf Person", ready: "Bereit zur Übergabe", done: "Abgeschlossen", ended: "Durch Entscheidung beendet" } as Record<StoryStatus, string>,
     open: (uc: string) => `${uc} öffnen`,
   },
@@ -50,38 +52,44 @@ export function UseCasesCard() {
 
   return (
     <DashCard icon={<Layers size={18} strokeWidth={1.75} />} title={t.title} right={t.right(rows.length, closed)}>
-      <ul className="grid grid-cols-1 gap-px bg-divider sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div
+        aria-hidden
+        className="flex items-center gap-3 border-b border-divider px-4 pb-1.5 text-[11.5px] font-bold uppercase tracking-[0.06em] text-mute"
+      >
+        <span className="w-[92px] shrink-0">{t.cols.ticket}</span>
+        <span className="min-w-0 flex-1">{t.cols.request}</span>
+        <span className="w-[132px] shrink-0">{t.cols.status}</span>
+        <span className="w-[15px] shrink-0" />
+      </div>
+      <ul className="divide-y divide-divider">
         {rows.map(({ run, status, guided }) => (
-          <li key={run.story.id} className="bg-white">
+          <li key={run.story.id}>
             <button
               type="button"
               onClick={() => go({ kind: "story", storyId: run.story.id })}
-              aria-label={`${t.open(run.story.ucLabel)} · ${run.story.title[lang]}`}
-              className="ui-pill group flex h-full w-full flex-col text-left transition-colors hover:bg-surface-fog"
+              aria-label={`${t.open(run.story.ucLabel)} · ${run.story.title[lang]} · ${t.status[status]}`}
+              className="ui-pill group flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-fog"
             >
-              <span className="relative block h-[92px] w-full overflow-hidden bg-accent-navy">
-                <img
-                  src={`/media/story-${run.story.id.toLowerCase()}.png`}
-                  alt=""
-                  className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
-                />
+              <span className="flex w-[92px] shrink-0 flex-col">
+                <span className="whitespace-nowrap text-[13px] font-bold leading-[17px] text-ink">{run.story.ucLabel}</span>
+                <span className="whitespace-nowrap text-[11.5px] leading-4 text-mute tabular-nums">{run.story.caseId}</span>
+              </span>
+              <span className="flex min-w-0 flex-1 items-center gap-2">
+                <span className="min-w-0 truncate text-[13px] text-ink" title={run.story.title[lang]}>
+                  {run.story.title[lang]}
+                </span>
                 {guided && (
-                  <span className="absolute left-2.5 top-2.5 inline-flex items-center gap-1 whitespace-nowrap rounded-sm bg-ink/80 px-1.5 py-0.5 text-[11px] font-medium text-ink-inverse">
-                    <PlayCircle size={12} aria-hidden /> {t.guided}
+                  <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-sm border border-divider px-1.5 py-px text-[11px] font-medium text-surface-deep">
+                    <PlayCircle size={11} aria-hidden /> {t.guided}
                   </span>
                 )}
               </span>
-              <span className="flex flex-1 flex-col gap-1.5 px-3.5 pb-3 pt-2.5">
-                <span className="flex items-center gap-2 text-[11.5px] font-bold uppercase tracking-[0.08em] text-steel">
-                  {run.story.ucLabel}
-                  <span className="font-normal normal-case tracking-normal text-mute">{run.story.caseId}</span>
-                </span>
-                <span className="line-clamp-2 min-h-10 text-pretty text-[14px] font-medium leading-5 text-ink">{run.story.title[lang]}</span>
-                <span className="mt-auto flex items-center gap-2 pt-1">
-                  <span className={cn("truncate whitespace-nowrap rounded-sm px-1.5 py-0.5 text-[11.5px] font-medium", tone[status])}>{t.status[status]}</span>
-                  <ChevronRight size={15} aria-hidden className="ml-auto shrink-0 text-ink transition-transform group-hover:translate-x-0.5" />
+              <span className="w-[132px] shrink-0">
+                <span className={cn("inline-block max-w-full truncate whitespace-nowrap rounded-sm px-1.5 py-0.5 text-[11.5px] font-medium", tone[status])}>
+                  {t.status[status]}
                 </span>
               </span>
+              <ChevronRight size={15} aria-hidden className="shrink-0 text-ink transition-transform group-hover:translate-x-0.5" />
             </button>
           </li>
         ))}

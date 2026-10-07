@@ -1,8 +1,8 @@
 /**
  * Dashboard — the buyer's landing, restored to the original console layout:
  * header tools, the dark "today" banner with the position inline and New
- * request, four live tiles with sparklines, Requisitions beside Decisions and
- * holds, Invoice matching beside the two charts.
+ * request, four live tiles with sparklines, Requisitions beside New tickets
+ * (the client use cases), Invoice matching beside the two charts.
  *
  * Every figure is read from the canonical domain record and the shared work
  * queue (useDashboardModel), so closing a case anywhere moves this page.
@@ -24,7 +24,6 @@ import { useDashCopy } from "@/mro/components/dashboard/copy";
 import { useDashboardModel } from "@/mro/components/dashboard/model";
 import { UseCasesCard } from "@/mro/components/dashboard/UseCasesCard";
 import {
-  AttentionCard,
   HeldByReasonCard,
   InvoicesCard,
   NotificationsBell,
@@ -123,11 +122,9 @@ export function Dashboard() {
 
       <KPIStrip items={kpis} className="grid-cols-2 xl:grid-cols-4" />
 
-      <UseCasesCard />
-
       <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-[1.55fr_1fr]">
         <RequisitionsCard m={m} />
-        <AttentionCard m={m} />
+        <UseCasesCard />
       </div>
 
       <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-[1.55fr_1fr]">
