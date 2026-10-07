@@ -350,7 +350,8 @@ export type AuditEventType =
   | "followup.opened"
   | "task.reassigned"
   | "task.escalated"
-  | "duplicate.flagged";
+  | "duplicate.flagged"
+  | "policy.activated";
 
 export type AuditEvent = {
   id: string;

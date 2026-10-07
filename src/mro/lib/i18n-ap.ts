@@ -7,6 +7,17 @@ export const AP_DICT: Record<string, { en: string; de: string }> = {
   "brand.name": { en: "Automotive Procurement", de: "Automotive Procurement" },
   "brand.demo": { en: "Demo environment", de: "Demoumgebung" },
 
+  "nav.desk": { en: "My desk", de: "Mein Desk" },
+  "nav.newRequest": { en: "New request", de: "Neue Anforderung" },
+  "nav.workbenches": { en: "Workbenches", de: "Arbeitsbereiche" },
+  "nav.opportunities": { en: "Opportunities", de: "Chancen" },
+  "nav.sourcingBench": { en: "Sourcing", de: "Sourcing" },
+  "nav.suppliers": { en: "Suppliers", de: "Lieferanten" },
+  "nav.contracts": { en: "Contracts", de: "Verträge" },
+  "nav.assurance": { en: "Assurance", de: "Absicherung" },
+  "nav.value": { en: "Value assurance", de: "Wertsicherung" },
+  "nav.governance": { en: "Governance", de: "Governance" },
+
   "cases.title": { en: "Cases", de: "Vorgänge" },
   "cases.sub": { en: "Procurement cases on the domain record", de: "Beschaffungsvorgänge im Domänenbestand" },
   "cases.empty": { en: "No cases yet", de: "Noch keine Vorgänge" },
@@ -78,4 +89,10 @@ export const AP_DICT: Record<string, { en: string; de: string }> = {
   "event.exception.opened": { en: "Exception opened", de: "Ausnahme eröffnet" },
   "event.value.validated": { en: "Value validated", de: "Wert bestätigt" },
   "event.clock.advanced": { en: "Clock advanced", de: "Uhr vorgestellt" },
+  "event.po.acknowledged": { en: "Supplier confirmed PO", de: "Lieferant hat Bestellung bestätigt" },
+  "event.followup.opened": { en: "Follow-up opened", de: "Nachverfolgung eröffnet" },
+  "event.task.reassigned": { en: "Task reassigned", de: "Aufgabe neu zugewiesen" },
+  "event.task.escalated": { en: "Task escalated", de: "Aufgabe eskaliert" },
+  "event.duplicate.flagged": { en: "Possible duplicate flagged", de: "Mögliches Duplikat markiert" },
+  "event.policy.activated": { en: "Policy version activated", de: "Richtlinienversion aktiviert" },
 };

@@ -407,6 +407,8 @@ export function Exceptions() {
         }
       />
 
+      <LiveHoldsPanel />
+
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-3 items-stretch">
         {/* ── The board ──────────────────────────────────────────────────── */}
         <section className="flex h-full min-w-0 flex-col rounded-md border border-divider bg-white">

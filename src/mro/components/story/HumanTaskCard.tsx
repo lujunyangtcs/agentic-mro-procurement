@@ -7,6 +7,9 @@ import { UserRound, Clock, Check } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import type { HumanTask } from "@/mro/data/stories/runModel";
 import { useStoryCopy } from "@/mro/components/story/copy";
+import { useDeskCopy } from "@/mro/components/desk/copy";
+import { personaRole } from "@/mro/components/desk/personas";
+import { useProcurement } from "@/mro/data/store";
 
 export function HumanTaskCard({
   task,
@@ -22,6 +25,10 @@ export function HumanTaskCard({
   onDecide: (optionId: string) => void;
 }) {
   const { c, lang } = useStoryCopy();
+  const { role } = useDeskCopy();
+  const { session, setSession } = useProcurement();
+  const needed = personaRole(task.persona);
+  const mayDecide = session.reviewAs === needed;
   const chosen = task.options.find((o) => o.id === decided);
 
   return (
@@ -92,6 +99,17 @@ export function HumanTaskCard({
               {c.recordedReason}: {task.recorded.reason}
             </p>
           )}
+        </div>
+      ) : active && !mayDecide ? (
+        <div className="ml-12 flex flex-col items-start gap-2">
+          <p className="text-[12.5px] leading-[18px] text-mute">{c.reviewAsHint(role(session.reviewAs), role(needed))}</p>
+          <button
+            type="button"
+            onClick={() => setSession({ reviewAs: needed })}
+            className="ui-pill inline-flex items-center whitespace-nowrap rounded-md border border-divider bg-white px-3.5 py-2 text-[13px] font-medium text-ink hover:bg-surface-fog"
+          >
+            {c.switchTo(role(needed))}
+          </button>
         </div>
       ) : (
         <div className="ml-12 flex flex-wrap gap-2">

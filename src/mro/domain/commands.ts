@@ -9,6 +9,7 @@ import type {
   ConfidenceSignal,
   DomainState,
   IsoTime,
+  Policy,
   Request,
   SiteId,
   StoryId,
@@ -51,7 +52,9 @@ export type Command =
   | (Base & { type: "po.release"; caseId: string; expectedRevision: number })
   | (Base & { type: "po.acknowledge"; poId: string })
   | (Base & { type: "clock.advance"; minutes: number })
-  | (Base & { type: "failures.set"; erpPo?: number; supplierSilent?: boolean });
+  | (Base & { type: "failures.set"; erpPo?: number; supplierSilent?: boolean })
+  | (Base & { type: "policy.activate"; changeId: string; version: string; patch: Partial<Pick<Policy, "autoApproveLimit" | "lanes">> })
+  | (Base & { type: "policy.rollback"; to: string });
 
 export type CommandError =
   | "stale-revision"

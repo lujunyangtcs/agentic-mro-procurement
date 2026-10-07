@@ -2,7 +2,8 @@ import { useT } from "@/mro/lib/i18n";
 
 const en = {
   newRequestTitle: "New request",
-  newRequestLead: "Five requests from the UK sites, each run through the agent chain its I/O defines.",
+  newRequestLead: "Type a catalogue need, or run one of today's five arrivals through its agent chain.",
+  todayArrivals: "Today's arrivals",
   inbox: "Arrived today",
   asArrived: "As it arrived",
   agentChain: "Agent chain",
@@ -55,13 +56,18 @@ const en = {
   showInput: "Show input",
   hideInput: "Hide input",
   policyHandoff: "Policy hand-off · no person needed",
+  rawOutput: "Full agent output",
+  pausedNotice: "This agent is paused in Governance. The step waits in the human queue; nothing already dispatched is replayed.",
+  reviewAsHint: (now: string, need: string) => `You are reviewing as ${now}. Only the ${need} can decide this.`,
+  switchTo: (r: string) => `Review as ${r}`,
 };
 
 type Copy = typeof en;
 
 const de: Copy = {
   newRequestTitle: "Neue Anforderung",
-  newRequestLead: "Fünf Anforderungen der UK-Standorte, jede durch die Agentenkette ihres I/O.",
+  newRequestLead: "Katalogbedarf eingeben oder einen der fünf heutigen Eingänge durch seine Agentenkette führen.",
+  todayArrivals: "Heutige Eingänge",
   inbox: "Heute eingegangen",
   asArrived: "Wie eingegangen",
   agentChain: "Agentenkette",
@@ -114,6 +120,10 @@ const de: Copy = {
   showInput: "Eingabe zeigen",
   hideInput: "Eingabe ausblenden",
   policyHandoff: "Übergabe per Richtlinie · keine Person nötig",
+  rawOutput: "Vollständige Agentenausgabe",
+  pausedNotice: "Dieser Agent ist in Governance pausiert. Der Schritt wartet in der menschlichen Warteschlange; bereits Übermitteltes wird nicht wiederholt.",
+  reviewAsHint: (now, need) => `Sie prüfen als ${now}. Nur ${need} kann das entscheiden.`,
+  switchTo: (r) => `Als ${r} prüfen`,
 };
 
 export function useStoryCopy() {

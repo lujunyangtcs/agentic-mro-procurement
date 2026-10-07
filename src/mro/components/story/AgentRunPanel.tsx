@@ -6,6 +6,8 @@ import { IoBody } from "@/mro/components/story/IoBody";
 import { ConfidenceCard, GuardrailCard, LaneCard } from "@/mro/components/story/Envelope";
 import { HumanTaskCard } from "@/mro/components/story/HumanTaskCard";
 import { useStoryCopy } from "@/mro/components/story/copy";
+import { StoryEvidence, hasEvidence } from "@/mro/components/story/StoryEvidence";
+import type { UseCaseKey } from "@/mro/data/stories/io";
 
 function Working() {
   const { c } = useStoryCopy();
@@ -27,6 +29,8 @@ function Working() {
 }
 
 export function AgentRunPanel({
+  uc,
+  paused,
   step,
   running,
   isFrontier,
@@ -37,6 +41,8 @@ export function AgentRunPanel({
   onDecide,
   onHandOff,
 }: {
+  uc: UseCaseKey;
+  paused?: boolean;
   step: RunStep;
   running: boolean;
   isFrontier: boolean;
@@ -76,7 +82,11 @@ export function AgentRunPanel({
         )}
       </header>
 
-      {running ? (
+      {paused && isFrontier && !finished ? (
+        <p role="status" className="rounded-md border border-[color-mix(in_srgb,var(--mark-amber)_40%,white)] bg-surface-amber/60 px-4 py-3 text-[13.5px] leading-[19px] text-ink">
+          {c.pausedNotice}
+        </p>
+      ) : running ? (
         <Working />
       ) : (
         <>
@@ -99,7 +109,22 @@ export function AgentRunPanel({
                 <IoBody body={step.input} />
               </div>
             )}
-            <IoBody body={step.output} />
+            {hasEvidence(uc, step.index) ? (
+              <>
+                <StoryEvidence uc={uc} index={step.index} />
+                <details className="group rounded-md border border-divider">
+                  <summary className="flex cursor-pointer list-none items-center gap-1 px-3 py-2 text-[12.5px] font-medium text-surface-deep">
+                    {c.rawOutput}
+                    <ChevronDown size={14} className="transition-transform group-open:rotate-180" aria-hidden />
+                  </summary>
+                  <div className="border-t border-divider p-3">
+                    <IoBody body={step.output} />
+                  </div>
+                </details>
+              </>
+            ) : (
+              <IoBody body={step.output} />
+            )}
             {r.evidenceIds.length > 0 && (
               <p className="flex flex-wrap items-center gap-1.5 border-t border-divider pt-3 text-[12px] text-mute">
                 {c.evidence}:

@@ -5,6 +5,7 @@ import FreightApp from "@/freight/App";
 import MroApp from "@/mro/App";
 import { EntryLogin } from "@/views/EntryLogin";
 import { ProcurementStoreProvider } from "@/mro/data/store";
+import { loadNav } from "@/mro/state";
 
 export type Product = "p2p" | "o2c" | "freight" | "mro";
 
@@ -18,8 +19,10 @@ export type Product = "p2p" | "o2c" | "freight" | "mro";
  * The P2P, O2C and Freight workforces stay wired for reuse but are not shown.
  */
 function Launched() {
-  const [launched, setLaunched] = React.useState<Product | null>(null);
-  const [seat, setSeat] = React.useState<"buyer" | "supplier">("buyer");
+  /* A refresh inside the workspace resumes the seat and screen it was on. */
+  const [resumed] = React.useState(loadNav);
+  const [launched, setLaunched] = React.useState<Product | null>(resumed ? "mro" : null);
+  const [seat, setSeat] = React.useState<"buyer" | "supplier">(resumed?.persona ?? "buyer");
   const back = () => setLaunched(null);
 
   if (launched === "p2p") return <P2pApp startSignedIn onExit={back} />;

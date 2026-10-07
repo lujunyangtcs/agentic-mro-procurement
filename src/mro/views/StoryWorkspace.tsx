@@ -5,6 +5,7 @@
  * until the named persona decides.
  */
 
+import * as React from "react";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { useApp } from "@/mro/state";
 import type { StoryId } from "@/mro/domain/types";
@@ -18,11 +19,17 @@ import { AgentRunPanel } from "@/mro/components/story/AgentRunPanel";
 import { OutcomeCard } from "@/mro/components/story/OutcomeCard";
 import { RequestSummary } from "@/mro/components/story/RequestSummary";
 
-export function StoryWorkspace({ storyId }: { storyId: StoryId }) {
+export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; step?: number }) {
   const { go } = useApp();
   const { c, lang } = useStoryCopy();
   const run = storyRunById[storyId];
-  const { state, running, stepDone, pendingTasks, decide, handOff, select, restart, humanDecisions, status } = useStoryRun(run);
+  const { state, running, paused, stepDone, pendingTasks, decide, handOff, select, restart, humanDecisions, status } = useStoryRun(run);
+
+  /* Deep links from the workbenches open a step that has already run. */
+  React.useEffect(() => {
+    if (openStep !== undefined && openStep <= state.reached) select(openStep);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openStep]);
 
   const step = run.steps[state.selected];
   const doneCount = run.steps.filter((_, i) => stepDone(i) && (i < state.reached || state.finished)).length;
@@ -87,6 +94,8 @@ export function StoryWorkspace({ storyId }: { storyId: StoryId }) {
             {state.finished && <OutcomeCard run={run} endedBy={state.endedBy} humanDecisions={humanDecisions} />}
             <AgentRunPanel
               key={state.selected}
+              uc={run.story.uc}
+              paused={paused}
               step={step}
               running={running && state.selected === state.reached}
               isFrontier={state.selected === state.reached}

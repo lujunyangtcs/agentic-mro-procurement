@@ -665,8 +665,59 @@ function setFailures(state: DomainState, cmd: Extract<Command, { type: "failures
   return { ok: true, state: s, eventIds: [] };
 }
 
+/**
+ * A Value Council-approved rule change becomes a new policy version. Cases
+ * opened earlier keep the version they were opened under; the gate refuses
+ * the change without the council's signature (HC09).
+ */
+function activatePolicy(state: DomainState, cmd: Extract<Command, { type: "policy.activate" }>): CommandResult {
+  if (state.processedKeys[cmd.idempotencyKey]) return { ok: true, state, eventIds: [], duplicate: true };
+  if (cmd.actor.kind !== "human" || cmd.actor.role !== "value-council") return fail(state, "role-mismatch", "Only the Value Council can activate a rule change");
+  if (state.policies.versions[cmd.version]) return fail(state, "already-decided", `${cmd.version} already exists`);
+  const s = structuredClone(state);
+  const base = s.policies.versions[s.policies.active];
+  s.policies.versions[cmd.version] = { ...structuredClone(base), ...cmd.patch, version: cmd.version, effectiveFrom: s.clock.now };
+  const previous = s.policies.active;
+  s.policies.active = cmd.version;
+  const ev = audit(s, {
+    type: "policy.activated",
+    actor: cmd.actor,
+    ruleVersion: cmd.version,
+    sources: [cmd.changeId, previous],
+    summary: `${cmd.changeId}: ${previous} → ${cmd.version}; rollback to ${previous}`,
+    substantive: false,
+    idempotencyKey: cmd.idempotencyKey,
+  });
+  s.processedKeys[cmd.idempotencyKey] = ev.id;
+  return { ok: true, state: s, eventIds: [ev.id] };
+}
+
+function rollbackPolicy(state: DomainState, cmd: Extract<Command, { type: "policy.rollback" }>): CommandResult {
+  if (state.processedKeys[cmd.idempotencyKey]) return { ok: true, state, eventIds: [], duplicate: true };
+  if (cmd.actor.kind !== "human" || cmd.actor.role !== "value-council") return fail(state, "role-mismatch", "Only the Value Council can roll back a rule change");
+  if (!state.policies.versions[cmd.to]) return fail(state, "unknown-case", `No policy ${cmd.to}`);
+  const s = structuredClone(state);
+  const previous = s.policies.active;
+  s.policies.active = cmd.to;
+  const ev = audit(s, {
+    type: "policy.activated",
+    actor: cmd.actor,
+    ruleVersion: cmd.to,
+    sources: [previous, cmd.to],
+    summary: `Rolled back ${previous} → ${cmd.to}`,
+    substantive: false,
+    idempotencyKey: cmd.idempotencyKey,
+  });
+  s.processedKeys[cmd.idempotencyKey] = ev.id;
+  return { ok: true, state: s, eventIds: [ev.id] };
+}
+
 export function handleCommand(state: DomainState, cmd: Command): CommandResult {
   switch (cmd.type) {
+    case "policy.activate":
+      return activatePolicy(state, cmd);
+    case "policy.rollback":
+      return rollbackPolicy(state, cmd);
     case "request.submit":
       return submit(state, cmd);
     case "request.revise":

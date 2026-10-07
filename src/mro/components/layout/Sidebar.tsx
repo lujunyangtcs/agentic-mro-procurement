@@ -5,15 +5,24 @@ import { useT } from "@/mro/lib/i18n";
 import { agentsById, type AgentId } from "@/mro/data/agents";
 import {
   LayoutDashboard,
-  ClipboardList,
-  Settings,
   FileText,
   CircleAlert,
   Receipt,
   Headset,
   MessageSquare,
   Globe,
+  PenLine,
+  Lightbulb,
+  Scale,
+  Building2,
+  FileSignature,
+  BadgePoundSterling,
+  Landmark,
+  SlidersHorizontal,
 } from "lucide-react";
+import { PresenterControls } from "@/mro/components/desk/PresenterControls";
+import { useWorkQueue } from "@/mro/components/desk/workQueue";
+import { useProcurement } from "@/mro/data/store";
 
 type NavItem = {
   label: string;
@@ -36,40 +45,35 @@ const agentItem = (id: AgentId): NavItem => ({
 });
 
 /** Built per render so every label follows the reader's chosen language. */
-const buyerSectionsFor = (t: (key: string) => string): Section[] => [
-  {
-    title: t("nav.overview"),
-    items: [
-      { label: t("nav.dashboard"), icon: LayoutDashboard, view: { kind: "cockpit" } },
-      { label: t("nav.controlTower"), icon: Globe, view: { kind: "control-tower" } },
-      { ...agentItem("orchestrator"), label: t("nav.agentWorkforce") },
-    ],
-  },
+const buyerSectionsFor = (t: (key: string) => string, badges: { approvals: number; holds: number }): Section[] => [
   {
     /* The buyer's own desk — the work, rather than the workforce. */
     title: t("nav.myDesk"),
     items: [
+      { label: t("nav.desk"), icon: LayoutDashboard, view: { kind: "cockpit" }, badge: badges.approvals ? { kind: "count", value: badges.approvals } : undefined },
+      { label: t("nav.newRequest"), icon: PenLine, view: { kind: "agent", id: "intake" } },
       { label: t("nav.requisitions"), icon: FileText, view: { kind: "requisitions" } },
-      { label: t("nav.exceptions"), icon: CircleAlert, view: { kind: "exceptions" } },
+      { label: t("nav.exceptions"), icon: CircleAlert, view: { kind: "exceptions" }, badge: badges.holds ? { kind: "count", value: badges.holds } : undefined },
       { label: t("nav.invoiceMatching"), icon: Receipt, view: { kind: "invoice-matching" } },
       { label: t("nav.serviceDesk"), icon: Headset, view: { kind: "service-desk" } },
     ],
   },
   {
-    title: t("nav.validation"),
+    title: t("nav.workbenches"),
     items: [
-      { ...agentItem("intake"), label: t("nav.prProcessing") },
-      { ...agentItem("vendor"), label: t("nav.masterData") },
-      { ...agentItem("invoice"), label: t("nav.warranty") },
-      { ...agentItem("sourcing"), label: t("nav.sourcing") },
-      { ...agentItem("po"), label: t("nav.approval") },
+      { label: t("nav.opportunities"), icon: Lightbulb, view: { kind: "opportunities" } },
+      { label: t("nav.sourcingBench"), icon: Scale, view: { kind: "sourcing" } },
+      { label: t("nav.suppliers"), icon: Building2, view: { kind: "suppliers" } },
+      { label: t("nav.contracts"), icon: FileSignature, view: { kind: "contracts" } },
     ],
   },
   {
-    title: t("nav.system"),
+    title: t("nav.assurance"),
     items: [
-      { label: t("nav.auditLog"), icon: ClipboardList, comingSoon: true },
-      { label: t("nav.settings"), icon: Settings, comingSoon: true },
+      { label: t("nav.value"), icon: BadgePoundSterling, view: { kind: "value" } },
+      { label: t("nav.governance"), icon: Landmark, view: { kind: "governance" } },
+      { label: t("nav.controlTower"), icon: Globe, view: { kind: "control-tower" } },
+      { ...agentItem("orchestrator"), label: t("nav.agentWorkforce") },
     ],
   },
 ];
@@ -90,23 +94,21 @@ const supplierSectionsFor = (t: (key: string) => string): Section[] => [
 
 function isItemActive(item: NavItem, view: View): boolean {
   if (!item.view) return false;
-  if (item.view.kind === "cockpit") return view.kind === "cockpit";
   if (item.view.kind === "agent") return view.kind === "agent" && view.id === item.view.id;
-  if (item.view.kind === "requisitions") return view.kind === "requisitions";
-  if (item.view.kind === "exceptions") return view.kind === "exceptions";
-  if (item.view.kind === "invoice-matching") return view.kind === "invoice-matching";
-  if (item.view.kind === "service-desk") return view.kind === "service-desk";
-  if (item.view.kind === "supplier-center") return view.kind === "supplier-center";
-  if (item.view.kind === "supplier-overview") return view.kind === "supplier-overview";
-  if (item.view.kind === "control-tower") return view.kind === "control-tower";
-  return false;
+  if (item.view.kind === "cockpit") return view.kind === "cockpit" || view.kind === "case";
+  return item.view.kind === view.kind;
 }
 
 export function Sidebar() {
   const { view, go, signOut, persona } = useApp();
   const { t } = useT();
+  const { session } = useProcurement();
+  const { approvals, exceptions } = useWorkQueue();
+  const [presenter, setPresenter] = React.useState(false);
   const isSupplier = persona === "supplier";
-  const sectionsForPersona = isSupplier ? supplierSectionsFor(t) : buyerSectionsFor(t);
+  const sectionsForPersona = isSupplier
+    ? supplierSectionsFor(t)
+    : buyerSectionsFor(t, { approvals: approvals.filter((a) => a.role === session.reviewAs).length, holds: exceptions.length });
 
   return (
     <aside className="flex flex-col w-[240px] shrink-0 h-screen bg-white border-r border-divider sticky top-0">
@@ -120,10 +122,19 @@ export function Sidebar() {
             <div className="whitespace-nowrap text-[14px] font-bold text-ink">
               {isSupplier ? t("sp.chip") : t("brand.name")}
             </div>
-            <div className="whitespace-nowrap text-[12px] text-mute">{t("brand.demo")}</div>
+            <button
+              type="button"
+              onClick={() => setPresenter(true)}
+              aria-haspopup="dialog"
+              className="ui-pill -ml-1 inline-flex items-center gap-1 whitespace-nowrap rounded px-1 text-[12px] text-mute hover:bg-surface-fog hover:text-ink"
+            >
+              <SlidersHorizontal size={11} aria-hidden />
+              {t("brand.demo")}
+            </button>
           </div>
         </div>
       </div>
+      <PresenterControls open={presenter} onClose={() => setPresenter(false)} />
 
       {/* Sections */}
       <nav className="flex-1 overflow-y-auto pt-3">

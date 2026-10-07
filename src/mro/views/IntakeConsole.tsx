@@ -18,6 +18,7 @@ import { RequestSummary } from "@/mro/components/story/RequestSummary";
 import { CHANNEL_ICON, gbpWhole } from "@/mro/components/story/format";
 import { ToneChip } from "@/mro/components/story/IoBody";
 import { hasProgress } from "@/mro/components/story/useStoryRun";
+import { RequestComposer } from "@/mro/components/desk/RequestComposer";
 
 function RequestRow({ id, active, onOpen }: { id: StoryId; active: boolean; onOpen: () => void }) {
   const { c, lang } = useStoryCopy();
@@ -69,6 +70,10 @@ export function IntakeConsole() {
 
   return (
     <ConsolePage title={c.newRequestTitle} lead={c.newRequestLead}>
+      <SpringIn>
+        <RequestComposer />
+      </SpringIn>
+      <h2 className="pt-2 text-[13px] font-bold uppercase tracking-[0.06em] text-ink">{c.todayArrivals}</h2>
       <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         <SpringIn>
           <section className="overflow-hidden rounded-md border border-divider bg-white">
