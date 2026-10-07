@@ -154,15 +154,18 @@ export function TheatrePanel({
   const { c } = useStoryCopy();
   const { t } = useTheatreCopy();
   const [showInput, setShowInput] = React.useState(false);
-  const [analysing, setAnalysing] = React.useState<"confidence" | "guardrails" | null>(null);
+  const [analysing, setAnalysing] = React.useState(false);
   const r = step.run;
   const seconds = Math.max(1, Math.round((Date.parse(r.finishedAt) - Date.parse(r.startedAt)) / 1000));
   const stages = stagesOf(step);
+  /* Confidence and guardrails run as one AI check, so both cards land together. */
+  const checks = stages.filter((s): s is "confidence" | "guardrails" => s !== "lane");
   const live = isFrontier && !finished;
   const shownBeat = live ? beat : stages.length;
   const shown = (s: Stage) => stages.indexOf(s) < shownBeat;
-  const fresh = (s: Stage) => live && stages.indexOf(s) === shownBeat - 1;
+  const fresh = (s: Stage) => live && (s === "lane" ? stages.indexOf(s) === shownBeat - 1 : shownBeat === checks.length);
   const next = live ? stages[beat] : undefined;
+  const checking = next === "confidence" || next === "guardrails";
   const firstOpen = step.tasks.findIndex((x) => !decisions[x.id]);
   const canHandOff = live && !running && shownBeat >= stages.length && pendingCount === 0;
 
@@ -180,10 +183,10 @@ export function TheatrePanel({
   const fetchedDocs = script.fetch.map((f) => (f.doc ? docs[f.doc] : undefined)).filter((d, i, a): d is SourceDoc => !!d && a.indexOf(d) === i);
   const producedDocs = (script.produces ?? []).map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
 
-  const analysis = (kind: "confidence" | "guardrails"): AnalysisItem[] =>
+  const analysisOf = (kind: "confidence" | "guardrails"): AnalysisItem[] =>
     kind === "confidence"
       ? (r.confidence?.signals ?? []).map((s) => ({
-          key: s.key,
+          key: `signal-${s.key}`,
           label: humanKey(s.key),
           detail: s.evidence,
           value: s.score === null ? "—" : s.score.toFixed(2),
@@ -191,7 +194,7 @@ export function TheatrePanel({
           ok: (s.score ?? 0) >= 0.9,
         }))
       : r.guardrails.map((g) => ({
-          key: g.rule,
+          key: `guard-${g.rule}`,
           label: g.rule,
           detail: g.detail,
           value: g.status,
@@ -201,6 +204,13 @@ export function TheatrePanel({
 
   const bandLabel = (score: number) => (score >= 0.9 ? t.bands.touchless : score >= 0.7 ? t.bands.review : t.bands.client);
   const passCount = r.guardrails.filter((g) => g.status !== "TRIPPED").length;
+  const both = checks.length === 2;
+  const checkLabel = both ? t.analyseChecks : checks[0] === "confidence" ? t.analyseConfidence : t.analyseGuardrails;
+  const checkTitle = both ? t.checksTitle : checks[0] === "confidence" ? t.scoringTitle : t.guardTitle;
+  const checkDoc = both ? t.checksDoc : checks[0] === "confidence" ? t.scoringDoc : t.guardDoc;
+  const checkResult = checks
+    .map((k) => (k === "confidence" && r.confidence ? t.confidenceResult(r.confidence.score.toFixed(2), bandLabel(r.confidence.score)) : t.guardResult(passCount, r.guardrails.length)))
+    .join(" · ");
 
   return (
     <article className="flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
@@ -323,8 +333,7 @@ export function TheatrePanel({
             </div>
           )}
 
-          {next === "confidence" && <AiAction label={t.analyseConfidence} onClick={() => setAnalysing("confidence")} />}
-          {next === "guardrails" && <AiAction label={t.analyseGuardrails} onClick={() => setAnalysing("guardrails")} />}
+          {checking && <AiAction label={checkLabel} onClick={() => setAnalysing(true)} />}
           {next === "lane" && (
             <p role="status" className="aap-fade-up flex items-center gap-3 border border-divider bg-white px-5 py-3.5 text-[13px] text-ink">
               <Spinner size={13} /> {t.deciding}
@@ -363,19 +372,15 @@ export function TheatrePanel({
       {analysing && (
         <AiAnalysisModal
           caseId={r.caseId}
-          title={analysing === "confidence" ? t.scoringTitle : t.guardTitle}
-          docLabel={analysing === "confidence" ? t.scoringDoc : t.guardDoc}
+          title={checkTitle}
+          docLabel={checkDoc}
           agent={r.agent}
           model={r.model}
-          items={analysis(analysing)}
-          result={
-            analysing === "confidence" && r.confidence
-              ? t.confidenceResult(r.confidence.score.toFixed(2), bandLabel(r.confidence.score))
-              : t.guardResult(passCount, r.guardrails.length)
-          }
+          items={checks.flatMap(analysisOf)}
+          result={checkResult}
           onDone={() => {
-            setAnalysing(null);
-            onBeat(beat + 1);
+            setAnalysing(false);
+            onBeat(checks.length);
           }}
         />
       )}
