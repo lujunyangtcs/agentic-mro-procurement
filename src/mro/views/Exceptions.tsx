@@ -16,6 +16,7 @@ import { exceptionIcon, ICON } from "@/mro/components/console/icons";
 import { cn } from "@/mro/lib/utils";
 import { useApp } from "@/mro/state";
 import { useProcurement } from "@/mro/data/store";
+import { LiveHoldsPanel } from "@/mro/components/desk/LiveHoldsPanel";
 import {
   exceptionLanes,
   lineValue,
