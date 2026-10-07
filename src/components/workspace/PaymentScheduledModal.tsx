@@ -19,7 +19,7 @@ type Schedule = {
   timeline: { label: string; date: string; done: boolean }[];
 };
 
-const CONFETTI_COLORS = ["#107e3e", "#0a6ed1", "#354a5f", "#5bc98b", "#e6b800"];
+const CONFETTI_COLORS = ["#2f6b4f", "#0a6ed1", "#27455c", "#5bc98b", "#e6b800"];
 
 function Confetti() {
   // 28 pieces fanned across the card top — random spread/rotation/delay so each

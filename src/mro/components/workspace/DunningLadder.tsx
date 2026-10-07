@@ -13,7 +13,7 @@ import type { DunningTier } from "@/mro/data/dunning";
  */
 
 /** Soft (green) → hard (red) colour ramp across the five tiers. */
-const RAMP = ["#107e3e", "#6a8b22", "#a07a12", "#b5560f", "#bb0000"];
+const RAMP = ["#2f6b4f", "#6a8b22", "#a07a12", "#b5560f", "#a1232b"];
 
 export function DunningLadder({
   tiers,
@@ -37,7 +37,7 @@ export function DunningLadder({
           Dunning ladder · contract-based escalation
         </span>
         {rec && (
-          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-surface-mint/70 border border-surface-deep/20 px-2.5 py-1 text-[10.5px] font-bold text-surface-deep">
+          <span className="ml-auto inline-flex items-center gap-1.5 bg-surface-mint/70 border border-surface-deep/20 px-2.5 py-1 text-[10.5px] font-bold text-surface-deep">
             <Sparkles size={11} /> AI recommends · Tier {rec.n} · {rec.name}
           </span>
         )}

@@ -116,7 +116,7 @@ export function DeliveryDoc({ delivery = deliveryBlueRidge }: { delivery?: Deliv
       </div>
 
       <div className="px-4 py-3 flex items-center gap-2.5 border-t border-divider">
-        <span className="w-3 h-3 rounded-full bg-[#107e3e] ring-2 ring-[#107e3e]/25" />
+        <span className="w-3 h-3 rounded-full bg-[#2f6b4f] ring-2 ring-[#2f6b4f]/25" />
         <span className="text-[12.5px] text-ink">
           Goods issue posted — {delivery.item.deliveryQty} {delivery.item.unit} shipped and relieved from stock. Delivery is billing-relevant.
         </span>

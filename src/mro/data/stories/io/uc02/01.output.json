@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104640",
+    "use_case": "UC2 – Premium / single-manufacturer specification: approved equivalents",
+    "agent": "Intake Agent",
+    "flow_step": "Flow 1 · 1.0–2.0",
+    "timestamp": "2026-10-08T15:10:03Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "spec_challenge": {
+    "essential_attributes": [
+      "Sensing range 8mm",
+      "IP67",
+      "M18 thread",
+      "PNP output",
+      "24V DC"
+    ],
+    "non_essential": [
+      "Brand"
+    ],
+    "approved_equivalents": [
+      {
+        "part": "SensCo S18-8P",
+        "ref": "EQV-SENSORS-v7#114",
+        "indicative_price": 71
+      },
+      {
+        "part": "Orbis OP18-PNP",
+        "ref": "EQV-SENSORS-v7#115",
+        "indicative_price": 78
+      }
+    ],
+    "recommendation": "Widen RFQ to brand + 2 approved equivalents"
+  },
+  "structured_request": {
+    "category": "MRO – sensors",
+    "gl": "640455",
+    "value_band": "£3K–£30K",
+    "starting_cost_gbp": 3840
+  },
+  "confidence": {
+    "score": 0.95,
+    "signals": {
+      "attribute_match": {
+        "score": 0.94,
+        "weight": 0.35,
+        "evidence": "Range, IP67, M18, PNP match"
+      },
+      "criticality": {
+        "score": 1.0,
+        "weight": 0.25,
+        "evidence": "Non-safety per CRIT-HW-2026"
+      },
+      "equivalent_listed": {
+        "score": 0.95,
+        "weight": 0.25,
+        "evidence": "2 equivalents approved by Technical Owner 2026-03"
+      },
+      "quality_history": {
+        "score": 0.88,
+        "weight": 0.15,
+        "evidence": "Equivalent A: 0.3% failure; B: 0.5%"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Safety-critical parts never auto-substituted",
+      "status": "PASS",
+      "detail": "Non-safety"
+    },
+    {
+      "rule": "Equivalents pre-approved by Technical Owner",
+      "status": "PASS",
+      "detail": "EQV-SENSORS-v7"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next_agent": "Sourcing Agent",
+      "notify": "Requester informed of equivalents (can object within 24h)"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "audit": {
+    "model_version": "intake-v2.3 / spec-module-v1.1"
+  }
+}

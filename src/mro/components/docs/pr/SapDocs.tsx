@@ -35,7 +35,7 @@ function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
   return (
     <table className="w-full text-[12px] border-collapse">
       <thead>
-        <tr className="bg-[#eef1f5] text-left text-[#5b6b7b]">
+        <tr className="bg-[#eef1f5] text-left text-[#646e77]">
           {head.map((h, i) => (
             <th key={i} className="px-3 py-2 text-[10px] tracking-[0.04em] uppercase font-medium border-b border-divider whitespace-nowrap">{h}</th>
           ))}
@@ -57,7 +57,7 @@ function Table({ head, rows }: { head: string[]; rows: React.ReactNode[][] }) {
 function Status({ ok, text }: { ok: boolean; text: string }) {
   return (
     <div className="px-4 py-3 flex items-center gap-2.5">
-      <span className={cn("w-3 h-3 rounded-full ring-2", ok ? "bg-[#107e3e] ring-[#107e3e]/25" : "bg-[#bb0000] ring-[#bb0000]/25")} />
+      <span className={cn("w-3 h-3 rounded-full ring-2", ok ? "bg-[#2f6b4f] ring-[#2f6b4f]/25" : "bg-[#a1232b] ring-[#a1232b]/25")} />
       <span className="text-[12.5px] text-ink">{text}</span>
     </div>
   );
@@ -114,7 +114,7 @@ export type StockOverview = {
 };
 
 export function StockOverviewDoc({ s }: { s: StockOverview }) {
-  const toneText: Record<string, string> = { surplus: "text-[#107e3e] font-semibold", short: "text-[#bb0000] font-semibold", plain: "" };
+  const toneText: Record<string, string> = { surplus: "text-[#2f6b4f] font-semibold", short: "text-[#a1232b] font-semibold", plain: "" };
   return (
     <DocShell tcode="MB52" tname="Warehouse Stocks" status="Stock overview · all plants displayed">
       <DocTitleBand number={s.number} status="Display" docType="Stock overview · MB52 · plant / storage" system="Inventory management" createdOn={s.createdOn} createdBy={s.createdBy} />
@@ -257,9 +257,9 @@ export type ApprovalRouting = {
 };
 
 const levelChip: Record<ApprovalLevel["status"], { cls: string; mark: string }> = {
-  approved: { cls: "bg-[#107e3e] text-white", mark: "✓ Approved" },
+  approved: { cls: "bg-[#2f6b4f] text-white", mark: "✓ Approved" },
   pending: { cls: "bg-[#df6e0c] text-white", mark: "● Pending" },
-  "not-reached": { cls: "bg-[#dfe4ea] text-[#5b6b7b]", mark: "— Not reached" },
+  "not-reached": { cls: "bg-[#dfe4ea] text-[#646e77]", mark: "— Not reached" },
 };
 
 export function ApprovalRoutingDoc({ r }: { r: ApprovalRouting }) {
@@ -284,7 +284,7 @@ export function ApprovalRoutingDoc({ r }: { r: ApprovalRouting }) {
       <Status ok={r.validation.ok} text={r.validation.text} />
       {r.action && (
         <div className="px-4 py-3 border-t border-divider text-[12.5px] text-ink">
-          <span className="text-[10px] uppercase tracking-[0.08em] text-[#5b6b7b] font-bold">Open action</span>
+          <span className="text-[10px] uppercase tracking-[0.08em] text-[#646e77] font-bold">Open action</span>
           <div className="mt-1">{r.action}</div>
         </div>
       )}
@@ -404,7 +404,7 @@ export function OpenPrListDoc({ l }: { l: OpenPrList }) {
       <div className="px-4 py-2 text-[12px] text-mute border-b border-divider">{l.scope}</div>
       <table className="w-full text-[12px] border-collapse">
         <thead>
-          <tr className="bg-[#eef1f5] text-left text-[#5b6b7b]">
+          <tr className="bg-[#eef1f5] text-left text-[#646e77]">
             {["PR", "Itm", "Material", "Qty", "Plant", "Created"].map((h) => (
               <th key={h} className="px-3 py-2 text-[10px] tracking-[0.04em] uppercase font-medium border-b border-divider whitespace-nowrap">{h}</th>
             ))}
@@ -413,9 +413,9 @@ export function OpenPrListDoc({ l }: { l: OpenPrList }) {
         <tbody>
           {l.rows.map((r, i) => (
             <tr key={i} {...(r.tone === "dup" ? { "data-ai-anchor": true } : {})} className={cn("align-top", r.tone === "dup" && "bg-[#fdecec]")}>
-              <td className={cn("px-3 py-2.5 border-b border-divider tabular-nums", r.tone === "dup" ? "text-[#bb0000] font-semibold" : "text-ink")}>{r.pr}</td>
+              <td className={cn("px-3 py-2.5 border-b border-divider tabular-nums", r.tone === "dup" ? "text-[#a1232b] font-semibold" : "text-ink")}>{r.pr}</td>
               <td className="px-3 py-2.5 border-b border-divider tabular-nums text-ink">{r.item}</td>
-              <td className={cn("px-3 py-2.5 border-b border-divider", r.tone === "dup" ? "text-[#bb0000] font-semibold" : "text-ink")}>{r.material}</td>
+              <td className={cn("px-3 py-2.5 border-b border-divider", r.tone === "dup" ? "text-[#a1232b] font-semibold" : "text-ink")}>{r.material}</td>
               <td className="px-3 py-2.5 border-b border-divider tabular-nums text-ink">{r.qty}</td>
               <td className="px-3 py-2.5 border-b border-divider text-ink">{r.plant}</td>
               <td className="px-3 py-2.5 border-b border-divider tabular-nums text-ink">{r.created}</td>

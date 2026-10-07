@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104387",
+    "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+    "agent": "Intake Agent",
+    "flow_step": "Flow 1 · 1.0",
+    "timestamp": "2026-10-07T09:12:04Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "trigger": {
+    "type": "REQUEST",
+    "source": "Front-door form submitted"
+  },
+  "request": {
+    "request_id": "REQ-118204",
+    "channel": "Front-door form",
+    "requester": {
+      "name": "Priya Natarajan",
+      "role": "Engineering Manager",
+      "org": "Client",
+      "function": "Vehicle Engineering – Body",
+      "cost_centre": "CC-4471-GAY",
+      "site": "Gaydon"
+    },
+    "need": "12 additional CAD viewer licences for new body-in-white team",
+    "item_text": "CAD viewer pro licence x12, 12 months",
+    "need_by": "2026-10-20",
+    "starting_cost_gbp": 14400,
+    "supplier_hint": "Existing software reseller"
+  },
+  "knowledge_refs": {
+    "taxonomy": "UNSPSC-Client v3",
+    "starting_cost_rule": "Last paid unit price × qty",
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)"
+  }
+}

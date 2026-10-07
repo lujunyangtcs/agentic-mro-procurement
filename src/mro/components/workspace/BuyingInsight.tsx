@@ -396,7 +396,7 @@ export function SplitVsConsolidated({ spec }: { spec: ConsolidationSpec }) {
         <div className="flex items-start gap-2">
           <span className="min-w-0 flex-1 text-[12px] font-bold text-ink">{ph(o.title)}</span>
           {picked && (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-deep px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.04em] text-ink-inverse">
+            <span className="inline-flex shrink-0 items-center gap-1 bg-surface-deep px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.04em] text-ink-inverse">
               <Sparkles size={9} /> {t("insight.recommended")}
             </span>
           )}

@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { agents, type AgentId, type AutonomyLevel } from "@/mro/data/agents";
+import type { StoryId } from "@/mro/domain/types";
 
 /**
  * The guided runs this workspace plays: the clean pump-diaphragm request, the four
@@ -42,6 +43,17 @@ export type View =
   | { kind: "login" }
   | { kind: "cockpit" }
   | { kind: "workspace"; flow: FlowId }
+  /* A case from the client's use-case I/O, run agent by agent. */
+  | { kind: "story"; storyId: StoryId; step?: number }
+  /* A Flow 1 case created live from New Request. */
+  | { kind: "case"; caseId: string }
+  /* Workbenches and assurance surfaces over the same records. */
+  | { kind: "opportunities" }
+  | { kind: "sourcing" }
+  | { kind: "suppliers" }
+  | { kind: "contracts" }
+  | { kind: "value" }
+  | { kind: "governance" }
   | { kind: "agent"; id: AgentId }
   | { kind: "doc"; id: DocId }
   /* Work-menu pages — the procurement desk's own surfaces. */
@@ -157,6 +169,32 @@ const freshConfig = (): Record<AgentId, AgentConfig> =>
 
 const Ctx = React.createContext<(AppState & AppActions) | null>(null);
 
+/**
+ * The open screen survives a refresh within the tab, so reloading at a
+ * pending approval lands back on the held case rather than the front door.
+ */
+const NAV_KEY = "ap-demo:nav:v1";
+
+export function loadNav(): { persona: Persona; view: View } | undefined {
+  try {
+    const raw = typeof window === "undefined" ? null : window.sessionStorage.getItem(NAV_KEY);
+    if (!raw) return undefined;
+    const v = JSON.parse(raw) as { persona: Persona; view: View };
+    return v.view && v.view.kind !== "login" && v.view.kind !== "workspace" && v.view.kind !== "doc" ? v : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function saveNav(persona: Persona, view: View | null) {
+  try {
+    if (view) window.sessionStorage.setItem(NAV_KEY, JSON.stringify({ persona, view }));
+    else window.sessionStorage.removeItem(NAV_KEY);
+  } catch {
+    /* Private mode: refresh returns to the door. */
+  }
+}
+
 export function AppProvider({
   children,
   initialView,
@@ -177,6 +215,10 @@ export function AppProvider({
     agentOutputs: freshOutputs(),
     agentConfig: freshConfig(),
   });
+
+  React.useEffect(() => {
+    if (state.view.kind !== "login") saveNav(state.persona, state.view);
+  }, [state.view, state.persona]);
 
   const go = React.useCallback(
     (view: View) =>
@@ -225,6 +267,7 @@ export function AppProvider({
   );
 
   const signOut = React.useCallback(() => {
+    saveNav("buyer", null);
     if (onExit) {
       onExit();
       return;

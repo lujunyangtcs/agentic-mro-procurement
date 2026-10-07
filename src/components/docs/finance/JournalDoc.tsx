@@ -81,7 +81,7 @@ export function JournalDoc({ journal = journalBlueRidge }: { journal?: Journal }
                 <td className="px-3 py-2.5 border-b border-divider text-mute tabular-nums">{l.line}</td>
                 <td className="px-3 py-2.5 border-b border-divider font-semibold text-surface-deep tabular-nums">{l.glAccount}</td>
                 <td className="px-3 py-2.5 border-b border-divider">{l.text}</td>
-                <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#107e3e]")}>{l.drcr}</td>
+                <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#2f6b4f]")}>{l.drcr}</td>
                 <td className="px-3 py-2.5 border-b border-divider tabular-nums font-medium">{journal.currency} {l.amount}</td>
               </tr>
             ))}
@@ -92,11 +92,11 @@ export function JournalDoc({ journal = journalBlueRidge }: { journal?: Journal }
       <SectionBand>AR sub-ledger clearing</SectionBand>
       <div className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-[12.5px]">
         <div className="flex items-center gap-2.5">
-          <span className="w-3 h-3 rounded-full bg-[#107e3e] ring-2 ring-[#107e3e]/25" />
+          <span className="w-3 h-3 rounded-full bg-[#2f6b4f] ring-2 ring-[#2f6b4f]/25" />
           <span className="text-ink">
             {journal.subledger.customer} · {journal.subledger.invoice} —{" "}
             <span className="text-mute line-through">{journal.subledger.before}</span>{" "}
-            → <span className="font-bold text-[#107e3e]">{journal.subledger.after}</span>
+            → <span className="font-bold text-[#2f6b4f]">{journal.subledger.after}</span>
           </span>
         </div>
         <span className="text-[12px] text-mute">Debits = Credits · balanced · GL and sub-ledger updated</span>

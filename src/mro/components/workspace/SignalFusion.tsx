@@ -57,7 +57,7 @@ export function SignalFusion({ spec, onComplete }: { spec: SignalSpec; onComplet
 
       <SpringIn>
         <div className="bg-white border border-divider rounded-md overflow-hidden">
-          <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#354a5f]">
+          <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#27455c]">
             <Sparkles size={12} className="text-ink shrink-0" />
             <span className="text-[10.5px] uppercase tracking-[0.06em] text-ink font-bold">
               Risk signals · {shown} / {spec.signals.length}
@@ -95,7 +95,7 @@ export function SignalFusion({ spec, onComplete }: { spec: SignalSpec; onComplet
               <button
                 type="button"
                 onClick={onComplete}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green"
+                className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green"
               >
                 <CornerUpRight size={14} /> Continue to the prediction
               </button>

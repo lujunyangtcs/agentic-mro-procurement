@@ -1,0 +1,18 @@
+{
+  "use_case": "UC10 – Non-standard contract language: clause band and fallback",
+  "case_id": "TSM-2026-104611",
+  "flow_path": "Flow 3 (1.0 → 1.1 → 2.0 → 3.0) → 3.1 → 3.2 / 3.3 → 4.0",
+  "agents": [
+    "01_Contract_Agent",
+    "02_Clause_Compare_Agent"
+  ],
+  "outcome": "HiTL – 1 Green auto-accepted, 2 Amber to Delegated Approvers, 1 Red to Client Legal; PO blocked until stored",
+  "human_touchpoints": [
+    "Contract Analyst (TCS)",
+    "Delegated Approver (Client)",
+    "Client Legal"
+  ],
+  "tail_spend_interventions": [
+    "T5"
+  ]
+}

@@ -109,7 +109,7 @@ export function StepProgress({
           <span
             key={p}
             className={cn(
-              "inline-flex items-center gap-1 text-[10.5px] tracking-[0.02em] rounded-full px-2 py-0.5 border whitespace-nowrap",
+              "inline-flex items-center gap-1 text-[10.5px] tracking-[0.02em] px-2 py-0.5 border whitespace-nowrap",
               i < activePhase
                 ? "border-surface-mint bg-surface-mint/50 text-surface-deep"
                 : i === activePhase

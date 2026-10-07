@@ -122,7 +122,7 @@ function JournalTable({ lines, currency }: { lines: PostingLine[]; currency: str
               <td className="px-3 py-2.5 border-b border-divider text-mute tabular-nums">{l.line}</td>
               <td className="px-3 py-2.5 border-b border-divider font-semibold text-surface-deep tabular-nums">{l.glAccount}</td>
               <td className="px-3 py-2.5 border-b border-divider">{l.text}</td>
-              <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#107e3e]")}>
+              <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#2f6b4f]")}>
                 {l.drcr}
               </td>
               <td className="px-3 py-2.5 border-b border-divider tabular-nums font-medium">{currency} {l.amount}</td>
@@ -183,7 +183,7 @@ export function InvoiceMatch({ invoice = invoiceBelt }: { invoice?: SapInvoice }
                 <td className="px-3 py-2.5 border-b border-divider tabular-nums">{r.goodsReceipt}</td>
                 <td className="px-3 py-2.5 border-b border-divider tabular-nums font-medium">{r.invoice}</td>
                 <td className="px-3 py-2.5 border-b border-divider">
-                  <span className={cn("inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[9px] font-bold", r.ok ? "bg-[#107e3e]" : "bg-[#bb0000]")}>
+                  <span className={cn("inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[9px] font-bold", r.ok ? "bg-[#2f6b4f]" : "bg-[#a1232b]")}>
                     {r.ok ? "✓" : "✕"}
                   </span>
                 </td>
@@ -195,7 +195,7 @@ export function InvoiceMatch({ invoice = invoiceBelt }: { invoice?: SapInvoice }
 
       {/* Balance */}
       <div className="px-4 py-3 flex items-center gap-2.5 border-b border-divider">
-        <span className={cn("w-3 h-3 rounded-full ring-2", clean ? "bg-[#107e3e] ring-[#107e3e]/25" : "bg-[#bb0000] ring-[#bb0000]/25")} />
+        <span className={cn("w-3 h-3 rounded-full ring-2", clean ? "bg-[#2f6b4f] ring-[#2f6b4f]/25" : "bg-[#a1232b] ring-[#a1232b]/25")} />
         <span className="text-[12.5px] text-ink">
           Balance <span className="font-bold tabular-nums">{invoice.currency} {invoice.balance}</span> —{" "}
           {clean ? "no discrepancies · ready to post" : "discrepancies found · payment held"}
@@ -210,7 +210,7 @@ export function InvoiceMatch({ invoice = invoiceBelt }: { invoice?: SapInvoice }
               <SectionBand>General ledger — invoice posting (MIRO)</SectionBand>
               <JournalTable lines={invoice.postingJournal} currency={invoice.currency} />
               <div className="px-4 py-2 flex items-center gap-2 text-[11.5px] text-ink">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#107e3e]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#2f6b4f]" />
                 Debits = Credits · the goods receipt's GR/IR clears, the AP liability is booked
               </div>
 

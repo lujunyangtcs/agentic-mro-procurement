@@ -1,0 +1,18 @@
+{
+  "use_case": "UC2 – Premium / single-manufacturer specification: approved equivalents",
+  "case_id": "TSM-2026-104640",
+  "flow_path": "Flow 1 (1.0–2.0) → Flow 2 (3.0 → 6.0) → Flow 1 (6.0) → Flow 5 (1.0)",
+  "agents": [
+    "01_Intake_Agent_Spec_Challenge",
+    "02_Sourcing_Agent"
+  ],
+  "outcome": "TOUCHLESS – equivalents added, awarded £2,760 vs £3,840 (28.1%)",
+  "human_touchpoints": [
+    "Requester may object within 24h",
+    "Finance BP (Client) signs off saving at invoice"
+  ],
+  "tail_spend_interventions": [
+    "T4",
+    "T2"
+  ]
+}

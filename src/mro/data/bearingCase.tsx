@@ -644,9 +644,9 @@ export const bearingPrSteps: RunStep[] = [
       `Value $${TOTAL} against the plant lead's $5,000 limit`,
       "All prior checks clear — master data, stock, coverage, price",
       "Release rule satisfied — no signature required",
-      `Purchase order ${PO} raised to ${VENDOR} · written in Spanish`,
+      `Purchase order ${PO} raised to ${VENDOR} · written in German`,
     ],
-    /* Apex work in Spanish, so the order goes to them in Spanish. The English
+    /* The order goes to the supplier in German. The English
        beside it is what the buyer reads before it leaves. */
     email: {
       cta: "Review & send the order",
@@ -662,12 +662,12 @@ export const bearingPrSteps: RunStep[] = [
           `We are ordering ${QTY} of diaphragm at $${UNIT} each, payment terms Net 30.`,
           `Purchase order ${PO} is attached. Please confirm the delivery date.`,
         ],
-        sendingIn: "Español",
+        sendingIn: "Deutsch",
       },
       attachment: bearingPoDoc,
       attachmentLabel: `${PO} · purchase order`,
       toastTitle: "Order sent",
-      toastBody: `${PO} sent to ${VENDOR} in Spanish · the invoice follows.`,
+      toastBody: `${PO} sent to ${VENDOR} in German · the invoice follows.`,
     },
     docLabel: `${PR} · release routing`,
     document: bearingApprovalRouting,

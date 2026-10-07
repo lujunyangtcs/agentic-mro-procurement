@@ -366,7 +366,7 @@ export function AiWorkspacePanel({
                       <button
                         type="button"
                         onClick={onHoldContinue}
-                        className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-[#c2740c] text-white hover:bg-[#a8640a]"
+                        className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-[#c2740c] text-white hover:bg-[#a8640a]"
                       >
                         <AlertTriangle size={14} /> {holdContinue.label}
                       </button>
@@ -375,7 +375,7 @@ export function AiWorkspacePanel({
                         type="button"
                         onClick={() => onDecision("approved")}
                         className={cn(
-                          "ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold whitespace-nowrap",
+                          "ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold whitespace-nowrap",
                           step.hasExceptions
                             ? "bg-[#c2740c] text-white hover:bg-[#a8640a]"
                             : "bg-surface-deep text-ink-inverse hover:bg-accent-green",
@@ -396,21 +396,21 @@ export function AiWorkspacePanel({
                     <button
                       type="button"
                       onClick={() => onDecision("pending")}
-                      className="ui-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
+                      className="ui-pill inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
                     >
                       <PauseCircle size={14} /> Pending
                     </button>
                     <button
                       type="button"
                       onClick={() => onDecision("escalated")}
-                      className="ui-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
+                      className="ui-pill inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
                     >
                       <ArrowUpRight size={14} /> Escalate
                     </button>
                     <button
                       type="button"
                       onClick={() => onDecision("rejected")}
-                      className="ui-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium bg-white text-mark-red border border-mark-red/40 hover:bg-surface-rose"
+                      className="ui-pill inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium bg-white text-mark-red border border-mark-red/40 hover:bg-surface-rose"
                     >
                       <X size={14} /> Reject
                     </button>

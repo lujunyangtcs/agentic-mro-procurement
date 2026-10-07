@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104512",
+    "use_case": "UC9 – Supplier quote: price reasonableness and negotiation position",
+    "agent": "Sourcing Agent",
+    "flow_step": "Flow 2 · 3.0",
+    "timestamp": "2026-10-07T10:02:03Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "rfq": {
+    "rfq_id": "RFQ-26-09931",
+    "type": "Spot buy – quick quotes",
+    "issued_to": [
+      "SUP-20411 Midlands Hydraulics",
+      "SUP-20977 PressCare UK",
+      "SUP-31002 Fluid Power Services",
+      "SUP-18840 Apex Industrial"
+    ],
+    "window": {
+      "opens": "2026-10-07T10:05:00Z",
+      "closes": "2026-10-10T17:00:00Z"
+    },
+    "min_compliant_quotes": 3
+  },
+  "confidence": {
+    "score": 0.96,
+    "signals": {
+      "spec_clarity": {
+        "score": 0.94,
+        "weight": 0.4,
+        "evidence": "Spec SPEC-HP400-SVC complete"
+      },
+      "panel_coverage": {
+        "score": 0.95,
+        "weight": 0.35,
+        "evidence": "4 active panel suppliers"
+      },
+      "template_fit": {
+        "score": 1.0,
+        "weight": 0.25,
+        "evidence": "Spot-buy RFQ template"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Value-band channel",
+      "status": "PASS",
+      "detail": "£24.5K → spot buy"
+    },
+    {
+      "rule": "Panel suppliers only",
+      "status": "PASS",
+      "detail": "All 4 active, risk-cleared"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next": "Suppliers bid → Bid Scoring Agent"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "audit": {
+    "model_version": "sourcing-v2.1"
+  }
+}

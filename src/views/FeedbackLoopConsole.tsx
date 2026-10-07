@@ -117,7 +117,7 @@ function BeforeAfter({ moves }: { moves: MetricMove[] }) {
           </span>
           <ArrowRight size={13} className="text-surface-deep shrink-0" />
           <span className="text-[15px] font-bold text-ink tabular-nums">{m.after}</span>
-          <span className="ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 rounded-full tabular-nums shrink-0">
+          <span className="ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 tabular-nums shrink-0">
             <TrendingUp size={11} strokeWidth={2.4} /> {m.gain}
           </span>
         </div>

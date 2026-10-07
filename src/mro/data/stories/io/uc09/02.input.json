@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104512",
+    "use_case": "UC9 – Supplier quote: price reasonableness and negotiation position",
+    "agent": "Bid Scoring Agent",
+    "flow_step": "Flow 2 · 4.0–5.0",
+    "timestamp": "2026-10-10T17:05:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "rfq_id": "RFQ-26-09931",
+  "starting_cost_gbp": 24500,
+  "bids": [
+    {
+      "supplier": "SUP-20977 PressCare UK",
+      "lines": [
+        {
+          "line": 1,
+          "desc": "Annual service – hydraulic press HP-400",
+          "qty": 2,
+          "unit_price": 5200
+        },
+        {
+          "line": 2,
+          "desc": "Seal kit replacement",
+          "qty": 6,
+          "unit_price": 610
+        },
+        {
+          "line": 3,
+          "desc": "On-site labour (engineer days)",
+          "qty": 8,
+          "unit_price": 740
+        },
+        {
+          "line": 4,
+          "desc": "Travel & subsistence",
+          "qty": 1,
+          "unit_price": 1150
+        }
+      ],
+      "total": 21130,
+      "validity_days": 30,
+      "lead_time_days": 7
+    },
+    {
+      "supplier": "SUP-20411 Midlands Hydraulics",
+      "total": 21980,
+      "validity_days": 30,
+      "lead_time_days": 10
+    },
+    {
+      "supplier": "SUP-31002 Fluid Power Services",
+      "total": 23400,
+      "validity_days": 14,
+      "lead_time_days": 5
+    }
+  ],
+  "benchmarks": {
+    "price_history": [
+      {
+        "po": "PO-7702118",
+        "date": "2025-10-14",
+        "item": "HP-400 annual service",
+        "unit_price": 4750
+      },
+      {
+        "po": "PO-7655010",
+        "date": "2025-04-02",
+        "item": "Seal kit",
+        "unit_price": 540
+      }
+    ],
+    "rate_card": {
+      "engineer_day_gbp": 640,
+      "ref": "RC-MRO-2026"
+    },
+    "index": {
+      "name": "PPI – machinery maintenance",
+      "yoy_change_pct": 3.1
+    }
+  },
+  "knowledge_refs": {
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)"
+  }
+}

@@ -138,8 +138,8 @@ export function StructuredPrDoc({
           Structured from free text · <span className="font-medium">{pr.confidence}</span>
         </div>
         {pr.flags?.map((f) => (
-          <div key={f} className="flex items-start gap-2 text-[12px] text-[#bb0000]">
-            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#bb0000] shrink-0" />
+          <div key={f} className="flex items-start gap-2 text-[12px] text-[#a1232b]">
+            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#a1232b] shrink-0" />
             <span>{f}</span>
           </div>
         ))}
@@ -187,7 +187,7 @@ export function ValidationDoc({ report }: { report: ValidationReport }) {
           <SectionBand>{sec.band}</SectionBand>
           <table className="w-full text-[12px] border-collapse">
             <thead>
-              <tr className="bg-[#eef1f5] text-left text-[#5b6b7b]">
+              <tr className="bg-[#eef1f5] text-left text-[#646e77]">
                 {["Check", "Expected", "Found", ""].map((h, i) => (
                   <th key={i} className="px-3 py-2 text-[10px] tracking-[0.04em] uppercase font-medium border-b border-divider whitespace-nowrap">{h}</th>
                 ))}
@@ -200,7 +200,7 @@ export function ValidationDoc({ report }: { report: ValidationReport }) {
                   <td className="px-3 py-2.5 border-b border-divider">{r.expected}</td>
                   <td className="px-3 py-2.5 border-b border-divider font-medium">{r.found}</td>
                   <td className="px-3 py-2.5 border-b border-divider">
-                    <span className={cn("inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[9px] font-bold", r.ok ? "bg-[#107e3e]" : "bg-[#bb0000]")}>{r.ok ? "✓" : "✕"}</span>
+                    <span className={cn("inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[9px] font-bold", r.ok ? "bg-[#2f6b4f]" : "bg-[#a1232b]")}>{r.ok ? "✓" : "✕"}</span>
                   </td>
                 </tr>
               ))}
@@ -212,7 +212,7 @@ export function ValidationDoc({ report }: { report: ValidationReport }) {
         <>
           <SectionBand>Verdict</SectionBand>
           <div className="px-4 py-3 flex items-center gap-2.5">
-            <span className={cn("w-3 h-3 rounded-full ring-2", report.verdict.ok ? "bg-[#107e3e] ring-[#107e3e]/25" : "bg-[#bb0000] ring-[#bb0000]/25")} />
+            <span className={cn("w-3 h-3 rounded-full ring-2", report.verdict.ok ? "bg-[#2f6b4f] ring-[#2f6b4f]/25" : "bg-[#a1232b] ring-[#a1232b]/25")} />
             <span className="text-[12.5px] text-ink">{report.verdict.text}</span>
           </div>
         </>

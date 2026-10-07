@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104387",
+    "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+    "agent": "Channel Decision Agent",
+    "flow_step": "Flow 1 · 4.0–5.0",
+    "timestamp": "2026-10-07T09:12:12Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "route": {
+    "channel": "Internal fulfilment – licence reassignment",
+    "po_required": false,
+    "actions": [
+      {
+        "action": "Assign 12 unassigned licences to CC-4471 users",
+        "system": "SAM tool",
+        "status": "Executed"
+      },
+      {
+        "action": "Notify requester with licence keys",
+        "system": "Teams / e-mail",
+        "status": "Executed"
+      }
+    ]
+  },
+  "confidence": {
+    "score": 0.96,
+    "signals": {
+      "match_strength": {
+        "score": 0.96,
+        "weight": 0.4,
+        "evidence": "Full quantity met from pool"
+      },
+      "policy_fit": {
+        "score": 1.0,
+        "weight": 0.3,
+        "evidence": "Internal fulfilment needs no spend commitment"
+      },
+      "track_record": {
+        "score": 0.92,
+        "weight": 0.3,
+        "evidence": "Override rate 1.8% on this pattern (last 90d)"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "DoA",
+      "status": "N/A",
+      "detail": "No spend commitment"
+    },
+    {
+      "rule": "Application Owner approval",
+      "status": "PASS",
+      "detail": "Same-tier reassignment pre-approved by owner policy APP-CV-01"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "outcome": "Fulfilled touchless – no PO"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "value_record": {
+    "value_record_id": "VR-26-55102",
+    "saving_type": "Spend avoidance",
+    "baseline_gbp": 14400,
+    "actual_gbp": 0,
+    "avoided_gbp": 14400,
+    "measurement": "Avoided quantity × contracted unit price",
+    "to": "Value Agent (Flow 5 · 1.0) → Finance BP sign-off"
+  },
+  "kpi_impact": {
+    "no_buyer_touch": true,
+    "cycle_time_minutes": 8
+  },
+  "audit": {
+    "evidence_ids": [
+      "APP-CV-01",
+      "SAM-ASSIGN-77120"
+    ],
+    "model_version": "channel-v3.0"
+  }
+}

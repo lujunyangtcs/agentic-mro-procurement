@@ -13,7 +13,7 @@ import type { DunningTier } from "@/data/dunning";
  */
 
 /** Soft (green) → hard (red) colour ramp across the five tiers. */
-const RAMP = ["#107e3e", "#6a8b22", "#a07a12", "#b5560f", "#bb0000"];
+const RAMP = ["#2f6b4f", "#6a8b22", "#a07a12", "#b5560f", "#a1232b"];
 
 export function DunningLadder({
   tiers,

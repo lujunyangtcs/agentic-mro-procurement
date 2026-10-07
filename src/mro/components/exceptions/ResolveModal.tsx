@@ -84,7 +84,7 @@ function SealSizeCard({ picked, onPick }: { picked: "45" | "50"; onPick: (v: "45
               </span>
               <span className="text-[14px] font-bold text-ink">{o.title}</span>
               {o.ok && (
-                <span className="ml-auto whitespace-nowrap rounded-full bg-surface-deep px-2.5 py-0.5 text-[12px] font-medium text-ink-inverse">
+                <span className="ml-auto whitespace-nowrap bg-surface-deep px-2.5 py-0.5 text-[12px] font-medium text-ink-inverse">
                   Recommended
                 </span>
               )}
@@ -114,7 +114,7 @@ function DraftToEngineer() {
       >
         <Languages size={15} className="shrink-0 text-surface-deep" />
         <span className="text-[13px] font-semibold text-ink">Confirmation drafted for the engineer</span>
-        <span className="whitespace-nowrap rounded-full bg-surface-mint px-2.5 py-0.5 text-[12px] font-medium text-surface-deep">
+        <span className="whitespace-nowrap bg-surface-mint px-2.5 py-0.5 text-[12px] font-medium text-surface-deep">
           Written in Deutsch
         </span>
         <ChevronDown size={15} className={cn("ml-auto shrink-0 text-mute transition-transform", open && "rotate-180")} />

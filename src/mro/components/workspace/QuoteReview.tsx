@@ -72,7 +72,7 @@ export function QuoteReview({ spec, onComplete }: { spec: Spec; onComplete: () =
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-[12.5px] font-bold leading-tight text-ink">{r.vendor}</span>
                     {isPick && (
-                      <span className="shrink-0 rounded-full bg-surface-deep px-2 py-0.5 text-[10px] font-bold text-ink-inverse">
+                      <span className="shrink-0 bg-surface-deep px-2 py-0.5 text-[10px] font-bold text-ink-inverse">
                         PICK
                       </span>
                     )}
@@ -87,8 +87,8 @@ export function QuoteReview({ spec, onComplete }: { spec: Spec; onComplete: () =
                       </>
                     ) : (
                       <>
-                        <Mail size={12} className="shrink-0 text-[#107e3e]" />
-                        <span className="text-[#107e3e]">{t("qr.emailReply")}</span>
+                        <Mail size={12} className="shrink-0 text-[#2f6b4f]" />
+                        <span className="text-[#2f6b4f]">{t("qr.emailReply")}</span>
                       </>
                     )}
                   </div>
@@ -189,7 +189,7 @@ export function QuoteReview({ spec, onComplete }: { spec: Spec; onComplete: () =
               <button
                 type="button"
                 onClick={() => setPhase("thinking")}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full bg-surface-deep px-4 py-2 text-[13px] font-bold text-white hover:brightness-110"
+                className="ui-pill inline-flex items-center gap-1.5 bg-surface-deep px-4 py-2 text-[13px] font-bold text-white hover:brightness-110"
               >
                 <Sparkles size={14} /> {t("qr.compare")}
               </button>
@@ -202,7 +202,7 @@ export function QuoteReview({ spec, onComplete }: { spec: Spec; onComplete: () =
               <button
                 type="button"
                 onClick={onComplete}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full bg-surface-deep px-4 py-2 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
+                className="ui-pill inline-flex items-center gap-1.5 bg-surface-deep px-4 py-2 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
               >
                 <CornerUpRight size={14} /> {t("qr.accept", { vendor: picked?.vendor ?? "" })}
               </button>

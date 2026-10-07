@@ -152,7 +152,7 @@ export function FourWayMatchGrid({
                         >
                           {cell.value}
                           {!dash && cell.ok && (
-                            <Check size={11} className="text-[#107e3e]" strokeWidth={3} />
+                            <Check size={11} className="text-[#2f6b4f]" strokeWidth={3} />
                           )}
                         </span>
                       ) : (
@@ -166,7 +166,7 @@ export function FourWayMatchGrid({
                     <span
                       className={cn(
                         "inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[9px] font-bold",
-                        matched ? "bg-[#107e3e]" : "bg-[#bb0000]",
+                        matched ? "bg-[#2f6b4f]" : "bg-[#a1232b]",
                       )}
                     >
                       {matched ? "✓" : "✕"}
@@ -180,7 +180,7 @@ export function FourWayMatchGrid({
       </table>
       {verdict && showVerdict && (
         <div className="px-2.5 pt-3 flex items-center gap-2 text-[12px] text-ink">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#107e3e] shrink-0" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#2f6b4f] shrink-0" />
           {verdict}
         </div>
       )}

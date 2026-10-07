@@ -39,14 +39,7 @@ function Body({
   english?: string;
   working: boolean;
 }) {
-  const raw = vendor.local?.lang ?? "";
-  const lang: Lang = raw.includes("中文")
-    ? "zh"
-    : /espa/i.test(raw)
-      ? "es"
-      : /fran/i.test(raw)
-        ? "fr"
-        : "de";
+  const lang: Lang = "de";
   const pieces: Piece[] | null = React.useMemo(() => {
     if (english === undefined) return null;
     return retranslate(english.split(/\n+/).filter(Boolean), lang);
@@ -301,7 +294,7 @@ export function RfqDraftsModal({
           <button
             type="button"
             onClick={onClose}
-            className="ui-pill shrink-0 rounded-full border border-divider px-4 py-2.5 text-[13px] font-bold text-ink hover:border-surface-deep"
+            className="ui-pill shrink-0 border border-divider px-4 py-2.5 text-[13px] font-bold text-ink hover:border-surface-deep"
           >
             Close
           </button>

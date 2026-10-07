@@ -27,7 +27,7 @@ export function ScorecardDoc({ d }: { d: ScorecardData }) {
         <span className="text-[15px] font-bold">{d.number}</span>
         <span
           className={cn(
-            "rounded-full px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.05em]",
+            "px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.05em]",
             passed === d.checks.length
               ? "bg-surface-mint text-surface-deep"
               : "bg-surface-rose text-mark-red",

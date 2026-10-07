@@ -47,7 +47,7 @@ export function exportElementAsHtml(el: HTMLElement, filename: string): void {
   html, body { margin: 0; background: #eef1f5; }
   body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; padding: 24px; }
   .export-wrap { max-width: 920px; margin: 0 auto; }
-  .export-meta { max-width: 920px; margin: 0 auto 12px; color: #5b6b7b; font-size: 11px;
+  .export-meta { max-width: 920px; margin: 0 auto 12px; color: #646e77; font-size: 11px;
     display: flex; justify-content: space-between; }
   @media print { body { background: #fff; padding: 0; } .export-meta { display: none; } }
 </style>

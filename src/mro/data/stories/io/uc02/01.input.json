@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104640",
+    "use_case": "UC2 – Premium / single-manufacturer specification: approved equivalents",
+    "agent": "Intake Agent",
+    "flow_step": "Flow 1 · 1.0–2.0 (spec challenge)",
+    "timestamp": "2026-10-08T15:10:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "trigger": {
+    "type": "REQUEST",
+    "source": "Front-door form"
+  },
+  "request": {
+    "request_id": "REQ-118702",
+    "requester": {
+      "role": "Facilities Engineer",
+      "org": "Client",
+      "site": "Halewood"
+    },
+    "item_text": "Proximity sensor – BrandX PX-30 only, qty 40",
+    "qty": 40,
+    "named_part": "BrandX PX-30",
+    "unit_price_last_paid": 96,
+    "starting_cost_gbp": 3840,
+    "application": "Conveyor end-of-line detection (non-safety)"
+  },
+  "knowledge_refs": {
+    "equivalents_list": "EQV-SENSORS-v7",
+    "criticality_register": "CRIT-HW-2026",
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)"
+  }
+}

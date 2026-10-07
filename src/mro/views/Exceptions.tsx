@@ -16,6 +16,7 @@ import { exceptionIcon, ICON } from "@/mro/components/console/icons";
 import { cn } from "@/mro/lib/utils";
 import { useApp } from "@/mro/state";
 import { useProcurement } from "@/mro/data/store";
+import { LiveHoldsPanel } from "@/mro/components/desk/LiveHoldsPanel";
 import {
   exceptionLanes,
   lineValue,
@@ -407,6 +408,8 @@ export function Exceptions() {
         }
       />
 
+      <LiveHoldsPanel />
+
       <div className="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_380px] gap-3 items-stretch">
         {/* ── The board ──────────────────────────────────────────────────── */}
         <section className="flex h-full min-w-0 flex-col rounded-md border border-divider bg-white">
@@ -475,17 +478,17 @@ export function Exceptions() {
                       {r.description}
                     </span>
                     {resolved ? (
-                      <span className="hidden shrink-0 items-center gap-1.5 rounded-full bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep lg:inline-flex">
+                      <span className="hidden shrink-0 items-center gap-1.5 bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep lg:inline-flex">
                         <Check size={11} strokeWidth={2.6} />
                         Resolved
                       </span>
                     ) : row.state === "assigned" ? (
-                      <span className="hidden shrink-0 rounded-full bg-[#fff3c4] px-2.5 py-1 text-[12px] font-medium text-[#8a5a00] lg:inline">
+                      <span className="hidden shrink-0 bg-[#fff3c4] px-2.5 py-1 text-[12px] font-medium text-[#8a5a00] lg:inline">
                         With {row.to}
                       </span>
                     ) : (
                       <span
-                        className="hidden shrink-0 rounded-full px-2.5 py-1 text-[12px] font-medium lg:inline"
+                        className="hidden shrink-0 px-2.5 py-1 text-[12px] font-medium lg:inline"
                         style={{
                           color: meta.accent,
                           background: `color-mix(in srgb, ${meta.accent} 12%, white)`,
@@ -516,7 +519,7 @@ export function Exceptions() {
                   </span>
                   <span className="w-[86px] shrink-0 text-[13px] font-medium text-ink">{f.id}</span>
                   <span className="min-w-0 flex-1 truncate text-[13px] text-ink">{f.desc}</span>
-                  <span className="hidden shrink-0 items-center gap-1.5 rounded-full bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep lg:inline-flex">
+                  <span className="hidden shrink-0 items-center gap-1.5 bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep lg:inline-flex">
                     <Check size={11} strokeWidth={2.6} />
                     {f.action}
                   </span>

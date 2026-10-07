@@ -231,18 +231,12 @@ const EN_LINES = [
   `Delivery by ${NEED_BY} — the line is down. Please state price, lead time and payment terms.`,
 ];
 
-const outgoing = (name: string, lang: "de" | "zh", addr: string): InboundEmail => ({
+const outgoing = (name: string, lang: "de" | "en", addr: string): InboundEmail => ({
   from: `To: ${name}`,
   fromAddr: addr,
   receivedMeta: "Outbound · 2026-06-20 · 11:08",
-  subject: lang === "de" ? `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t` : `${RFQ} — 电工钢 12 吨询价`,
-  lines:
-    lang === "de"
-      ? DE_LINES
-      : [
-          `请就 ${REC.qty} 吨取向电工钢（M4 牌号，C5 绝缘涂层，卷装）报价。`,
-          `交付期限 ${NEED_BY} —— 产线目前停机。请提供价格、交货周期与付款条件。`,
-        ],
+  subject: lang === "de" ? `${RFQ} — Anfrage kornorientiertes Elektroblech, 12 t` : `${RFQ} — grain-oriented electrical steel · 12 t`,
+  lines: lang === "de" ? DE_LINES : EN_LINES,
   attachment: rfqDoc,
   attachmentLabel: `${RFQ} · request for quotation`,
   headline: `The request as it goes to ${name}`,
@@ -318,7 +312,7 @@ const reply = (o: {
   name: string;
   addr: string;
   meta: string;
-  lang: "de" | "zh";
+  lang: "de" | "en";
   subject: string;
   lines: string[];
   en: string[];
@@ -421,11 +415,11 @@ const hengtaiReply = reply({
   name: "Hengtai Electrical Steel (Jiangsu)",
   addr: "sales@hengtai-steel.example",
   meta: "Outlook · 2026-06-21 · 03:15",
-  lang: "zh",
-  subject: `回复：${RFQ} —— 暂无法承接`,
+  lang: "en",
+  subject: `RE: ${RFQ} — unable to quote`,
   lines: [
-    "感谢贵司询价。很遗憾，本季度我方电工钢产线排期已满，无法在贵司要求的交付日期前交货。",
-    "如贵司可将交期放宽至九月，我们可以重新报价。",
+    "Thank you for the enquiry. Unfortunately our electrical steel line is fully booked this quarter and we cannot deliver before your required date.",
+    "If the date could move to September we would be glad to quote again.",
   ],
   en: [
     "Thank you for the enquiry. Unfortunately our electrical steel line is fully booked this quarter and we cannot deliver before your required date.",
@@ -684,15 +678,7 @@ export const offContractSteps: RunStep[] = [
           country: "China",
           negotiating: true,
           draft: { subject: `${RFQ} — grain-oriented electrical steel · 12 t`, lines: EN_LINES },
-          local: {
-            lang: "简体中文",
-            subject: `${RFQ} —— 电工钢 12 吨询价`,
-            lines: [
-              `请就 ${REC.qty} 吨取向电工钢（M4 牌号，C5 绝缘涂层，卷装）报价。`,
-              `交付期限 ${NEED_BY} —— 产线目前停机。请提供价格、交货周期与付款条件。`,
-            ],
-          },
-          draftEmail: outgoing("Hengtai Electrical Steel (Jiangsu)", "zh", "sales@hengtai-steel.example"),
+          draftEmail: outgoing("Hengtai Electrical Steel (Jiangsu)", "en", "sales@hengtai-steel.example"),
           quote: { headline: "No quote", lines: ["Capacity full this quarter — cannot meet the date."] },
           reply: hengtaiReply,
         },

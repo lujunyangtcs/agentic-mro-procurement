@@ -53,7 +53,7 @@ export function EmailReceivedModal({
           <button
             type="button"
             onClick={onView}
-            className="ui-pill w-full mt-5 rounded-full bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
+            className="ui-pill w-full mt-5 bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
           >
             View reply
           </button>

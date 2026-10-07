@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104512",
+    "use_case": "UC9 – Supplier quote: price reasonableness and negotiation position",
+    "agent": "Sourcing Agent",
+    "flow_step": "Flow 2 · 3.0",
+    "timestamp": "2026-10-07T10:02:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "trigger": {
+    "type": "REQUEST",
+    "source": "Flow 1 · 6.0 standard request, no contract match"
+  },
+  "request": {
+    "request_id": "REQ-118377",
+    "requester": {
+      "role": "Maintenance Manager",
+      "org": "Client",
+      "site": "Castle Bromwich"
+    },
+    "category": "MRO – equipment maintenance",
+    "starting_cost_gbp": 24500,
+    "value_band": "£3K–£30K",
+    "need_by": "2026-10-28",
+    "spec_ref": "SPEC-HP400-SVC"
+  },
+  "panel": [
+    "SUP-20411 Midlands Hydraulics",
+    "SUP-20977 PressCare UK",
+    "SUP-31002 Fluid Power Services",
+    "SUP-18840 Apex Industrial"
+  ],
+  "knowledge_refs": {
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)",
+    "rfq_template": "RFQ-SPOT-v2"
+  }
+}

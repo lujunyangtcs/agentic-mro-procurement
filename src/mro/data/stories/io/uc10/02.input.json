@@ -1,0 +1,46 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104611",
+    "use_case": "UC10 – Non-standard contract language: clause band and fallback",
+    "agent": "Clause Compare Agent",
+    "flow_step": "Flow 3 · 2.0–3.0",
+    "timestamp": "2026-10-10T12:15:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "doc_id": "CTR-26-31877-D2",
+  "supplier_redlines": [
+    {
+      "clause": "12.1 Limitation of liability",
+      "client_position": "Cap 150% of annual fees",
+      "supplier_proposal": "Cap 100% of annual fees"
+    },
+    {
+      "clause": "9.2 Payment terms",
+      "client_position": "60 days from valid invoice",
+      "supplier_proposal": "30 days from invoice"
+    },
+    {
+      "clause": "14.3 Warranty",
+      "client_position": "Workmanship 12 months",
+      "supplier_proposal": "Workmanship 6 months"
+    },
+    {
+      "clause": "18.1 Termination for convenience",
+      "client_position": "30 days notice",
+      "supplier_proposal": "60 days notice"
+    }
+  ],
+  "clause_library": "CL-2026Q3",
+  "prior_deviations": {
+    "supplier": "SUP-20411",
+    "accepted": [
+      {
+        "clause": "18.1",
+        "position": "60 days",
+        "date": "2025-10-20"
+      }
+    ]
+  }
+}

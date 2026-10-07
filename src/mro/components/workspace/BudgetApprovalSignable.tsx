@@ -143,7 +143,7 @@ export function BudgetApprovalSignableModal({
     ctx.lineWidth = 1.8;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    ctx.strokeStyle = "#084337";
+    ctx.strokeStyle = "#27455c";
 
     let drawing = false;
     let last: { x: number; y: number } | null = null;
@@ -297,7 +297,7 @@ export function BudgetApprovalSignableModal({
                     type="checkbox"
                     checked={ack}
                     onChange={(e) => setAck(e.target.checked)}
-                    className="w-3.5 h-3.5 accent-[#084337]"
+                    className="w-3.5 h-3.5 accent-[#27455c]"
                   />
                   I authorise the over-DOA spend and the PO release.
                 </label>
@@ -306,7 +306,7 @@ export function BudgetApprovalSignableModal({
                   onClick={sign}
                   disabled={!hasInk || !ack}
                   className={cn(
-                    "ui-pill inline-flex items-center gap-2 rounded-full font-bold text-[13px] px-5 py-2.5 transition-colors",
+                    "ui-pill inline-flex items-center gap-2 font-bold text-[13px] px-5 py-2.5 transition-colors",
                     hasInk && ack ? "bg-surface-deep text-ink-inverse hover:bg-accent-green" : "bg-divider text-mute cursor-not-allowed",
                   )}
                 >

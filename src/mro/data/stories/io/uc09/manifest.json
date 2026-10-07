@@ -1,0 +1,18 @@
+{
+  "use_case": "UC9 – Supplier quote: price reasonableness and negotiation position",
+  "case_id": "TSM-2026-104512",
+  "flow_path": "Flow 2 (3.0 → 4.0 → 5.0) → HiTL 5.1 → Award Agent 6.0",
+  "agents": [
+    "01_Sourcing_Agent",
+    "02_Bid_Scoring_Agent"
+  ],
+  "outcome": "HiTL REVIEW (0.89) – TCS Buy Desk negotiates to target £20,600",
+  "human_touchpoints": [
+    "Buy Desk Analyst (TCS) validates and negotiates",
+    "Category Lead (Client) only if over walk-away"
+  ],
+  "tail_spend_interventions": [
+    "T4",
+    "T6"
+  ]
+}

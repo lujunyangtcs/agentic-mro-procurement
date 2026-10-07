@@ -184,7 +184,7 @@ export function PaymentPostingDoc({ posting = postingBlueRidge }: { posting?: Pa
                 <td className="px-3 py-2.5 border-b border-divider text-mute tabular-nums">{l.line}</td>
                 <td className="px-3 py-2.5 border-b border-divider font-semibold text-surface-deep tabular-nums">{l.glAccount}</td>
                 <td className="px-3 py-2.5 border-b border-divider">{l.text}</td>
-                <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#107e3e]")}>{l.drcr}</td>
+                <td className={cn("px-3 py-2.5 border-b border-divider font-bold", l.drcr === "Dr" ? "text-surface-deep" : "text-[#2f6b4f]")}>{l.drcr}</td>
                 <AmountCell filled={filled[i]} hot={hot === i} value={`${posting.currency} ${l.amount}`} />
               </tr>
             ))}
@@ -194,7 +194,7 @@ export function PaymentPostingDoc({ posting = postingBlueRidge }: { posting?: Pa
       <div className="px-4 py-2 flex items-center gap-2 text-[11.5px]">
         {allFilled ? (
           <>
-            <span className="w-2.5 h-2.5 rounded-full bg-[#107e3e]" />
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2f6b4f]" />
             <span className="text-ink">Debits = Credits · balanced</span>
           </>
         ) : (
@@ -226,10 +226,10 @@ export function PaymentPostingDoc({ posting = postingBlueRidge }: { posting?: Pa
                       <span
                         className={cn(
                           "inline-flex items-center gap-1.5 rounded px-1.5 py-0.5 text-[11px] font-medium transition-all duration-300",
-                          isCleared ? "bg-[#107e3e]/12 text-[#107e3e] ring-1 ring-[#107e3e]/25" : "bg-surface-rose text-mark-red",
+                          isCleared ? "bg-[#2f6b4f]/12 text-[#2f6b4f] ring-1 ring-[#2f6b4f]/25" : "bg-surface-rose text-mark-red",
                         )}
                       >
-                        <span className={cn("w-1.5 h-1.5 rounded-full", isCleared ? "bg-[#107e3e]" : "bg-mark-red")} />
+                        <span className={cn("w-1.5 h-1.5 rounded-full", isCleared ? "bg-[#2f6b4f]" : "bg-mark-red")} />
                         {isCleared ? "Cleared" : "Open · past due"}
                       </span>
                     ) : (
@@ -269,7 +269,7 @@ export function PaymentPostingDoc({ posting = postingBlueRidge }: { posting?: Pa
                 </td>
                 <td className="px-3 py-2.5 border-b border-divider text-right tabular-nums">
                   {cleared ? (
-                    <span className={cn("font-medium", b.dir === "up" ? "text-[#107e3e]" : b.dir === "down" ? "text-mark-red" : "text-mute")}>{b.delta}</span>
+                    <span className={cn("font-medium", b.dir === "up" ? "text-[#2f6b4f]" : b.dir === "down" ? "text-mark-red" : "text-mute")}>{b.delta}</span>
                   ) : (
                     <span className="inline-block w-20 h-5 rounded bg-[#f4f6f9] border border-dashed border-[#d4dae1] align-middle" />
                   )}
@@ -285,13 +285,13 @@ export function PaymentPostingDoc({ posting = postingBlueRidge }: { posting?: Pa
 
       <div className="px-4 py-3 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-divider text-[12.5px]">
         <div className="flex items-center gap-2.5">
-          <span className={cn("w-3 h-3 rounded-full ring-2", posted ? "bg-[#107e3e] ring-[#107e3e]/25" : "bg-[#a25b00] ring-[#a25b00]/25")} />
+          <span className={cn("w-3 h-3 rounded-full ring-2", posted ? "bg-[#2f6b4f] ring-[#2f6b4f]/25" : "bg-[#a25b00] ring-[#a25b00]/25")} />
           <span className="text-ink">
             Control balance{" "}
             <span className={cn("tabular-nums", cleared && "text-mute line-through")}>USD {posting.balanceBefore}</span>
             {cleared && (
               <>
-                {" "}→ <span className="font-bold text-[#107e3e] tabular-nums">USD {posting.balanceAfter}</span>
+                {" "}→ <span className="font-bold text-[#2f6b4f] tabular-nums">USD {posting.balanceAfter}</span>
               </>
             )}
           </span>

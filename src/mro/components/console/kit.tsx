@@ -30,16 +30,19 @@ export function ConsolePage({
   children: React.ReactNode;
 }) {
   return (
-    <div className="pl-5 pr-6 pt-4 pb-10 min-h-screen bg-[color-mix(in_srgb,var(--surface-mint)_18%,var(--surface-fog))]">
+    <div className="pl-6 pr-7 pt-5 pb-12 min-h-screen bg-surface-fog">
       {/* z-40: the language menu must drop OVER the tiles below, never under. */}
       {(title || lead || actions) && (
         <SpringIn className="relative z-40 mt-3.5 flex items-center justify-between gap-4">
           <div className="min-w-0">
             {title && (
-              <h1 className="text-[24px] leading-[29px] font-bold tracking-[-0.02em] text-ink">
-                {title}
+              <h1 className="aap-title text-[22px] leading-[30px] text-ink">
+                <span className="aap-line">
+                  <span>{title}</span>
+                </span>
               </h1>
             )}
+            <span aria-hidden className="aap-rule mb-2.5 mt-2 block h-px w-12 bg-ink" style={{ animationDelay: "200ms" }} />
             {/* One line. If it needs two, the page is explaining too much. */}
             {lead && <p className="truncate text-[14px] leading-[20px] text-mute mt-0.5">{lead}</p>}
           </div>
@@ -104,23 +107,26 @@ export function AiSummaryCard({
   return (
     /* z-40: the language menu in `right` must drop over whatever sits below. */
     <SpringIn className="relative z-40">
-      <div className="rounded-md bg-surface-deep px-4 py-3.5">
+      <div className="relative bg-accent-navy px-5 py-4">
+        <span aria-hidden className="aap-rule absolute inset-x-0 top-0 block h-[2px] bg-sand" />
         {(title || right) && (
-          <div className="flex items-center justify-between gap-4 pb-2">
+          <div className="flex items-center justify-between gap-4 pb-2.5">
             {title && (
-              <h1 className="text-[24px] leading-[29px] font-bold tracking-[-0.02em] text-ink-inverse">
-                {title}
+              <h1 className="aap-title text-[22px] leading-[30px] text-ink-inverse">
+                <span className="aap-line">
+                  <span>{title}</span>
+                </span>
               </h1>
             )}
             {right && <div className="flex shrink-0 items-center gap-2.5">{right}</div>}
           </div>
         )}
         <div className="flex items-start gap-3">
-          <span className="mt-0.5 shrink-0 text-surface-mint ai-pulse">
-            <Sparkles size={17} strokeWidth={1.75} />
+          <span className="mt-0.5 shrink-0 text-sand ai-pulse">
+            <Sparkles size={17} />
           </span>
           <div className="min-w-0">
-            <p className="text-[14px] font-semibold leading-[20px] text-ink-inverse">
+            <p className="text-[14.5px] font-normal leading-[21px] text-ink-inverse">
               <StreamingText text={headline} cps={110} caret={false} />
             </p>
             <p className="text-[13px] leading-[19px] text-ink-inverse mt-0.5">
@@ -187,10 +193,14 @@ export function StatTiles({ items, className }: { items: Stat[]; className?: str
         const tone = s.tone ?? "ink";
         return (
           <SpringIn key={s.label} delay={i * 70} className="h-full">
-            <article className="flex h-full items-center gap-3.5 rounded-md border border-divider bg-white px-4 py-3.5">
+            <article className="group relative flex h-full items-center gap-4 border border-divider bg-white px-5 py-4 transition-colors duration-150 ease-out hover:border-ink/40">
+              <span
+                aria-hidden
+                className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-ink transition-transform duration-300 ease-out group-hover:scale-x-100"
+              />
               <span
                 className={cn(
-                  "grid h-10 w-10 shrink-0 place-items-center rounded-lg",
+                  "grid h-10 w-10 shrink-0 place-items-center",
                   statChip[tone],
                 )}
               >
@@ -199,7 +209,7 @@ export function StatTiles({ items, className }: { items: Stat[]; className?: str
               <div className="min-w-0">
                 <div
                   className={cn(
-                    "text-[26px] leading-[30px] font-bold tracking-[-0.02em] tabular-nums",
+                    "text-[28px] leading-[32px] font-extralight tracking-[-0.01em] tabular-nums",
                     statTone[tone],
                   )}
                 >
@@ -238,27 +248,34 @@ export function TabSwitch<T extends string>({
   onChange: (id: T) => void;
 }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-6 border-b border-divider" role="tablist">
       {tabs.map((t) => {
         const on = t.id === active;
         return (
           <button
             key={t.id}
             type="button"
+            role="tab"
+            aria-selected={on}
             onClick={() => onChange(t.id)}
             className={cn(
-              "ui-pill inline-flex items-center gap-2 whitespace-nowrap rounded-md border px-4 py-2 text-[13px] font-medium transition-colors",
-              on
-                ? "bg-surface-deep border-surface-deep text-ink-inverse"
-                : "bg-white border-divider text-ink hover:bg-surface-mint/40",
+              "group relative -mb-px inline-flex items-center gap-2 whitespace-nowrap pb-2.5 pt-1 text-[13.5px] transition-colors duration-150 ease-out",
+              on ? "text-ink" : "text-mute hover:text-ink",
             )}
           >
+            <span
+              aria-hidden
+              className={cn(
+                "absolute inset-x-0 bottom-0 bg-ink transition-[height,background-color] duration-150 ease-in-out",
+                on ? "h-[3px]" : "h-0 bg-steel group-hover:h-[3px]",
+              )}
+            />
             {t.label}
             {typeof t.count === "number" && (
               <span
                 className={cn(
-                  "rounded-full px-2 py-0.5 text-[12px] font-bold tabular-nums",
-                  on ? "bg-white/20 text-ink-inverse" : "bg-surface-fog text-mute",
+                  "px-1.5 py-0.5 text-[11.5px] leading-[14px] tabular-nums",
+                  on ? "bg-ink text-ink-inverse" : "bg-white text-mute border border-divider",
                 )}
               >
                 {t.count}
@@ -289,7 +306,7 @@ export function AgentStatusChip({
 }) {
   if (state === "processing") {
     return (
-      <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-mint px-3 py-1.5 text-[13px] font-medium text-surface-deep">
+      <span className="aap-scan inline-flex items-center gap-2 whitespace-nowrap bg-sand px-3 py-1.5 text-[13px] text-ink">
         <Spinner size={13} />
         <StreamingText text={label} cps={26} caret={false} />
       </span>
@@ -297,14 +314,14 @@ export function AgentStatusChip({
   }
   if (state === "complete") {
     return (
-      <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-fog px-3 py-1.5 text-[13px] font-medium text-ink">
-        <Check size={13} strokeWidth={2.6} className="text-accent-green" />
+      <span className="inline-flex items-center gap-2 whitespace-nowrap border border-divider bg-white px-3 py-1.5 text-[13px] text-ink">
+        <Check size={13} className="text-accent-green" />
         {label}
       </span>
     );
   }
   return (
-    <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-rose px-3 py-1.5 text-[13px] font-medium text-mark-red">
+    <span className="inline-flex items-center gap-2 whitespace-nowrap bg-surface-red px-3 py-1.5 text-[13px] text-mark-red">
       <AlertTriangle size={13} strokeWidth={2.2} />
       {label}
     </span>
@@ -374,10 +391,10 @@ export function Panel({
   className?: string;
 }) {
   return (
-    <section className={cn("bg-white border border-divider rounded-md", className)}>
-      <header className="flex items-center justify-between gap-4 px-4 pt-3.5 pb-3">
+    <section className={cn("bg-white border border-divider", className)}>
+      <header className="flex items-center justify-between gap-4 px-5 pt-4 pb-3">
         <div className="min-w-0">
-          <h2 className="text-[15px] font-bold text-ink leading-tight">{title}</h2>
+          <h2 className="aap-title text-[14px] leading-[20px] text-ink">{title}</h2>
           {sub && <p className="truncate text-[13px] text-mute leading-snug mt-0.5">{sub}</p>}
         </div>
         {right && <div className="shrink-0">{right}</div>}

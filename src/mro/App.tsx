@@ -1,8 +1,15 @@
-import { AppProvider, useApp, type Persona, type View } from "@/mro/state";
+import { AppProvider, loadNav, useApp, type Persona, type View } from "@/mro/state";
 import { Sidebar } from "@/mro/components/layout/Sidebar";
 import { Login } from "@/mro/views/Login";
-import { Cockpit } from "@/mro/views/Cockpit";
+import * as React from "react";
+import { MyDesk } from "@/mro/views/MyDesk";
+import { CaseWorkspace } from "@/mro/views/CaseWorkspace";
+import { OpportunitiesBench, SourcingBench, SuppliersBench, ContractsBench } from "@/mro/views/Workbenches";
+import { ValueAssurance } from "@/mro/views/ValueAssurance";
+import { Governance } from "@/mro/views/Governance";
+import { installUiAudit } from "@/mro/lib/uiAudit";
 import { Workspace } from "@/mro/views/Workspace";
+import { StoryWorkspace } from "@/mro/views/StoryWorkspace";
 import { DocView } from "@/mro/views/DocView";
 import { IntakeConsole } from "@/mro/views/IntakeConsole";
 import { AgentProfile } from "@/mro/views/AgentProfile";
@@ -20,9 +27,25 @@ function Router() {
     case "login":
       return <Login />;
     case "cockpit":
-      return <Cockpit />;
+      return <MyDesk />;
     case "workspace":
       return <Workspace flow={view.flow} />;
+    case "story":
+      return <StoryWorkspace key={`${view.storyId}:${view.step ?? ""}`} storyId={view.storyId} step={view.step} />;
+    case "case":
+      return <CaseWorkspace caseId={view.caseId} />;
+    case "opportunities":
+      return <OpportunitiesBench />;
+    case "sourcing":
+      return <SourcingBench />;
+    case "suppliers":
+      return <SuppliersBench />;
+    case "contracts":
+      return <ContractsBench />;
+    case "value":
+      return <ValueAssurance />;
+    case "governance":
+      return <Governance />;
     case "agent":
       /* Intake keeps its own desk — it is where free-text requests land.
          Every other agent shows what it reads, produces and stops for. */
@@ -48,6 +71,7 @@ function Router() {
 
 function Shell() {
   const { view } = useApp();
+  React.useEffect(() => installUiAudit(), []);
   // The work menu stays docked on every signed-in surface; login is full-screen.
   const showSidebar = view.kind !== "login";
 
@@ -73,7 +97,8 @@ export default function App({
   /** Which chair the door opened into — the buyer's desk or the supplier's. */
   startPersona?: Persona;
 }) {
-  const home: View = startPersona === "supplier" ? { kind: "supplier-overview" } : { kind: "cockpit" };
+  const resumed = loadNav();
+  const home: View = resumed && resumed.persona === startPersona ? resumed.view : startPersona === "supplier" ? { kind: "supplier-overview" } : { kind: "cockpit" };
   return (
     <AppProvider
       initialView={startSignedIn ? home : undefined}

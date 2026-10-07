@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104387",
+    "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+    "agent": "Intake Agent",
+    "flow_step": "Flow 1 · 1.0",
+    "timestamp": "2026-10-07T09:12:06Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "structured_request": {
+    "request_id": "REQ-118204",
+    "category": {
+      "code": "43232300",
+      "name": "Software licences – engineering"
+    },
+    "gl": "640210",
+    "quantity": 12,
+    "unit": "licence-year",
+    "starting_cost_gbp": 14400,
+    "value_band": "£3K–£30K",
+    "demand_type": "Recurring"
+  },
+  "flags": [
+    "Possible reuse – licence pool exists for this product"
+  ],
+  "confidence": {
+    "score": 0.96,
+    "signals": {
+      "data_completeness": {
+        "score": 1.0,
+        "weight": 0.25,
+        "evidence": "All mandatory fields present"
+      },
+      "classification_certainty": {
+        "score": 0.96,
+        "weight": 0.3,
+        "evidence": "Category 43232300 Software licences; GL 640210"
+      },
+      "starting_cost": {
+        "score": 0.95,
+        "weight": 0.25,
+        "evidence": "Last paid £1,200 / licence / yr (PO-7781223)"
+      },
+      "duplicate_check": {
+        "score": 0.92,
+        "weight": 0.2,
+        "evidence": "No open request for same item in CC-4471"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Front door only",
+      "status": "PASS",
+      "detail": "Submitted via form"
+    },
+    {
+      "rule": "Coding not TBD",
+      "status": "PASS",
+      "detail": "GL 640210"
+    },
+    {
+      "rule": "Budget available",
+      "status": "PASS",
+      "detail": "CC-4471 remaining £86,200"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next_agent": "Spend Intelligence Agent",
+      "then": "Channel Decision Agent"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "audit": {
+    "evidence_ids": [
+      "PO-7781223",
+      "BUD-CC4471-FY27"
+    ],
+    "model_version": "intake-v2.3"
+  }
+}

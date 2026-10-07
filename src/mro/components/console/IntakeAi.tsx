@@ -136,7 +136,7 @@ export function AiConversation({
               key={c.label}
               type="button"
               onClick={c.onPick}
-              className="ui-pill whitespace-nowrap rounded-full border border-surface-deep/35 bg-white px-3 py-1.5 text-[12.5px] text-ink transition-colors hover:bg-surface-mint/40"
+              className="ui-pill whitespace-nowrap border border-surface-deep/35 bg-white px-3 py-1.5 text-[12.5px] text-ink transition-colors hover:bg-surface-mint/40"
             >
               {c.label}
             </button>

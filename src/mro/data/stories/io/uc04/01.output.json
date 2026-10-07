@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104588",
+    "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+    "agent": "Supplier Match Agent",
+    "flow_step": "Flow 4 · 1.0–2.0",
+    "timestamp": "2026-10-07T11:20:03Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "recommendation": {
+    "decision": "Redirect to panel supplier",
+    "supplier": "SUP-40210 Kestrel Operations",
+    "rationale": [
+      "Meets all mandatory capabilities",
+      "Day rate £1,150 vs £1,400 named supplier (-17.9%)",
+      "Uses existing commitment – moves toward £250K rebate tier",
+      "Avoids 12 days onboarding and new-supplier risk"
+    ],
+    "estimated_cost_gbp": 34500,
+    "saving_vs_named_gbp": 7500,
+    "avoided_onboarding": true
+  },
+  "confidence": {
+    "score": 0.93,
+    "signals": {
+      "capability_match": {
+        "score": 0.95,
+        "weight": 0.35,
+        "evidence": "Kestrel meets all 3 requirements"
+      },
+      "performance": {
+        "score": 0.92,
+        "weight": 0.2,
+        "evidence": "4.4/5 on 9 engagements"
+      },
+      "capacity": {
+        "score": 0.9,
+        "weight": 0.25,
+        "evidence": "Consultant available 2026-10-20"
+      },
+      "commercial": {
+        "score": 0.94,
+        "weight": 0.2,
+        "evidence": "£132K headroom on commitment; tier rebate at £250K"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Panels first",
+      "status": "PASS",
+      "detail": "Panel supplier fits"
+    },
+    {
+      "rule": "No duplicate supplier",
+      "status": "PASS",
+      "detail": "Kestrel active – SUP-40210"
+    },
+    {
+      "rule": "Value band",
+      "status": "INFO",
+      "detail": "£34.5K → Category Lead confirms fit (>£30K)"
+    }
+  ],
+  "lane_decision": {
+    "lane": "HiTL",
+    "band": "HARD_CONSTRAINT",
+    "reason": "Guardrail tripped: Value >£30K – supplier fit confirmation reserved for Category Lead",
+    "route_to": {
+      "persona": "Category Lead – Manufacturing Services",
+      "org": "Client",
+      "task": "Confirm Kestrel fit or approve onboarding exception",
+      "sla_hours": 48,
+      "prefilled": true
+    }
+  },
+  "if_rejected": {
+    "next_agent": "Onboarding Agent",
+    "condition": "Category Lead approves exception with recorded reason"
+  },
+  "value_record": {
+    "baseline_gbp": 42000,
+    "measurement": "Price difference + validated avoided onboarding cost; rebate tier where applicable"
+  },
+  "audit": {
+    "evidence_ids": [
+      "PANEL-CONS-2026Q3",
+      "PERF-40210-2026"
+    ],
+    "model_version": "suppliermatch-v1.4"
+  }
+}

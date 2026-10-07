@@ -44,7 +44,7 @@ export function Login({ onExit }: { onExit?: () => void }) {
         <button
           type="button"
           onClick={onExit}
-          className="absolute top-4 left-1/2 z-30 -translate-x-1/2 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/75 backdrop-blur transition-colors hover:border-teal-400 hover:text-teal-300"
+          className="absolute top-4 left-1/2 z-30 -translate-x-1/2 inline-flex items-center gap-1.5 border border-white/20 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/75 backdrop-blur transition-colors hover:border-teal-400 hover:text-teal-300"
         >
           <ArrowLeft size={13} /> All workforces
         </button>
@@ -216,7 +216,7 @@ function SignInPanel({ signIn }: { signIn: () => void }) {
             <Boxes size={16} strokeWidth={1.75} />
           </span>
           <span
-            className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
+            className="px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
             style={{ color: ACCENT.hex, background: `${ACCENT.hex}14`, border: `1px solid ${ACCENT.hex}55` }}
           >
             {PERSONA.badge}

@@ -15,16 +15,16 @@ import {
 // locally from /public so the page works on corporate networks that block
 // remote image CDNs.
 const HERO_COLUMNS = [
-  { label: "Requests & Specs", src: "/hero-factory.jpg" },
-  { label: "Stock & Master Data", src: "/hero-boxes.jpg" },
-  { label: "Vendors & Approval", src: "/hero-factory.jpg" },
+  { label: "Vehicle assembly", src: "/entry-assembly.png" },
+  { label: "Maintenance stores", src: "/entry-stores.png" },
+  { label: "Engineering services", src: "/entry-engineering.png" },
 ];
 
 const ACCENT = { hex: "#14b8a6", halo: "rgba(20,184,166,0.45)" };
 
 const PERSONA = {
   badge: "Procurement",
-  name: "Siemens MRO Procurement workspace",
+  name: "Automotive Procurement workspace",
   capabilities: [
     "One cockpit over 5 agents and the orchestrator",
     "Touchless release of on-contract requisitions · approvals only when it matters",
@@ -52,11 +52,6 @@ export function Login() {
           )}
         </main>
 
-        <footer className="relative z-10 px-6 pb-7 text-center sm:px-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            Confidential · Enterprise Use Only
-          </p>
-        </footer>
       </div>
     </div>
   );
@@ -107,10 +102,7 @@ function TopBar({
         </span>
         <span className="flex flex-col leading-tight">
           <span className="text-[15px] font-bold tracking-[-0.01em] text-white">
-            Siemens MRO Procurement
-          </span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
-            Maintenance, repair &amp; operations workforce
+            Agentic Automotive Procurement
           </span>
         </span>
       </div>
@@ -142,19 +134,18 @@ function Hero({ onAccess }: { onAccess: () => void }) {
   return (
     <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-6 text-center">
       <span className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
-        Maintenance procurement intelligence
+        Indirect procurement · four UK sites
       </span>
       <h1
         className="font-bold leading-[1.04] tracking-[-0.025em] text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)]"
         style={{ fontSize: "clamp(2rem, 5.6vw, 4.4rem)" }}
       >
-        Siemens MRO Procurement
+        Automotive Procurement
       </h1>
       <p className="mt-6 max-w-xl text-[14px] font-normal leading-[1.55] text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-[15px]">
-        Turn a plant engineer's free-text request into a coded requisition,
-        check master data, duplicates and stock, confirm warranty cover, validate
-        the vendor and price against contract, and release it with a complete
-        audit trail.
+        Maintenance parts, services, software and facilities for Solihull, Halewood,
+        Wolverhampton and Gaydon. Each request is one case: approvals, orders and
+        supplier work stay on its record.
       </p>
       <button
         type="button"
@@ -181,7 +172,7 @@ function SignInPanel({ signIn }: { signIn: () => void }) {
     <div className="relative z-10 mx-auto w-full max-w-[440px]">
       <div className="text-center mb-8">
         <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
-          Siemens MRO Procurement workspace
+          Automotive Procurement workspace
         </span>
         <h2
           className="mt-3 font-bold leading-[1.05] tracking-[-0.02em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.55)]"
@@ -208,7 +199,7 @@ function SignInPanel({ signIn }: { signIn: () => void }) {
             <Boxes size={16} strokeWidth={1.75} />
           </span>
           <span
-            className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
+            className="px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
             style={{ color: ACCENT.hex, background: `${ACCENT.hex}14`, border: `1px solid ${ACCENT.hex}55` }}
           >
             {PERSONA.badge}

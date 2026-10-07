@@ -174,7 +174,7 @@ function ExceptionQueuePanel() {
     <article className="bg-white border border-divider rounded-md p-5 flex flex-col h-full">
       <CardHeader
         label="Exception queue · routed to a person"
-        right={<span className="text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 rounded-full">4 open</span>}
+        right={<span className="text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 ">4 open</span>}
       />
       <div className="mt-3 space-y-2 flex-1">
         {exceptions.map((e) => (
@@ -257,7 +257,7 @@ export function OrchestratorConsole() {
         <button
           type="button"
           onClick={() => setChatHidden(false)}
-          className="ui-pill fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-surface-deep text-ink-inverse px-4 py-2.5 text-[13px] font-bold shadow-lg hover:bg-accent-green"
+          className="ui-pill fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-surface-deep text-ink-inverse px-4 py-2.5 text-[13px] font-bold shadow-lg hover:bg-accent-green"
         >
           <Bot size={16} strokeWidth={1.9} /> Chat with Orchestrator
         </button>

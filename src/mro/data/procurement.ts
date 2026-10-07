@@ -179,14 +179,11 @@ export type Resolution = {
 };
 
 /** Languages the workforce reads and writes. English is the working language. */
-export type Lang = "en" | "de" | "es" | "fr" | "zh";
+export type Lang = "en" | "de";
 
 export const LANGUAGES: { code: Lang; label: string; native: string; flag: string; emoji: string }[] = [
-  { code: "en", label: "English", native: "English", flag: "EN", emoji: "🇺🇸" },
+  { code: "en", label: "English", native: "English", flag: "EN", emoji: "🇬🇧" },
   { code: "de", label: "German", native: "Deutsch", flag: "DE", emoji: "🇩🇪" },
-  { code: "es", label: "Spanish", native: "Español", flag: "ES", emoji: "🇪🇸" },
-  { code: "fr", label: "French", native: "Français", flag: "FR", emoji: "🇫🇷" },
-  { code: "zh", label: "Chinese", native: "简体中文", flag: "中文", emoji: "🇨🇳" },
 ];
 
 export type Requisition = {
@@ -410,7 +407,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_REPAIR,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "fr",
+    sourceLang: "en",
     note: "The total is above the plant approval limit and past the point where three competitive quotes are required, so it routes to the procurement manager.",
   },
 
@@ -434,7 +431,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "es",
+    sourceLang: "en",
     avoidedSpend: 1155,
     note: "Three of these six are already covered by a request raised for the same line two days ago.",
   },
@@ -459,7 +456,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "zh",
+    sourceLang: "en",
     avoidedSpend: 1104,
     note: "The Berlin plant holds twenty-four of these in its store and can transfer them this week.",
   },
@@ -505,7 +502,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_REPAIR,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "es",
+    sourceLang: "en",
   },
   {
     id: "PR-48683",
@@ -526,7 +523,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "fr",
+    sourceLang: "en",
   },
 
   /* ── Released clean — the touchless majority ─────────────────────────── */
@@ -595,7 +592,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "fr",
+    sourceLang: "en",
   },
   {
     id: "PR-48618",
@@ -616,7 +613,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "zh",
+    sourceLang: "en",
   },
   {
     id: "PR-48622",
@@ -658,7 +655,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "es",
+    sourceLang: "en",
   },
   {
     id: "PR-48629",
@@ -679,7 +676,7 @@ export const requisitions: Requisition[] = [
     glAccount: GL_SPARES,
     vendor: APEX,
     agreement: SA07,
-    sourceLang: "fr",
+    sourceLang: "en",
   },
 ];
 

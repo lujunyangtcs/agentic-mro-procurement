@@ -58,7 +58,7 @@ export function InboundEmailModal({ email, onClose }: { email: InboundEmail; onC
               onClick={() => setPreviewOpen(true)}
               className="flex w-full items-center gap-3 rounded-xl border border-divider bg-surface-fog px-3.5 py-3 text-left hover:border-surface-deep"
             >
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#d4342a]/10 text-[#d4342a]"><FileText size={18} /></span>
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#a1232b]/10 text-[#a1232b]"><FileText size={18} /></span>
               <span className="min-w-0 flex-1">
                 <span className="block text-[13px] font-bold text-ink truncate">{fileName}</span>
                 <span className="block text-[11px] text-mute">{email.previewNote ?? "PDF · click to preview the invoice"}</span>
@@ -69,7 +69,7 @@ export function InboundEmailModal({ email, onClose }: { email: InboundEmail; onC
         </div>
 
         <footer className="border-t border-divider px-6 py-4 shrink-0">
-          <button type="button" onClick={onClose} className="ui-pill flex w-full items-center justify-center gap-1.5 rounded-full bg-surface-deep px-4 py-2.5 text-[13.5px] font-bold text-ink-inverse hover:bg-accent-green">
+          <button type="button" onClick={onClose} className="ui-pill flex w-full items-center justify-center gap-1.5 bg-surface-deep px-4 py-2.5 text-[13.5px] font-bold text-ink-inverse hover:bg-accent-green">
             <CornerUpRight size={15} /> {email.cta ?? "Continue to the match"}
           </button>
         </footer>
@@ -79,7 +79,7 @@ export function InboundEmailModal({ email, onClose }: { email: InboundEmail; onC
         <div className={cn("fixed inset-0 z-[110] flex items-center justify-center bg-black/50 px-4 py-6")} onClick={() => setPreviewOpen(false)}>
           <div onClick={(e) => e.stopPropagation()} className="ai-spring flex max-h-[90vh] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
             <header className="flex items-center gap-2 border-b border-divider px-5 py-3 shrink-0">
-              <FileText size={15} className="text-[#d4342a]" />
+              <FileText size={15} className="text-[#a1232b]" />
               <span className="truncate text-[13px] font-bold text-ink">{fileName}</span>
               <button type="button" onClick={() => setPreviewOpen(false)} aria-label="Close preview" className="ui-pill ml-auto flex h-7 w-7 items-center justify-center rounded-full text-mute hover:bg-surface-fog hover:text-ink"><X size={16} /></button>
             </header>

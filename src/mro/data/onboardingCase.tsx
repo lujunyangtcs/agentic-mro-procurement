@@ -171,17 +171,17 @@ const quoteComparisonDoc = (
 
 const submissionEmail = (
   <MultilingualEmailDoc
-    from={`${WINNER} · Administración`}
+    from={`${WINNER} · Administration`}
     fromAddr="admin@calibracionesibericas.example"
     to="Supplier onboarding"
     sent="2026-07-17 · 10:05"
-    sourceLang="es"
+    sourceLang="en"
     original={{
-        subject: "Documentación de alta de proveedor — Calibraciones Ibéricas",
+        subject: "Supplier registration documents — Calibraciones Ibéricas",
       lines: [
-        "Adjuntamos la documentación solicitada para darnos de alta como proveedor: escritura de constitución, certificado de identificación fiscal, póliza de responsabilidad civil y certificado bancario.",
-        "Nuestro número de identificación fiscal es ESB87451209 y la cuenta para pagos figura en el certificado bancario adjunto.",
-        "Quedamos a su disposición para cualquier documento adicional.",
+        "Attached is the documentation you asked for so we can be set up as a supplier: certificate of incorporation, tax identification certificate, public liability insurance policy and bank certificate.",
+        "Our tax identification number is ESB87451209 and the account for payments is shown on the attached bank certificate.",
+        "We are happy to provide any further documents you need.",
       ],
     }}
     translated={{
@@ -234,7 +234,7 @@ const extractedFieldsDoc = (
       ],
       determination: {
         ok: true,
-        text: "Every field the supplier master needs was found in the submitted documents and translated from Spanish. Nothing was typed by hand and nothing was inferred.",
+        text: "Every field the supplier master needs was found in the submitted documents. Nothing was typed by hand and nothing was inferred.",
       },
     }}
   />
@@ -317,7 +317,7 @@ const masterDraftDoc = (
         { label: "Legal name", value: "Calibraciones Ibéricas de Precisión S.L." },
         { label: "Address", value: "Polígono Industrial Les Corts 14, Valencia, Spain" },
         { label: "Tax ID", value: "ESB87451209" },
-        { label: "Correspondence language", value: "Español" },
+        { label: "Correspondence language", value: "English" },
       ],
       purchasing: [
         { label: "Purchasing org", value: "1000 · Orvantec Procurement" },
@@ -474,10 +474,10 @@ export const onboardingSteps: RunStep[] = [
     title: "Read the submitted documents",
     sub: "Reads the supplier's papers and translates them",
     aiThought:
-      "The winning contractor has sent their registration pack — in Spanish, as four separate documents. Let me read them and pull out the fields the supplier master actually needs.",
+      "The winning contractor has sent their registration pack as four separate documents. Let me read them and pull out the fields the supplier master actually needs.",
     reasoning: [
       "Reading the registration email and its four attachments",
-      "Translating from Español",
+      "Matching the attachments to the email",
       "Certificate of incorporation → legal name, address, incorporation date",
       "Tax certificate → tax identification and VAT status",
       "Insurance policy → cover and expiry",
@@ -485,7 +485,7 @@ export const onboardingSteps: RunStep[] = [
     docLabel: "DRAFT-411 · extracted fields",
     document: extractedFieldsDoc,
     sources: [
-      { id: "onb-email", label: "Registration pack", meta: "submitted in Español · 10:05", kind: "email", body: submissionEmail },
+      { id: "onb-email", label: "Registration pack", meta: "submitted · 10:05", kind: "email", body: submissionEmail },
       { id: "onb-extract", label: "DRAFT-411", meta: "extracted fields", kind: "master", body: extractedFieldsDoc },
     ],
     recommendation:
@@ -497,7 +497,7 @@ export const onboardingSteps: RunStep[] = [
         title: "The submission",
         fields: [
           { label: "Received", value: "2026-07-17 · 10:05" },
-          { label: "Written in", value: "Español · translated on read" },
+          { label: "Written in", value: "English" },
           { label: "Documents", value: "Incorporation · tax · insurance · bank" },
           { label: "Tax ID stated", value: "ESB87451209" },
         ],
