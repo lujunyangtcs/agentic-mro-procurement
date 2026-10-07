@@ -724,6 +724,9 @@ const st04: FlowDef = {
 
 const newSupplier = (ctx: StepCtx) => !!ctx.run.variant.newSupplier;
 
+/** Signals a Category Lead supplier decision resolves. */
+const SUPPLIER_SIGNALS = ["supplier_status", "match_strength", "price_benchmark"];
+
 const st03: FlowDef = {
   key: "ST03",
   title: bi("Check the panel before onboarding", "Vor dem Onboarding das Panel prüfen"),
@@ -777,7 +780,7 @@ const st03: FlowDef = {
       effect: (ctx, opt) => {
         if (opt !== "incumbent") return ctx.s;
         const r = rev(ctx);
-        const res = command(ctx, { type: "request.revise", actor: ctx.actor!, caseId: ctx.caseId, expectedRevision: ctx.c.revision, supplierId: ST03.incumbent.supplierId, agreementId: ST03.incumbent.agreement, lines: r.lines.map((l) => ({ material: l.material, quantity: l.quantity, uom: l.uom, neededBy: l.neededBy })), idempotencyKey: `${ctx.caseId}:revise:route` });
+        const res = command(ctx, { type: "request.revise", actor: ctx.actor!, caseId: ctx.caseId, expectedRevision: ctx.c.revision, supplierId: ST03.incumbent.supplierId, agreementId: ST03.incumbent.agreement, lines: r.lines.map((l) => ({ material: l.material, quantity: l.quantity, uom: l.uom, neededBy: l.neededBy })), resolvedSignals: SUPPLIER_SIGNALS, idempotencyKey: `${ctx.caseId}:revise:route` });
         if (!res.ok) return { error: res.message };
         upsertValue(ctx, "sourcing", { category: "sourcing-saving", basis: "Named £38,400 − incumbent £36,000 · same scope", baseline: ST03.requested.price, expected: st03Saving, state: "expected" });
         upsertValue(ctx, "onboarding-effort", { category: "productivity", basis: "One onboarding avoided · illustrative effort", baseline: ST03.onboardingEffort, expected: ST03.onboardingEffort, state: "expected" });
@@ -875,7 +878,7 @@ const st03: FlowDef = {
           pending.status = "inactive";
         }
         const r = rev(ctx);
-        const res = command(ctx, { type: "request.revise", actor: agentActor(ctx.s, "master-data"), caseId: ctx.caseId, expectedRevision: ctx.c.revision, supplierId: "SUP-AP-010", agreementId: null, lines: r.lines.map((l) => ({ material: l.material, quantity: l.quantity, uom: l.uom, neededBy: l.neededBy, unitPrice: ST03.requested.price })), idempotencyKey: `${ctx.caseId}:revise:activate` });
+        const res = command(ctx, { type: "request.revise", actor: agentActor(ctx.s, "master-data"), caseId: ctx.caseId, expectedRevision: ctx.c.revision, supplierId: "SUP-AP-010", agreementId: null, lines: r.lines.map((l) => ({ material: l.material, quantity: l.quantity, uom: l.uom, neededBy: l.neededBy, unitPrice: ST03.requested.price })), resolvedSignals: SUPPLIER_SIGNALS, idempotencyKey: `${ctx.caseId}:revise:activate` });
         if (!res.ok) return { error: res.message };
         return ctx.s;
       },

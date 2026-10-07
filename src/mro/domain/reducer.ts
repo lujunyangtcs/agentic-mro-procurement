@@ -284,6 +284,10 @@ function revise(state: DomainState, cmd: Extract<Command, { type: "request.revis
     agreementId,
     supplierId: cmd.supplierId ?? prev.supplierId,
   };
+  /* A person's decision resolves the named signals (e.g. supplier choice); evidence is kept. */
+  if (cmd.resolvedSignals?.length) {
+    next.signals = next.signals.map((sg) => (cmd.resolvedSignals!.includes(sg.key) ? { ...sg, score: Math.max(sg.score ?? 0, 0.95), evidence: `${sg.evidence} · resolved r${next.revision}` } : sg));
+  }
   s.requests[sc.requestId].revisions.push(next);
   sc.revision = next.revision;
   /* Material change: earlier approvals and open tasks no longer cover this revision. */

@@ -7,8 +7,10 @@
 
 import type { Command, CommandResult, RequestDraft } from "@/mro/domain/commands";
 import { idemKey } from "@/mro/domain/commands";
-import type { DomainState, Role } from "@/mro/domain/types";
-import { STANDING_MANDATE } from "@/mro/data/seedDomain";
+import type { Actor, DomainState, Role } from "@/mro/domain/types";
+import { STANDING_MANDATE_ID } from "@/mro/domain/reducer";
+
+export const STANDING_MANDATE: Actor = { kind: "policy", policyVersion: "POL-DEMO-1", mandateId: STANDING_MANDATE_ID };
 
 type Dispatch = (cmd: Command) => CommandResult;
 

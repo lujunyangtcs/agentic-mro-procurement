@@ -54,7 +54,7 @@ type Base = { actor: Actor; idempotencyKey: string; attemptId?: string };
 
 export type Command =
   | (Base & { type: "request.submit"; draft: RequestDraft })
-  | (Base & { type: "request.revise"; caseId: string; expectedRevision: number; lines: DraftLine[]; supplierId?: string; agreementId?: string | null })
+  | (Base & { type: "request.revise"; caseId: string; expectedRevision: number; lines: DraftLine[]; supplierId?: string; agreementId?: string | null; resolvedSignals?: string[] })
   | (Base & { type: "flow.start"; caseId: string; flow: FlowKey; runId?: string; variant?: Record<string, boolean> })
   | (Base & { type: "step.run"; runId: string; stepId: string })
   | (Base & { type: "step.decide"; runId: string; stepId: string; optionId: string; note?: string })

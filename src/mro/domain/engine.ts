@@ -172,7 +172,6 @@ function runStep(state: DomainState, cmd: Extract<Command, { type: "step.run" }>
 
   const s = structuredClone(state);
   const run = s.runs[cmd.runId];
-  const st = run.steps[cmd.stepId];
   const started = s.clock.now;
   let ctx = ctxFor(s, run);
   if (def.minutes > 0) {
