@@ -49,11 +49,14 @@ export const F1_STEPS = [
 
 export function initialDomainState(): DomainState {
   return {
-    schemaVersion: 2,
+    schemaVersion: 3,
     clock: { now: CLOCK_START },
-    /* Generated IDs continue the I/O's formats above every story ID:
-       TSM-2026-1047xx cases, REQ-1188xx requests, PO-77900xx orders. */
-    seq: { case: 104700, storyCase: {}, pr: 118800, po: 7790000, task: 0, audit: 0, exception: 0, hold: 0, value: 0, followUp: 0 },
+    /* Story cases use their PRD IDs (CASE-ST01-001 / PR-AP-1001 …); every
+       other request numbers from CASE-AP-1100 / PR-AP-1100. */
+    seq: { case: 1099, storyCase: {}, pr: 1099, po: 7000, task: 0, audit: 0, exception: 0, hold: 0, value: 0, followUp: 0, doc: 0 },
+    runs: {},
+    docs: {},
+    governance: { paused: [], ruleChanges: {}, opportunities: {} },
     followUps: {},
     policies: { active: DEMO_POLICY.version, versions: structuredClone(POLICIES) },
     cases: {},
@@ -128,7 +131,7 @@ function resolveLines(draftLines: DraftLine[], site: RequestDraft["site"], agree
         entered = { quantity: l.quantity, uom: l.uom };
       } else return `UoM ${l.uom} does not convert to ${m.uom}`;
     }
-    const price = agreement?.lines.find((al) => al.material === m.code && al.sites.includes(site))?.unitPrice ?? 0;
+    const price = agreement?.lines.find((al) => al.material === m.code && al.sites.includes(site))?.unitPrice ?? l.unitPrice ?? 0;
     out.push({ lineNo: (i + 1) * 10, material: m.code, description: m.description, quantity, uom: m.uom, entered, unitPrice: price, site, neededBy: l.neededBy });
   }
   return out;
@@ -152,19 +155,23 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
   const lines = resolveLines(d.lines, d.site, d.agreementId, s);
   if (typeof lines === "string") return fail(state, "invalid-draft", lines);
 
-  /* IDs: a story's first instance uses its I/O case and request IDs; any
-     repeat, and every other request, takes the next generated number. */
+  /* IDs: a story's first instance uses its PRD case and request IDs; a
+     repeat takes the story's next number; everything else numbers on. */
   let caseId: string;
   if (d.preferredCaseId && !s.cases[d.preferredCaseId]) caseId = d.preferredCaseId;
-  else {
+  else if (d.storyId) {
+    const n = (s.seq.storyCase[d.storyId] ?? 1) + 1;
+    s.seq.storyCase[d.storyId] = n;
+    caseId = `CASE-${d.storyId}-${pad(n)}`;
+  } else {
     s.seq.case += 1;
-    caseId = `TSM-2026-${s.seq.case}`;
+    caseId = `CASE-AP-${s.seq.case}`;
   }
   let prId: string;
   if (d.preferredPrId && !s.requests[d.preferredPrId]) prId = d.preferredPrId;
   else {
     s.seq.pr += 1;
-    prId = `REQ-${s.seq.pr}`;
+    prId = `PR-AP-${s.seq.pr}`;
   }
 
   /* Same requester, site and item still open → flag, never merge silently. */
@@ -189,7 +196,7 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     model: d.model,
     pattern: d.pattern,
   };
-  const wpId = `WP-${caseId.replace(/^TSM-/, "")}-F1`;
+  const wpId = `WP-${caseId.replace(/^CASE-/, "")}-F1`;
   s.requests[prId] = {
     id: prId,
     caseId,
@@ -221,6 +228,7 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     workPackageIds: [wpId],
     holds: [],
     createdAt: s.clock.now,
+    title: d.title,
     possibleDuplicateOf: duplicateOf,
   };
   if (d.captureId) s.captures[d.captureId] = caseId;
@@ -264,10 +272,18 @@ function revise(state: DomainState, cmd: Extract<Command, { type: "request.revis
   const s = structuredClone(state);
   const sc = s.cases[c.id];
   const prev = currentRevision(s, c.id)!;
-  const lines = resolveLines(cmd.lines, sc.site, prev.agreementId, s);
+  const agreementId = cmd.agreementId === null ? undefined : cmd.agreementId ?? prev.agreementId;
+  const lines = resolveLines(cmd.lines, sc.site, agreementId, s);
   if (typeof lines === "string") return fail(state, "invalid-draft", lines);
 
-  const next: RequestRevision = { ...structuredClone(prev), revision: prev.revision + 1, submittedAt: s.clock.now, lines };
+  const next: RequestRevision = {
+    ...structuredClone(prev),
+    revision: prev.revision + 1,
+    submittedAt: s.clock.now,
+    lines,
+    agreementId,
+    supplierId: cmd.supplierId ?? prev.supplierId,
+  };
   s.requests[sc.requestId].revisions.push(next);
   sc.revision = next.revision;
   /* Material change: earlier approvals and open tasks no longer cover this revision. */
@@ -334,7 +350,7 @@ function approve(state: DomainState, cmd: Extract<Command, { type: "request.appr
       else {
         s.seq.task += 1;
         const task: ApprovalTask = {
-          id: `TSK-26-${pad(s.seq.task, 4)}`,
+          id: `TSK-AP-${pad(s.seq.task, 4)}`,
           openedAt: s.clock.now,
           caseId: sc.id,
           role,
@@ -471,7 +487,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
 
   const rev = currentRevision(s, sc.id)!;
   s.seq.po += 1;
-  const poId = `PO-${s.seq.po}`;
+  const poId = `PO-AP-${s.seq.po}`;
   let attempts = 0;
   let reply: ReturnType<typeof erpDispatchPo> = { ok: false, error: "not attempted" };
   while (attempts < ERP_MAX_ATTEMPTS) {
@@ -484,7 +500,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
   if (!reply.ok) {
     s.seq.po -= 1;
     s.seq.exception += 1;
-    const excId = `EXC-26-${pad(s.seq.exception, 4)}`;
+    const excId = `EXC-AP-${pad(s.seq.exception, 4)}`;
     s.exceptions[excId] = {
       id: excId,
       caseId: sc.id,
@@ -547,7 +563,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
 
 function openFollowUp(s: DomainState, f: Omit<FollowUp, "id" | "openedAt">): FollowUp {
   s.seq.followUp += 1;
-  const fu: FollowUp = { id: `FUP-26-${pad(s.seq.followUp, 4)}`, openedAt: s.clock.now, ...f };
+  const fu: FollowUp = { id: `FUP-AP-${pad(s.seq.followUp, 4)}`, openedAt: s.clock.now, ...f };
   s.followUps[fu.id] = fu;
   return fu;
 }
@@ -587,7 +603,7 @@ function dueTimers(s: DomainState, until: string): TimerEvent[] {
   for (const po of Object.values(s.pos)) {
     if (po.dispatch.state !== "dispatched" || po.acknowledgedAt) continue;
     const ackAt = addHours(po.dispatch.at, SUPPLIER_ACK_AFTER_HOURS);
-    if (!s.failures.supplierSilent && ackAt <= until) {
+    if (!s.failures.supplierSilent && !po.withheldAck && ackAt <= until) {
       out.push({ at: ackAt, run: (x) => void acknowledgePo(x, po.id, { kind: "human", role: "supplier", name: x.suppliers[po.supplierId]?.name ?? po.supplierId }) });
     } else if (po.ackDueAt <= until && !Object.values(s.followUps).some((f) => f.refId === po.id && f.kind === "supplier-chase")) {
       out.push({
@@ -734,5 +750,9 @@ export function handleCommand(state: DomainState, cmd: Command): CommandResult {
       return advance(state, cmd);
     case "failures.set":
       return setFailures(state, cmd);
+    default:
+      return fail(state, "unknown-case", `${cmd.type} is handled by the workflow engine`);
   }
 }
+
+export { audit as appendAudit, openHold, closeHolds, pad };

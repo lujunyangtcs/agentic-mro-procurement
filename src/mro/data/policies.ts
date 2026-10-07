@@ -1,24 +1,22 @@
 /**
- * Demo policy, versioned with the references the use-case I/O samples cite:
- * DoA matrix DOA-2026.2, channel rules CHR-v4.1 and confidence policy
- * CONF-v1.0. Values are illustrative build settings, not a statement of any
- * client's actual delegation.
+ * Demo policy POL-DEMO-1 (PRD §5, §25.3). Illustrative build settings, not a
+ * statement of any client's actual delegation.
  *
- * - Auto-approve limit £5,000 (`auto_approve_limit_gbp` in the UC6 Channel
- *   Decision input).
- * - Lanes: touchless ≥0.90, buy-desk review 0.70–0.89, client decides <0.70;
- *   a tripped guardrail always routes to a person.
+ * - Standing approval below £3,000 for allowed categories on a live agreement.
+ * - Budget Holder up to £30,000; Category Lead up to £100,000; Procurement
+ *   Head below £250,000; £250,000 or more leaves the desk.
+ * - Lanes: touchless ≥0.90, TCS review ≥0.70, otherwise client decision.
  */
 
 import type { Policy } from "@/mro/domain/types";
 import { pence } from "@/mro/domain/money";
 
 export const DEMO_POLICY: Policy = {
-  version: "DOA-2026.2",
-  channelRules: "CHR-v4.1",
-  confidencePolicy: "CONF-v1.0",
+  version: "POL-DEMO-1",
+  channelRules: "CHR-DEMO-1",
+  confidencePolicy: "W-DEMO-1",
   effectiveFrom: "2026-10-01T00:00:00.000Z",
-  autoApproveLimit: pence(5_000),
+  autoApproveLimit: pence(3_000),
   doa: [
     { role: "budget-holder", maxInclusive: pence(30_000) },
     { role: "category-lead", maxInclusive: pence(100_000) },
@@ -26,7 +24,7 @@ export const DEMO_POLICY: Policy = {
   ],
   strategicHandoffFrom: pence(250_000),
   lanes: { touchless: 0.9, tcsReview: 0.7 },
-  allowedStandingCategories: ["ppe-consumables"],
+  allowedStandingCategories: ["ppe-consumables", "mro-consumables", "facilities-consumables", "software-licences"],
 };
 
 export const POLICIES: Record<string, Policy> = { [DEMO_POLICY.version]: DEMO_POLICY };

@@ -59,8 +59,8 @@ export type Actor =
   | { kind: "policy"; policyVersion: string; mandateId: string }
   | { kind: "agent"; agentId: AgentGroupId; policyVersion: string };
 
-export type SiteId = "UK-SOL-01" | "UK-HAL-01" | "UK-WOL-01" | "UK-GAY-01" | "UK-CAB-01";
-export type Uom = "EA" | "PAIR" | "PACK" | "LOT" | "LICENCE_YEAR" | "DAY";
+export type SiteId = "UK-SOL-01" | "UK-HAL-01" | "UK-WOL-01" | "UK-GAY-01";
+export type Uom = "EA" | "PAIR" | "PACK" | "LOT" | "SEAT_YEAR" | "DAY";
 
 /* ── Reference and master data ──────────────────────────────────────────── */
 
@@ -193,7 +193,7 @@ export type Request = {
   id: string;
   caseId: string;
   requester: string;
-  source: { channel: "form" | "email" | "teams" | "work-order"; captureId?: string; originalText: string };
+  source: { channel: "form" | "email" | "teams" | "work-order" | "portal"; captureId?: string; originalText: string };
   revisions: RequestRevision[];
   /** Revision the current approval covers, if any. */
   approvedRevision?: number;
@@ -225,6 +225,9 @@ export type ProcurementCase = {
   workPackageIds: string[];
   holds: Hold[];
   createdAt: IsoTime;
+  /** Short business title shown on queues ("Engineering Viewer seats · Gaydon"). */
+  title?: string;
+  closedAt?: IsoTime;
   /** Earlier open case for the same need, when a second submission repeats it. */
   possibleDuplicateOf?: string;
 };
@@ -295,6 +298,8 @@ export type PurchaseOrder = {
   /** Supplier order confirmation; a chaser opens when it is 48h late. */
   ackDueAt: IsoTime;
   acknowledgedAt?: IsoTime;
+  /** Fixture: this supplier has not confirmed the order (drives the 48h chase). */
+  withheldAck?: boolean;
 };
 
 export type DomainException = {
@@ -308,6 +313,10 @@ export type DomainException = {
   resolvedAt?: IsoTime;
 };
 
+/**
+ * Cash sourcing savings, licence cost avoidance and noncash productivity are
+ * separate categories; they are never added into one "savings" figure.
+ */
 export type ValueCategory = "sourcing-saving" | "cost-avoidance" | "productivity";
 export type ValueState =
   | "expected"
@@ -324,12 +333,92 @@ export type ValueRecord = {
   caseId: string;
   awardKey: string;
   category: ValueCategory;
+  /** One-line basis, e.g. "6 seats × £120 − £20 admin". */
+  basis: string;
   baseline: Pence;
   expected: Pence;
   evidenced?: Pence;
   invoiceEvidenceRefs: string[];
   financeSignedBy?: Actor;
+  signedAt?: IsoTime;
   state: ValueState;
+};
+
+/* ── Workflow runs ──────────────────────────────────────────────────────── */
+
+/** Which step chain a case runs: the catalogue path or one of the five stories. */
+export type FlowKey = "catalogue" | StoryId;
+
+/**
+ * `queued` — an agent step that may run now. `waiting` — a person must decide.
+ * `blocked` — an agent step held by an unmet dependency (e.g. a contract not
+ * yet stored); it re-queues itself when the dependency clears.
+ */
+export type StepStatus = "locked" | "queued" | "waiting" | "blocked" | "done" | "skipped";
+
+export type StepState = {
+  status: StepStatus;
+  startedAt?: IsoTime;
+  finishedAt?: IsoTime;
+  /** Business minutes this step took on the demo clock. */
+  minutes?: number;
+  taskId?: string;
+  blockedReason?: string;
+  decision?: { optionId: string; by: Actor; at: IsoTime; note?: string };
+};
+
+export type CaseRun = {
+  id: string;
+  caseId: string;
+  flow: FlowKey;
+  /** Branch switches set by decisions or the presenter (e.g. newSupplier). */
+  variant: Record<string, boolean>;
+  order: string[];
+  steps: Record<string, StepState>;
+  current?: string;
+  startedAt: IsoTime;
+  closedAt?: IsoTime;
+  /** "completed" or the reason a decision ended the run early. */
+  outcome?: string;
+  /** Seeded upstream evidence (standalone ST04 launch), not live decisions. */
+  seeded?: boolean;
+};
+
+/* ── Business documents ─────────────────────────────────────────────────── */
+
+export type DocKind =
+  | "rfq"
+  | "quote"
+  | "bafo"
+  | "award"
+  | "contract"
+  | "receipt"
+  | "invoice"
+  | "credit"
+  | "reservation"
+  | "assignment"
+  | "equivalence"
+  | "onboarding"
+  | "panel-match"
+  | "protected-terms";
+
+/**
+ * One business record a step produced. Money is pence; `fields` carries the
+ * short facts a renderer shows. Workbenches list these by kind, so a quote,
+ * award or contract is the same record on every page.
+ */
+export type BizDoc = {
+  id: string;
+  kind: DocKind;
+  caseId: string;
+  runId: string;
+  title: string;
+  status: string;
+  at: IsoTime;
+  amount?: Pence;
+  supplierId?: string;
+  refs: string[];
+  fields: Record<string, string | number | boolean>;
 };
 
 /* ── Audit ──────────────────────────────────────────────────────────────── */
@@ -351,7 +440,16 @@ export type AuditEventType =
   | "task.reassigned"
   | "task.escalated"
   | "duplicate.flagged"
-  | "policy.activated";
+  | "policy.activated"
+  | "run.started"
+  | "step.completed"
+  | "step.blocked"
+  | "step.skipped"
+  | "case.closed"
+  | "invoice.matched"
+  | "invoice.held"
+  | "agent.paused"
+  | "rule.decided";
 
 export type AuditEvent = {
   id: string;
@@ -371,9 +469,18 @@ export type AuditEvent = {
 /* ── Root state ─────────────────────────────────────────────────────────── */
 
 export type DomainState = {
-  schemaVersion: 2;
+  schemaVersion: 3;
   clock: { now: IsoTime };
-  seq: { case: number; storyCase: Record<string, number>; pr: number; po: number; task: number; audit: number; exception: number; hold: number; value: number; followUp: number };
+  seq: { case: number; storyCase: Record<string, number>; pr: number; po: number; task: number; audit: number; exception: number; hold: number; value: number; followUp: number; doc: number };
+  /** Workflow runs keyed by run id; a case can carry more than one (ST02 + ST04). */
+  runs: Record<string, CaseRun>;
+  docs: Record<string, BizDoc>;
+  /** Agents paused by the AI Ops steward, and Value Council decisions on rule changes. */
+  governance: {
+    paused: string[];
+    ruleChanges: Record<string, { state: "approved" | "rejected"; by: string; at: IsoTime }>;
+    opportunities: Record<string, { state: "live" | "parked"; by: string; at: IsoTime }>;
+  };
   followUps: Record<string, FollowUp>;
   policies: { active: string; versions: Record<string, Policy> };
   cases: Record<string, ProcurementCase>;

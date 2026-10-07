@@ -8,6 +8,7 @@ import type {
   Actor,
   ConfidenceSignal,
   DomainState,
+  FlowKey,
   IsoTime,
   Policy,
   Request,
@@ -16,7 +17,12 @@ import type {
   Uom,
 } from "@/mro/domain/types";
 
-export type DraftLine = { material: string; quantity: number; uom: Uom; neededBy: IsoTime };
+/**
+ * `unitPrice` is the starting-cost reference (a quote or last-paid price) for
+ * lines with no live agreement, or an awarded price on revision, in pence.
+ * A live agreement price always wins over it.
+ */
+export type DraftLine = { material: string; quantity: number; uom: Uom; neededBy: IsoTime; unitPrice?: number };
 
 export type RequestDraft = {
   fixtureId?: string;
@@ -40,13 +46,22 @@ export type RequestDraft = {
   signals: ConfidenceSignal[];
   model: string;
   budgetRef?: string;
+  /** Short business title for queues. */
+  title?: string;
 };
 
 type Base = { actor: Actor; idempotencyKey: string; attemptId?: string };
 
 export type Command =
   | (Base & { type: "request.submit"; draft: RequestDraft })
-  | (Base & { type: "request.revise"; caseId: string; expectedRevision: number; lines: DraftLine[] })
+  | (Base & { type: "request.revise"; caseId: string; expectedRevision: number; lines: DraftLine[]; supplierId?: string; agreementId?: string | null })
+  | (Base & { type: "flow.start"; caseId: string; flow: FlowKey; runId?: string; variant?: Record<string, boolean> })
+  | (Base & { type: "step.run"; runId: string; stepId: string })
+  | (Base & { type: "step.decide"; runId: string; stepId: string; optionId: string; note?: string })
+  | (Base & { type: "flow.variant"; runId: string; key: string; value: boolean })
+  | (Base & { type: "agent.pause"; agent: string; paused: boolean })
+  | (Base & { type: "rule.decide"; changeId: string; outcome: "approved" | "rejected" })
+  | (Base & { type: "opportunity.decide"; opportunityId: string; outcome: "live" | "parked" })
   | (Base & { type: "request.approve"; caseId: string; expectedRevision: number })
   | (Base & { type: "approval.decide"; taskId: string; expectedRevision: number; outcome: "approved" | "rejected"; reason?: string })
   | (Base & { type: "po.release"; caseId: string; expectedRevision: number })
@@ -64,7 +79,9 @@ export type CommandError =
   | "role-mismatch"
   | "invalid-draft"
   | "connector-failed"
-  | "already-decided";
+  | "already-decided"
+  | "not-current"
+  | "blocked";
 
 export type CommandResult =
   | { ok: true; state: DomainState; eventIds: string[]; duplicate?: boolean; caseId?: string; poId?: string; gate?: GateResult }

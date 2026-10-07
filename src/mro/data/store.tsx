@@ -23,7 +23,7 @@ import {
 } from "@/mro/data/procurement";
 import type { DomainState } from "@/mro/domain/types";
 import type { Command, CommandResult } from "@/mro/domain/commands";
-import { handleCommand } from "@/mro/domain/reducer";
+import { dispatchCommand } from "@/mro/domain/engine";
 import { seedDomain } from "@/mro/data/seedDomain";
 import { DEFAULT_SESSION, loadSnapshot, saveSnapshot, type Session } from "@/mro/services/snapshot";
 
@@ -195,7 +195,7 @@ export function ProcurementStoreProvider({ children }: { children: React.ReactNo
   const domainRef = React.useRef<DomainState>(initial.domain);
 
   const dispatch = React.useCallback((cmd: Command): CommandResult => {
-    const result = handleCommand(domainRef.current, cmd);
+    const result = dispatchCommand(domainRef.current, cmd);
     if (result.state !== domainRef.current) {
       domainRef.current = result.state;
       setDomain(result.state);

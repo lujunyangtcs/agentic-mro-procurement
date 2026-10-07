@@ -57,6 +57,12 @@ function missingMandatory(rev: RequestRevision): string[] {
   return out;
 }
 
+/** A contract the case's PO depends on (TOM guard): required, and whether it is stored. */
+function requiredContract(state: DomainState, caseId: string): { required: boolean; stored: boolean } | undefined {
+  const c = Object.values(state.docs).find((d) => d.kind === "contract" && d.caseId === caseId && d.fields.requiredForPo === true);
+  return c ? { required: true, stored: c.status === "stored" } : undefined;
+}
+
 /** Facts for one gate evaluation on one case, at its current revision. */
 export function gateInputFor(state: DomainState, caseId: string, action: GateAction, actor: Actor): GateInput {
   const c = state.cases[caseId];
@@ -91,6 +97,7 @@ export function gateInputFor(state: DomainState, caseId: string, action: GateAct
       sanctionsOpen: supplier.sanctionsOpen,
       bankVerified: supplier.bankVerified,
     },
+    contract: requiredContract(state, caseId),
     evidenceRefs: [request.id, rev.agreementId, rev.supplierId].filter((x): x is string => !!x),
     confidence: {
       signals: rev.signals,
