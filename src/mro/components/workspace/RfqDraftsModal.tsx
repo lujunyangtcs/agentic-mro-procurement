@@ -39,14 +39,7 @@ function Body({
   english?: string;
   working: boolean;
 }) {
-  const raw = vendor.local?.lang ?? "";
-  const lang: Lang = raw.includes("中文")
-    ? "zh"
-    : /espa/i.test(raw)
-      ? "es"
-      : /fran/i.test(raw)
-        ? "fr"
-        : "de";
+  const lang: Lang = "de";
   const pieces: Piece[] | null = React.useMemo(() => {
     if (english === undefined) return null;
     return retranslate(english.split(/\n+/).filter(Boolean), lang);

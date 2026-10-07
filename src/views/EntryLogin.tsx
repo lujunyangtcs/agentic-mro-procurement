@@ -45,24 +45,24 @@ type HeroColumn = {
 
 const HERO_COLUMNS: HeroColumn[] = [
   {
-    label: "Plants & production",
-    src: "/cover-plant.jpg",
+    label: "Vehicle assembly",
+    src: "/entry-assembly.png",
     base: "#07231f",
     glow: "#0f766e",
     accent: "#2dd4bf",
   },
   {
-    label: "Assembly & finishing",
-    src: "/cover-coating.jpg",
-    focus: "42% 50%",
+    label: "Maintenance stores",
+    src: "/entry-stores.png",
+    focus: "50% 45%",
     base: "#111827",
     glow: "#334155",
     accent: "#94a3b8",
   },
   {
-    label: "Precision & finish",
-    src: "/cover-product.jpg",
-    focus: "50% 56%",
+    label: "Engineering services",
+    src: "/entry-engineering.png",
+    focus: "50% 55%",
     base: "#1b1206",
     glow: "#b45309",
     accent: "#fbbf24",
@@ -100,7 +100,7 @@ const PERSONAS: Persona[] = [
     id: "mro",
     seat: "buyer",
     icon: Wrench,
-    badge: "Agentic Procurement",
+    badge: "Buy desk",
     name: "Buyer",
     capabilities: [
       "Free-text purchase requests structured & validated",
@@ -117,11 +117,11 @@ const PERSONAS: Persona[] = [
     badge: "Supplier self service",
     name: "Supplier",
     capabilities: [
-      "Orders, invoices and payments in your own language",
+      "Orders, invoices and payments for your account",
       "Ask the assistant — it answers from the live records",
       "Anything commercial goes to a named person",
     ],
-    userId: "apexsupply01",
+    userId: "supplier-ap-002",
     accent: { hex: "#f59e0b", halo: "rgba(245,158,11,0.45)" },
   },
 ];
@@ -146,7 +146,7 @@ export function EntryLogin({ onPick }: { onPick: (p: Product, seat: "buyer" | "s
 
         <footer className="relative z-10 px-6 pb-7 text-center sm:px-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            Confidential · Enterprise Use Only
+            Demo environment · illustrative data
           </p>
         </footer>
       </div>
@@ -256,9 +256,9 @@ function TopBar({
           <Sparkles size={16} strokeWidth={2} />
         </span>
         <span className="flex flex-col leading-tight">
-          <span className="text-[15px] font-bold tracking-[-0.01em] text-white">Agentic Procurement</span>
+          <span className="text-[15px] font-bold tracking-[-0.01em] text-white">Automotive Procurement</span>
           <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
-            Multi-agent procurement workforce
+            Demo environment
           </span>
         </span>
       </div>
@@ -293,7 +293,7 @@ function Hero({ onAccess }: { onAccess: () => void }) {
         className="mb-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
         style={{ animation: "entry-rise 700ms ease-out 260ms both" }}
       >
-        Global procurement intelligence
+        Indirect procurement · four UK sites
       </span>
       <h1
         className="font-bold leading-[1.04] tracking-[-0.025em] text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)]"
@@ -302,15 +302,15 @@ function Hero({ onAccess }: { onAccess: () => void }) {
           animation: "entry-rise 800ms cubic-bezier(0.22,1,0.36,1) 380ms both",
         }}
       >
-        Agentic Procurement
+        Automotive Procurement
       </h1>
       <p
         className="mt-6 max-w-xl text-[14px] font-normal leading-[1.55] text-white/80 drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] sm:text-[15px]"
         style={{ animation: "entry-rise 800ms ease-out 520ms both" }}
       >
-        A maintenance procurement workforce, seen from both chairs — the buyer's desk and
-        the supplier's portal. The agents do the work, a person approves every decision,
-        and every action is audited.
+        Maintenance parts, services, software and facilities for Solihull, Halewood,
+        Wolverhampton and Gaydon. Each request is one case: approvals, orders and
+        supplier work stay on its record.
       </p>
       <button
         type="button"

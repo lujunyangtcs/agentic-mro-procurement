@@ -117,12 +117,10 @@ export function Sidebar() {
             <span className="text-ink-inverse text-[15px] leading-none font-bold">✦</span>
           </div>
           <div className="leading-tight">
-            <div className="text-[14px] font-bold text-ink">
-              {isSupplier ? t("sp.chip") : "Agentic Procurement"}
+            <div className="whitespace-nowrap text-[14px] font-bold text-ink">
+              {isSupplier ? t("sp.chip") : t("brand.name")}
             </div>
-            <div className="text-[12px] text-mute">
-              {isSupplier ? "Apex Industrial Supply" : "Orvantec"}
-            </div>
+            <div className="whitespace-nowrap text-[12px] text-mute">{t("brand.demo")}</div>
           </div>
         </div>
       </div>
@@ -181,7 +179,7 @@ export function Sidebar() {
         </div>
         <div className="leading-tight flex-1 min-w-0">
           <div className="text-[13px] text-ink truncate">
-            {isSupplier ? "Apex · accounts receivable" : "Procurement · MRO buyer desk"}
+            {isSupplier ? "Supplier · accounts receivable" : "Procurement · buy desk"}
           </div>
           <button type="button" onClick={signOut} className="text-[12px] text-mute hover:text-ink">
             {t("nav.signOut")}

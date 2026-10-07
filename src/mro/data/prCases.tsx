@@ -661,17 +661,17 @@ const rollerStructuredDoc = (
 
 const rollerFreeText = (
   <MultilingualEmailDoc
-    from="车间工程师 · 三号球磨机"
+    from="Shop-floor engineer · Deburring Line 3"
     fromAddr="engineer@orvantec.com"
     to="Procurement intake"
     sent="2026-06-20 · 11:04"
-    sourceLang="zh"
+    sourceLang="en"
     original={{
-      subject: "三号球磨机 — 研磨介质更换申请",
+      subject: "Replacement grinding media — Deburring Line 3",
       lines: [
-        "三号球磨机需要更换研磨介质。目前这批磨损太快，研磨细度已经明显下降。",
-        "大约需要 6 至 8 袋，与三号球磨机现用的规格相同。",
-        "情况比较紧急，希望尽快处理，避免进一步停机。",
+        "Need replacement grinding media for Deburring Line 3. Media wearing out far too fast and dropping the grind fineness.",
+        "Approx 6–8 bags required. Same as currently installed in Deburring Line 3.",
+        "Urgent to avoid further breakdown.",
       ],
     }}
     translated={{
@@ -2687,7 +2687,7 @@ export const riskPrSteps: RunStep[] = [
   }),
 ];
 
-/* ════════════════════════════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════════��══════════════════
  * Example 4 — Compliance & Commercial Orchestrator (UC4)
  * A validated PR (PR-48690 · winder drive-gearbox rebuild kit · $42,000) is
  * ready for PO conversion. The orchestrator runs the final compliance &

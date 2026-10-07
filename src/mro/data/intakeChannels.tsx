@@ -236,7 +236,7 @@ export const channels: Channel[] = [
     label: "Portal",
     icon: "portal",
     meta: "Suppliers and plants writing in",
-    open: { text: "Grinding media for the mill", lang: "zh", spec: mediaSpec },
+    open: { text: "Grinding media for the mill", lang: "en", spec: mediaSpec },
     history: [
       { text: "Filter bags for the deburring line", note: "Covered from another plant" },
       { text: "Valve seals for a filling line", note: "Released last week" },

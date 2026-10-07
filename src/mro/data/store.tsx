@@ -21,6 +21,11 @@ import {
   lineValue,
   tieoutGap,
 } from "@/mro/data/procurement";
+import type { DomainState } from "@/mro/domain/types";
+import type { Command, CommandResult } from "@/mro/domain/commands";
+import { handleCommand } from "@/mro/domain/reducer";
+import { seedDomain } from "@/mro/data/seedDomain";
+import { DEFAULT_SESSION, loadSnapshot, saveSnapshot, type Session } from "@/mro/services/snapshot";
 
 /** An entry in the audit trail — one line per human decision. */
 export type AuditEntry = {
@@ -135,6 +140,18 @@ type StoreActions = {
   reset: () => void;
 };
 
+/**
+ * The canonical domain (PRD §17). Every business change goes through
+ * `dispatch`, which returns the command's result synchronously — the latest
+ * state lives in a ref so two clicks in one frame see each other.
+ */
+type DomainSlice = {
+  domain: DomainState;
+  session: Session;
+  dispatch: (cmd: Command) => CommandResult;
+  setSession: (patch: Partial<Session>) => void;
+};
+
 const freshState = (): StoreState => ({
   requisitions: seedRequisitions.map((r) => ({ ...r })),
   tieouts: seedTieouts.map((t) => ({ ...t })),
@@ -145,7 +162,16 @@ const freshState = (): StoreState => ({
   handoverLang: {},
 });
 
-const Ctx = React.createContext<(StoreState & StoreActions) | null>(null);
+const Ctx = React.createContext<(StoreState & StoreActions & DomainSlice) | null>(null);
+
+function boot() {
+  const snap = loadSnapshot();
+  return {
+    domain: snap?.domain ?? seedDomain(),
+    session: snap?.session ?? DEFAULT_SESSION,
+    lang: snap?.lang ?? ("en" as Lang),
+  };
+}
 
 /** Sequential case numbering, so ids read like a real queue rather than hashes. */
 let caseCounter = 0;
@@ -162,7 +188,29 @@ const stamp = () => {
 };
 
 export function ProcurementStoreProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = React.useState<StoreState>(freshState);
+  const [initial] = React.useState(boot);
+  const [state, setState] = React.useState<StoreState>(() => ({ ...freshState(), lang: initial.lang }));
+  const [domain, setDomain] = React.useState<DomainState>(initial.domain);
+  const [session, setSessionState] = React.useState<Session>(initial.session);
+  const domainRef = React.useRef<DomainState>(initial.domain);
+
+  const dispatch = React.useCallback((cmd: Command): CommandResult => {
+    const result = handleCommand(domainRef.current, cmd);
+    if (result.state !== domainRef.current) {
+      domainRef.current = result.state;
+      setDomain(result.state);
+    }
+    return result;
+  }, []);
+
+  const setSession = React.useCallback(
+    (patch: Partial<Session>) => setSessionState((s) => ({ ...s, ...patch })),
+    [],
+  );
+
+  React.useEffect(() => {
+    saveSnapshot({ domain, session, lang: state.lang });
+  }, [domain, session, state.lang]);
 
   const resolveException = React.useCallback(
     (prId: string, type: ExceptionType, action?: string, avoided?: number) =>
@@ -370,7 +418,13 @@ export function ProcurementStoreProvider({ children }: { children: React.ReactNo
     [],
   );
 
-  const reset = React.useCallback(() => setState(freshState()), []);
+  const reset = React.useCallback(() => {
+    setState(freshState());
+    const seeded = seedDomain();
+    domainRef.current = seeded;
+    setDomain(seeded);
+    setSessionState(DEFAULT_SESSION);
+  }, []);
 
   return (
     <Ctx.Provider
@@ -386,6 +440,10 @@ export function ProcurementStoreProvider({ children }: { children: React.ReactNo
         respondToCase,
         addNote,
         reset,
+        domain,
+        session,
+        dispatch,
+        setSession,
       }}
     >
       {children}

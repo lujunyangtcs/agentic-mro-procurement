@@ -68,14 +68,7 @@ export function EmailDraftModal({ draft, onClose, onSent }: { draft: EmailDraft;
   /* The English is the thing you edit; the message above re-renders from it. */
   const [english, setEnglish] = React.useState(() => (draft.review?.body ?? draft.body).join("\n\n"));
   const [working, setWorking] = React.useState(false);
-  const sendingIn = draft.review?.sendingIn ?? "";
-  const lang: Lang = sendingIn.includes("中文")
-    ? "zh"
-    : /espa|spanish/i.test(sendingIn)
-      ? "es"
-      : /fran|french/i.test(sendingIn)
-        ? "fr"
-        : "de";
+  const lang: Lang = "de";
   const outgoing = React.useMemo(() => {
     if (!draft.review) return draft.body.map((t) => ({ text: t, known: true }));
     return retranslate(english.split(/\n+/).filter(Boolean), lang);

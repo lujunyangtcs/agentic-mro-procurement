@@ -38,6 +38,7 @@ import { SpringIn } from "@/mro/components/ai/SpringIn";
 import { StructuredPrDoc } from "@/mro/components/docs/pr/PrDocs";
 import { requisitionDoc } from "@/mro/lib/prDoc";
 import { useT, TranslatedBadge, LanguageSwitch } from "@/mro/lib/i18n";
+import { DomainCasesPanel } from "@/mro/components/cases/DomainCasesPanel";
 
 /* ── Pills ──────────────────────────────────────────────────────────────── */
 
@@ -271,6 +272,8 @@ export function Requisitions() {
           </>
         }
       />
+
+      <DomainCasesPanel />
 
       <CountryCards requisitions={requisitions} filter={filter} onChange={setFilter} />
 

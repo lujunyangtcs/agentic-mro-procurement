@@ -113,7 +113,7 @@ export const flowRuns: Record<FlowId, FlowRun> = {
         { value: "0", label: "fields typed by hand" },
       ],
       caption:
-        "No approved supplier existed for vessel relining, so the market was searched and two quotes taken · Ibérica won at $38,400, $6,500 below the alternative and the only one able to mobilise inside the shutdown · their Spanish registration pack was read, translated and checked field by field, the compliance and risk screens ran clear, and the supplier record is prepared for one signature — with the bank account deliberately left blank until a callback verifies it.",
+        "No approved supplier existed for vessel relining, so the market was searched and two quotes taken · Ibérica won at $38,400, $6,500 below the alternative and the only one able to mobilise inside the shutdown · their registration pack was read and checked field by field, the compliance and risk screens ran clear, and the supplier record is prepared for one signature — with the bank account deliberately left blank until a callback verifies it.",
     },
   },
   /* The catalogue buy — the run that opens from "New request". */
