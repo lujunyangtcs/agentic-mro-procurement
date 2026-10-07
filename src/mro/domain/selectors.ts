@@ -93,7 +93,7 @@ export function gateInputFor(state: DomainState, caseId: string, action: GateAct
     },
     evidenceRefs: [request.id, rev.agreementId, rev.supplierId].filter((x): x is string => !!x),
     confidence: {
-      components: rev.confidence,
+      signals: rev.signals,
       pattern: rev.pattern,
       missingMandatory: missingMandatory(rev),
     },

@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104640",
+    "use_case": "UC2 – Premium / single-manufacturer specification: approved equivalents",
+    "agent": "Sourcing Agent",
+    "flow_step": "Flow 2 · 3.0–6.0",
+    "timestamp": "2026-10-12T10:00:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "rfq_id": "RFQ-26-10107",
+  "bids": [
+    {
+      "supplier": "SUP-11980 Sensor Direct",
+      "part": "SensCo S18-8P",
+      "unit": 69,
+      "total": 2760,
+      "lead_days": 3
+    },
+    {
+      "supplier": "SUP-12077 Industrial Distributor B",
+      "part": "Orbis OP18-PNP",
+      "unit": 76,
+      "total": 3040,
+      "lead_days": 2
+    },
+    {
+      "supplier": "SUP-11204 Industrial Distributor A",
+      "part": "BrandX PX-30",
+      "unit": 94,
+      "total": 3760,
+      "lead_days": 2
+    }
+  ],
+  "award": {
+    "supplier": "SUP-11980 Sensor Direct",
+    "part": "SensCo S18-8P",
+    "total_gbp": 2760,
+    "po_target": "Within 3–5 days of intake",
+    "saving_vs_starting_cost_gbp": 1080,
+    "saving_pct": 28.1
+  },
+  "confidence": {
+    "score": 0.96,
+    "signals": {
+      "comparability": {
+        "score": 0.95,
+        "weight": 0.3,
+        "evidence": "All meet essential attributes"
+      },
+      "benchmark": {
+        "score": 0.92,
+        "weight": 0.3,
+        "evidence": "Within equivalents price band"
+      },
+      "bid_count": {
+        "score": 1.0,
+        "weight": 0.2,
+        "evidence": "3 compliant bids"
+      },
+      "supplier_status": {
+        "score": 1.0,
+        "weight": 0.2,
+        "evidence": "All active panel"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "≥3 quotes",
+      "status": "PASS",
+      "detail": "3"
+    },
+    {
+      "rule": "Auto-award ≤£30K inside gate",
+      "status": "PASS",
+      "detail": "£2,760"
+    },
+    {
+      "rule": "Award to active supplier",
+      "status": "PASS",
+      "detail": "SUP-11980 active"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next_agent": "PO Agent (Flow 1 · 6.0)",
+      "then": "Value Agent (Flow 5 · 1.0)"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "value_record": {
+    "value_record_id": "VR-26-55388",
+    "baseline_gbp": 3840,
+    "award_gbp": 2760,
+    "measurement": "Original specified option minus awarded compliant alternative"
+  },
+  "learning_signal": {
+    "equivalent_accepted": "SensCo S18-8P",
+    "to": "Case memory – part family M18 PNP; list changes only via Value Council"
+  },
+  "audit": {
+    "model_version": "sourcing-v2.1"
+  }
+}

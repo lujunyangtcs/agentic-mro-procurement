@@ -6,7 +6,7 @@
 import type { GateResult } from "@/mro/domain/evaluateGate";
 import type {
   Actor,
-  ConfidenceDimension,
+  ConfidenceSignal,
   DomainState,
   IsoTime,
   Request,
@@ -36,7 +36,8 @@ export type RequestDraft = {
   supplierId?: string;
   lines: DraftLine[];
   pattern: string;
-  confidence: Partial<Record<ConfidenceDimension, number>>;
+  signals: ConfidenceSignal[];
+  model: string;
   budgetRef?: string;
 };
 
@@ -48,7 +49,9 @@ export type Command =
   | (Base & { type: "request.approve"; caseId: string; expectedRevision: number })
   | (Base & { type: "approval.decide"; taskId: string; expectedRevision: number; outcome: "approved" | "rejected"; reason?: string })
   | (Base & { type: "po.release"; caseId: string; expectedRevision: number })
-  | (Base & { type: "clock.advance"; minutes: number });
+  | (Base & { type: "po.acknowledge"; poId: string })
+  | (Base & { type: "clock.advance"; minutes: number })
+  | (Base & { type: "failures.set"; erpPo?: number; supplierSilent?: boolean });
 
 export type CommandError =
   | "stale-revision"

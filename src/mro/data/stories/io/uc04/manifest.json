@@ -1,0 +1,20 @@
+{
+  "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+  "case_id": "TSM-2026-104588",
+  "flow_path": "Flow 4 (1.0 → 2.0) → Category Lead decision → (exception) 3.0 → 4.0 → 5.1",
+  "agents": [
+    "01_Supplier_Match_Agent",
+    "02_Onboarding_Agent",
+    "03_Risk_Screening_Agent"
+  ],
+  "outcome": "Agent recommended redirect (£7.5K saving); Category Lead approved exception – onboarding under HiTL with medium-risk conditions",
+  "human_touchpoints": [
+    "Category Lead (Client) – supplier fit / exception",
+    "Risk Analyst (Client) – medium risk",
+    "Finance (Client) – bank call-back"
+  ],
+  "tail_spend_interventions": [
+    "T3",
+    "T1"
+  ]
+}

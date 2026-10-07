@@ -36,24 +36,31 @@ export type Role =
   | "value-council"
   | "supplier";
 
+/** The agents named in the use-case I/O samples, plus the orchestrator. */
 export type AgentGroupId =
   | "orchestrator"
+  | "intake"
   | "spend-intelligence"
-  | "intake-classify"
   | "channel-decision"
-  | "sourcing-bid-scoring"
-  | "contract-clause"
-  | "supplier-risk"
-  | "po-value-assurance"
-  | "ai-ops-monitor";
+  | "sourcing"
+  | "bid-scoring"
+  | "award"
+  | "po"
+  | "supplier-match"
+  | "onboarding"
+  | "risk-screening"
+  | "master-data"
+  | "contract"
+  | "clause-compare"
+  | "value";
 
 export type Actor =
   | { kind: "human"; role: Role; name: string }
   | { kind: "policy"; policyVersion: string; mandateId: string }
   | { kind: "agent"; agentId: AgentGroupId; policyVersion: string };
 
-export type SiteId = "UK-SOL-01" | "UK-HAL-01" | "UK-WOL-01" | "UK-GAY-01";
-export type Uom = "EA" | "PAIR" | "PACK" | "LOT" | "SEAT_YEAR";
+export type SiteId = "UK-SOL-01" | "UK-HAL-01" | "UK-WOL-01" | "UK-GAY-01" | "UK-CAB-01";
+export type Uom = "EA" | "PAIR" | "PACK" | "LOT" | "LICENCE_YEAR" | "DAY";
 
 /* ── Reference and master data ──────────────────────────────────────────── */
 
@@ -87,6 +94,9 @@ export type Material = {
   group: "MRO" | "SERVICES" | "IT" | "FACILITIES";
   glCode: string;
   category: string;
+  /** Free-text aliases the intake parser recognises. Only intake-enabled items are parsed in Flow 1. */
+  aliases?: string[];
+  intake?: boolean;
 };
 
 export type SupplierStatus = "active" | "pending" | "inactive";
@@ -116,18 +126,27 @@ export type Agreement = {
 
 /* ── Policy ─────────────────────────────────────────────────────────────── */
 
-export type ConfidenceDimension =
-  | "completeness"
-  | "classification"
-  | "matchStrength"
-  | "priceBenchmark"
-  | "supplierStatus"
-  | "patternHistory";
+/**
+ * One weighted confidence signal, as each agent reports it (CONF-v1.0). Each
+ * agent carries its own signal set and weights; the score is their weighted
+ * sum. A signal the pattern cannot score is null with a recorded reason —
+ * never silently scored as perfect.
+ */
+export type ConfidenceSignal = {
+  key: string;
+  score: number | null;
+  weight: number;
+  evidence: string;
+  inapplicable?: string;
+};
 
 export type DoaTier = { role: Role; maxInclusive: Pence };
 
 export type Policy = {
+  /** DoA matrix version; also the version stamped on policy actions. */
   version: string;
+  channelRules: string;
+  confidencePolicy: string;
   effectiveFrom: IsoTime;
   autoApproveLimit: Pence;
   /** Spend approval tiers, ascending. Commitments above the last tier leave the desk. */
@@ -135,9 +154,6 @@ export type Policy = {
   /** At or above this value the desk cannot commit (strategic handoff). */
   strategicHandoffFrom: Pence;
   lanes: { touchless: number; tcsReview: number };
-  weights: { version: string; values: Record<ConfidenceDimension, number> };
-  /** Explicit handling for dimensions a pattern cannot score. */
-  patternRules: Record<string, { inapplicable: Partial<Record<ConfidenceDimension, string>> }>;
   allowedStandingCategories: string[];
 };
 
@@ -167,7 +183,9 @@ export type RequestRevision = {
   supplierPreference?: string;
   agreementId?: string;
   supplierId?: string;
-  confidence: Partial<Record<ConfidenceDimension, number>>;
+  signals: ConfidenceSignal[];
+  /** Agent model that scored the request, e.g. intake-v2.3. */
+  model: string;
   pattern: string;
 };
 
@@ -207,6 +225,8 @@ export type ProcurementCase = {
   workPackageIds: string[];
   holds: Hold[];
   createdAt: IsoTime;
+  /** Earlier open case for the same need, when a second submission repeats it. */
+  possibleDuplicateOf?: string;
 };
 
 export type WorkPackageState = "running" | "waiting" | "done" | "blocked";
@@ -234,11 +254,31 @@ export type ApprovalTask = {
   caseRevision: number;
   amount: Pence;
   evidenceRefs: string[];
+  openedAt: IsoTime;
   dueAt: IsoTime;
+  /** Set when a later revision makes this task moot; it then leaves every queue. */
+  supersededAt?: IsoTime;
   outcome?: "approved" | "rejected";
   decidedBy?: Actor;
   decidedAt?: IsoTime;
   reason?: string;
+  /** Generic human-task timers: reassigned at 48h, escalated at 72h. */
+  reassignedAt?: IsoTime;
+  escalatedAt?: IsoTime;
+  escalatedTo?: Role;
+};
+
+export type FollowUpKind = "supplier-chase" | "task-reassigned" | "task-escalated";
+
+export type FollowUp = {
+  id: string;
+  caseId: string;
+  kind: FollowUpKind;
+  owner: Role;
+  refId: string;
+  summary: string;
+  openedAt: IsoTime;
+  closedAt?: IsoTime;
 };
 
 export type PurchaseOrder = {
@@ -252,6 +292,9 @@ export type PurchaseOrder = {
   total: Pence;
   approvedBy: Actor;
   dispatch: { state: "dispatched" | "failed"; erpRef?: string; attempts: number; at: IsoTime };
+  /** Supplier order confirmation; a chaser opens when it is 48h late. */
+  ackDueAt: IsoTime;
+  acknowledgedAt?: IsoTime;
 };
 
 export type DomainException = {
@@ -302,7 +345,12 @@ export type AuditEventType =
   | "po.dispatch-failed"
   | "exception.opened"
   | "clock.advanced"
-  | "value.validated";
+  | "value.validated"
+  | "po.acknowledged"
+  | "followup.opened"
+  | "task.reassigned"
+  | "task.escalated"
+  | "duplicate.flagged";
 
 export type AuditEvent = {
   id: string;
@@ -322,9 +370,10 @@ export type AuditEvent = {
 /* ── Root state ─────────────────────────────────────────────────────────── */
 
 export type DomainState = {
-  schemaVersion: 1;
+  schemaVersion: 2;
   clock: { now: IsoTime };
-  seq: { case: number; storyCase: Record<string, number>; pr: number; po: number; task: number; audit: number; exception: number; hold: number; value: number };
+  seq: { case: number; storyCase: Record<string, number>; pr: number; po: number; task: number; audit: number; exception: number; hold: number; value: number; followUp: number };
+  followUps: Record<string, FollowUp>;
   policies: { active: string; versions: Record<string, Policy> };
   cases: Record<string, ProcurementCase>;
   requests: Record<string, Request>;
@@ -338,6 +387,6 @@ export type DomainState = {
   captures: Record<string, string>;
   audit: AuditEvent[];
   processedKeys: Record<string, string>;
-  /** Presenter failure injection: remaining failing attempts per connector. */
-  failures: { erpPo: number };
+  /** Presenter failure injection: remaining failing ERP attempts; whether suppliers withhold confirmation. */
+  failures: { erpPo: number; supplierSilent: boolean };
 };

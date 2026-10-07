@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104588",
+    "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+    "agent": "Onboarding Agent",
+    "flow_step": "Flow 4 · 3.0",
+    "timestamp": "2026-10-10T09:30:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "invitation": {
+    "sent": "2026-10-08T14:03:00Z",
+    "portal_ref": "ONB-26-3381",
+    "chasers": []
+  },
+  "document_validation": [
+    {
+      "doc": "Certificate of incorporation",
+      "status": "VALID"
+    },
+    {
+      "doc": "VAT registration",
+      "status": "VALID",
+      "check": "VAT registry match"
+    },
+    {
+      "doc": "Bank letter",
+      "status": "RECEIVED",
+      "note": "Verification reserved for Client Finance"
+    },
+    {
+      "doc": "Insurance",
+      "status": "GAP",
+      "detail": "PI cover £1M – below £2M requirement"
+    },
+    {
+      "doc": "Information security questionnaire",
+      "status": "VALID"
+    },
+    {
+      "doc": "Modern Slavery statement",
+      "status": "N/A",
+      "detail": "Turnover below statutory threshold"
+    }
+  ],
+  "confidence": {
+    "score": 0.88,
+    "signals": {
+      "completeness": {
+        "score": 0.83,
+        "weight": 0.6,
+        "evidence": "1 document gap"
+      },
+      "validity": {
+        "score": 0.95,
+        "weight": 0.4,
+        "evidence": "Automated checks passed"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Requester cannot approve own supplier",
+      "status": "PASS",
+      "detail": "Approved by Category Lead"
+    },
+    {
+      "rule": "Bank details verified by a person",
+      "status": "PENDING",
+      "detail": "Routed to Client Finance"
+    }
+  ],
+  "lane_decision": {
+    "lane": "HiTL",
+    "band": "0.70–0.89",
+    "reason": "Confidence below touchless threshold – TCS review",
+    "route_to": {
+      "persona": "Buy Desk Analyst",
+      "org": "TCS",
+      "task": "Return gap list to supplier (loop 1 of 2)",
+      "sla_hours": 120
+    }
+  },
+  "next_agent": "Risk Screening Agent (in parallel)",
+  "audit": {
+    "model_version": "onboarding-v1.2"
+  }
+}

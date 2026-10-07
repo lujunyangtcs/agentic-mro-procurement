@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104387",
+    "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+    "agent": "Channel Decision Agent",
+    "flow_step": "Flow 1 · 4.0–5.0",
+    "timestamp": "2026-10-07T09:12:10Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "structured_request": {
+    "request_id": "REQ-118204",
+    "category": {
+      "code": "43232300",
+      "name": "Software licences – engineering"
+    },
+    "gl": "640210",
+    "quantity": 12,
+    "unit": "licence-year",
+    "starting_cost_gbp": 14400,
+    "value_band": "£3K–£30K",
+    "demand_type": "Recurring"
+  },
+  "reuse_assessment": {
+    "unassigned_available": 18,
+    "inactive_reclaimable": 7,
+    "reuse_recommended_qty": 12,
+    "source": "Unassigned pool (no reclaim needed)",
+    "new_purchase_qty": 0,
+    "spend_avoided_gbp": 14400,
+    "renewal_insight": {
+      "renewal_date": "2026-12-31",
+      "right_size_by": 7,
+      "note": "Inactive licences flagged to Flow 0 pipeline for renewal right-sizing"
+    }
+  },
+  "routing_options": [
+    "Internal fulfilment (reuse)",
+    "Hosted catalogue",
+    "Master vendor",
+    "Spot buy"
+  ],
+  "auto_approve_limit_gbp": 5000,
+  "knowledge_refs": {
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)"
+  }
+}

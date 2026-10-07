@@ -1,0 +1,20 @@
+{
+  "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+  "case_id": "TSM-2026-104387",
+  "flow_path": "Flow 1 (1.0) → Flow 0 (3.0) → Flow 1 (4.0–5.0) → Flow 5 (1.0)",
+  "agents": [
+    "01_Intake_Agent",
+    "02_Spend_Intelligence_Agent",
+    "03_Channel_Decision_Agent"
+  ],
+  "outcome": "TOUCHLESS – 12 licences reassigned, £14,400 avoided, no PO",
+  "human_touchpoints": [
+    "Finance BP (Client) signs off avoided spend in Flow 5",
+    "Category Lead (Client) reviews renewal right-sizing pipeline item"
+  ],
+  "tail_spend_interventions": [
+    "T2",
+    "T3",
+    "T6"
+  ]
+}

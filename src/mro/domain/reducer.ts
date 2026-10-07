@@ -10,9 +10,11 @@ import type { Command, CommandResult, DraftLine, RequestDraft } from "@/mro/doma
 import { evaluateGate, type GateResult } from "@/mro/domain/evaluateGate";
 import type {
   Actor,
+  AgentGroupId,
   ApprovalTask,
   AuditEvent,
   DomainState,
+  FollowUp,
   Hold,
   ProcurementCase,
   RequestLine,
@@ -24,9 +26,16 @@ import { addHours, addMinutes, CLOCK_START } from "@/mro/domain/clock";
 import { activePolicy, currentRevision, gateInputFor, policyForCase, revisionTotal } from "@/mro/domain/selectors";
 import { doaRoleFor } from "@/mro/domain/evaluateGate";
 import { AGREEMENTS, SUPPLIERS, materialByCode } from "@/mro/data/masterData";
-import { POLICIES, POL_DEMO_1 } from "@/mro/data/policies";
+import { POLICIES, DEMO_POLICY } from "@/mro/data/policies";
 import { ERP_MAX_ATTEMPTS, erpDispatchPo } from "@/mro/services/mockConnectors";
 import { gbp } from "@/mro/domain/money";
+
+/** Supplier confirmation arrives 2h after dispatch unless the presenter withholds it. */
+export const SUPPLIER_ACK_AFTER_HOURS = 2;
+export const SUPPLIER_ACK_SLA_HOURS = 48;
+export const TASK_REASSIGN_HOURS = 48;
+export const TASK_ESCALATE_HOURS = 72;
+export const STANDING_MANDATE_ID = "SM-CATALOGUE-01";
 
 export const F1_STEPS = [
   "F1.intake",
@@ -40,10 +49,13 @@ export const F1_STEPS = [
 
 export function initialDomainState(): DomainState {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     clock: { now: CLOCK_START },
-    seq: { case: 0, storyCase: {}, pr: 1099, po: 7000, task: 0, audit: 0, exception: 0, hold: 0, value: 0 },
-    policies: { active: POL_DEMO_1.version, versions: structuredClone(POLICIES) },
+    /* Generated IDs continue the I/O's formats above every story ID:
+       TSM-2026-1047xx cases, REQ-1188xx requests, PO-77900xx orders. */
+    seq: { case: 104700, storyCase: {}, pr: 118800, po: 7790000, task: 0, audit: 0, exception: 0, hold: 0, value: 0, followUp: 0 },
+    followUps: {},
+    policies: { active: DEMO_POLICY.version, versions: structuredClone(POLICIES) },
     cases: {},
     requests: {},
     workPackages: {},
@@ -56,7 +68,7 @@ export function initialDomainState(): DomainState {
     captures: {},
     audit: [],
     processedKeys: {},
-    failures: { erpPo: 0 },
+    failures: { erpPo: 0, supplierSilent: false },
   };
 }
 
@@ -140,26 +152,26 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
   const lines = resolveLines(d.lines, d.site, d.agreementId, s);
   if (typeof lines === "string") return fail(state, "invalid-draft", lines);
 
-  /* IDs: the first instance of a fixture uses its PRD ID; later ones count on. */
+  /* IDs: a story's first instance uses its I/O case and request IDs; any
+     repeat, and every other request, takes the next generated number. */
   let caseId: string;
-  if (d.preferredCaseId && !s.cases[d.preferredCaseId]) {
-    caseId = d.preferredCaseId;
-    const prefix = d.preferredCaseId.replace(/-\d+$/, "");
-    s.seq.storyCase[prefix] = Math.max(s.seq.storyCase[prefix] ?? 0, Number(d.preferredCaseId.match(/(\d+)$/)?.[1] ?? 1));
-  } else if (d.preferredCaseId) {
-    const prefix = d.preferredCaseId.replace(/-\d+$/, "");
-    s.seq.storyCase[prefix] = (s.seq.storyCase[prefix] ?? 1) + 1;
-    caseId = `${prefix}-${pad(s.seq.storyCase[prefix])}`;
-  } else {
+  if (d.preferredCaseId && !s.cases[d.preferredCaseId]) caseId = d.preferredCaseId;
+  else {
     s.seq.case += 1;
-    caseId = `CASE-AP-${pad(s.seq.case)}`;
+    caseId = `TSM-2026-${s.seq.case}`;
   }
   let prId: string;
   if (d.preferredPrId && !s.requests[d.preferredPrId]) prId = d.preferredPrId;
   else {
     s.seq.pr += 1;
-    prId = `PR-AP-${s.seq.pr}`;
+    prId = `REQ-${s.seq.pr}`;
   }
+
+  /* Same requester, site and item still open → flag, never merge silently. */
+  const firstMaterial = lines[0]?.material;
+  const duplicateOf = Object.values(s.cases).find(
+    (c) => c.status !== "closed" && c.requester === d.requester && c.site === d.site && currentRevision(s, c.id)?.lines[0]?.material === firstMaterial,
+  )?.id;
 
   const policy = activePolicy(s);
   const rev: RequestRevision = {
@@ -173,10 +185,11 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     supplierPreference: d.supplierPreference,
     agreementId: d.agreementId,
     supplierId: d.supplierId,
-    confidence: d.confidence,
+    signals: d.signals,
+    model: d.model,
     pattern: d.pattern,
   };
-  const wpId = `WP-${caseId.replace(/^CASE-/, "")}-F1`;
+  const wpId = `WP-${caseId.replace(/^TSM-/, "")}-F1`;
   s.requests[prId] = {
     id: prId,
     caseId,
@@ -190,7 +203,7 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     tomFlow: "F1",
     stepIds: [...F1_STEPS],
     currentStepId: "F1.classify-policy",
-    owner: "intake-classify",
+    owner: "intake",
     state: "running",
     dependsOn: [],
     nextAction: "request.approve",
@@ -208,6 +221,7 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     workPackageIds: [wpId],
     holds: [],
     createdAt: s.clock.now,
+    possibleDuplicateOf: duplicateOf,
   };
   if (d.captureId) s.captures[d.captureId] = caseId;
 
@@ -223,7 +237,22 @@ function submit(state: DomainState, cmd: Extract<Command, { type: "request.submi
     idempotencyKey: cmd.idempotencyKey,
   });
   s.processedKeys[cmd.idempotencyKey] = ev.id;
-  return { ok: true, state: s, eventIds: [ev.id], caseId };
+  const eventIds = [ev.id];
+  if (duplicateOf) {
+    eventIds.push(
+      audit(s, {
+        type: "duplicate.flagged",
+        actor: { kind: "agent", agentId: "intake", policyVersion: policy.version },
+        caseId,
+        caseRevision: 1,
+        ruleVersion: d.model,
+        sources: [prId, duplicateOf],
+        summary: `Possible duplicate of ${duplicateOf}; both cases stay open for review`,
+        substantive: false,
+      }).id,
+    );
+  }
+  return { ok: true, state: s, eventIds, caseId };
 }
 
 function revise(state: DomainState, cmd: Extract<Command, { type: "request.revise" }>): CommandResult {
@@ -241,8 +270,9 @@ function revise(state: DomainState, cmd: Extract<Command, { type: "request.revis
   const next: RequestRevision = { ...structuredClone(prev), revision: prev.revision + 1, submittedAt: s.clock.now, lines };
   s.requests[sc.requestId].revisions.push(next);
   sc.revision = next.revision;
-  /* Material change: earlier approvals no longer cover this revision. */
+  /* Material change: earlier approvals and open tasks no longer cover this revision. */
   for (const h of sc.holds) if (!h.closedAt) h.closedAt = s.clock.now;
+  for (const t of Object.values(s.tasks)) if (t.caseId === sc.id && !t.outcome && !t.supersededAt) t.supersededAt = s.clock.now;
   sc.status = "open";
   const wp = f1(s, sc);
   wp.currentStepId = "F1.classify-policy";
@@ -283,7 +313,7 @@ function approve(state: DomainState, cmd: Extract<Command, { type: "request.appr
     actor: { kind: "agent", agentId: "orchestrator", policyVersion: policy.version },
     caseId: sc.id,
     caseRevision: sc.revision,
-    ruleVersion: `${policy.version} / ${gate.confidence.weightVersion}`,
+    ruleVersion: `${policy.version} / ${policy.channelRules} / ${gate.confidence.policyVersion}`,
     sources: [sc.requestId],
     summary: gate.allowed
       ? `Gate passed · lane ${gate.lane} · confidence ${gate.confidence.score.toFixed(2)}`
@@ -299,12 +329,13 @@ function approve(state: DomainState, cmd: Extract<Command, { type: "request.appr
     let taskId: string | undefined;
     const isSpendAuthority = (gate.failedStage === "authority" || gate.controls.some((x) => x.id === "HC02" && x.result === "fail")) && !!doaRoleFor(policy, amount);
     if (isSpendAuthority) {
-      const open = Object.values(s.tasks).find((t) => t.caseId === sc.id && t.caseRevision === sc.revision && t.role === role && !t.outcome);
+      const open = Object.values(s.tasks).find((t) => t.caseId === sc.id && t.caseRevision === sc.revision && t.role === role && !t.outcome && !t.supersededAt);
       if (open) taskId = open.id;
       else {
         s.seq.task += 1;
         const task: ApprovalTask = {
-          id: `TASK-AP-${pad(s.seq.task, 4)}`,
+          id: `TSK-26-${pad(s.seq.task, 4)}`,
+          openedAt: s.clock.now,
           caseId: sc.id,
           role,
           decision: "Approve spend commitment",
@@ -342,9 +373,9 @@ function approve(state: DomainState, cmd: Extract<Command, { type: "request.appr
     caseId: sc.id,
     caseRevision: sc.revision,
     ruleVersion: ruleVersion(cmd.actor, policy.version),
-    sources: [sc.requestId, ...(gate.authority.standing ? ["SM-CATALOGUE-01"] : [])],
+    sources: [sc.requestId, ...(gate.authority.standing ? [STANDING_MANDATE_ID] : [])],
     summary: gate.authority.standing
-      ? `Approved under standing mandate SM-CATALOGUE-01 · ${gbp(amount)} below ${gbp(policy.autoApproveLimit)}`
+      ? `Approved under standing mandate ${STANDING_MANDATE_ID} · ${gbp(amount)} below ${gbp(policy.autoApproveLimit)}`
       : `Approved · ${gbp(amount)}`,
     substantive: cmd.actor.kind === "human",
     idempotencyKey: cmd.idempotencyKey,
@@ -358,6 +389,7 @@ function decide(state: DomainState, cmd: Extract<Command, { type: "approval.deci
   if (!t) return fail(state, "unknown-task", `No task ${cmd.taskId}`);
   if (state.processedKeys[cmd.idempotencyKey]) return { ok: true, state, eventIds: [], duplicate: true, caseId: t.caseId };
   if (t.outcome) return fail(state, "already-decided", `${t.id} was already ${t.outcome}`);
+  if (t.supersededAt) return fail(state, "stale-revision", `${t.id} was superseded by a later revision`);
   const c = state.cases[t.caseId];
   if (cmd.expectedRevision !== c.revision || t.caseRevision !== c.revision) return fail(state, "stale-revision", `Case is at revision ${c.revision}; task covers ${t.caseRevision}`);
   if (cmd.actor.kind !== "human") return fail(state, "role-mismatch", "Only a person can decide an approval task");
@@ -426,7 +458,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
     wp.state = "waiting";
     audit(s, {
       type: "gate.evaluated",
-      actor: { kind: "agent", agentId: "po-value-assurance", policyVersion: policy.version },
+      actor: { kind: "agent", agentId: "po", policyVersion: policy.version },
       caseId: sc.id,
       caseRevision: sc.revision,
       ruleVersion: policy.version,
@@ -439,7 +471,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
 
   const rev = currentRevision(s, sc.id)!;
   s.seq.po += 1;
-  const poId = `PO-AP-${s.seq.po}`;
+  const poId = `PO-${s.seq.po}`;
   let attempts = 0;
   let reply: ReturnType<typeof erpDispatchPo> = { ok: false, error: "not attempted" };
   while (attempts < ERP_MAX_ATTEMPTS) {
@@ -452,7 +484,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
   if (!reply.ok) {
     s.seq.po -= 1;
     s.seq.exception += 1;
-    const excId = `EXC-AP-${pad(s.seq.exception, 4)}`;
+    const excId = `EXC-26-${pad(s.seq.exception, 4)}`;
     s.exceptions[excId] = {
       id: excId,
       caseId: sc.id,
@@ -489,6 +521,7 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
     total: revisionTotal(rev),
     approvedBy: request.approvedBy!,
     dispatch: { state: "dispatched", erpRef: reply.erpRef, attempts, at: s.clock.now },
+    ackDueAt: addHours(s.clock.now, SUPPLIER_ACK_SLA_HOURS),
   };
   closeHolds(s, sc, "po.release");
   sc.status = "po-dispatched";
@@ -510,11 +543,125 @@ function release(state: DomainState, cmd: Extract<Command, { type: "po.release" 
   return { ok: true, state: s, eventIds: [ev.id], caseId: sc.id, poId, gate };
 }
 
+/* ── Follow-up and timers ───────────────────────────────────────────────── */
+
+function openFollowUp(s: DomainState, f: Omit<FollowUp, "id" | "openedAt">): FollowUp {
+  s.seq.followUp += 1;
+  const fu: FollowUp = { id: `FUP-26-${pad(s.seq.followUp, 4)}`, openedAt: s.clock.now, ...f };
+  s.followUps[fu.id] = fu;
+  return fu;
+}
+
+function acknowledgePo(s: DomainState, poId: string, actor: Actor, idempotencyKey?: string): string | undefined {
+  const po = s.pos[poId];
+  if (!po || po.acknowledgedAt) return undefined;
+  po.acknowledgedAt = s.clock.now;
+  for (const f of Object.values(s.followUps)) if (f.refId === poId && f.kind === "supplier-chase" && !f.closedAt) f.closedAt = s.clock.now;
+  const c = s.cases[po.caseId];
+  const wp = c.workPackageIds.map((id) => s.workPackages[id]).find((w) => w.tomFlow === "F1");
+  if (wp) {
+    wp.state = "done";
+    wp.nextAction = undefined;
+  }
+  return audit(s, {
+    type: "po.acknowledged",
+    actor,
+    caseId: c.id,
+    caseRevision: po.requestRevision,
+    ruleVersion: c.policyVersion,
+    sources: [poId],
+    summary: `${s.suppliers[po.supplierId]?.name ?? po.supplierId} confirmed ${poId}`,
+    substantive: false,
+    idempotencyKey,
+  }).id;
+}
+
+const NEXT_TIER: Partial<Record<Role, Role>> = { "budget-holder": "category-lead", "category-lead": "procurement-head" };
+
+type TimerEvent = { at: string; run: (s: DomainState) => void };
+
+function dueTimers(s: DomainState, until: string): TimerEvent[] {
+  const out: TimerEvent[] = [];
+  const policyActor = (agentId: AgentGroupId): Actor => ({ kind: "agent", agentId, policyVersion: s.policies.active });
+
+  for (const po of Object.values(s.pos)) {
+    if (po.dispatch.state !== "dispatched" || po.acknowledgedAt) continue;
+    const ackAt = addHours(po.dispatch.at, SUPPLIER_ACK_AFTER_HOURS);
+    if (!s.failures.supplierSilent && ackAt <= until) {
+      out.push({ at: ackAt, run: (x) => void acknowledgePo(x, po.id, { kind: "human", role: "supplier", name: x.suppliers[po.supplierId]?.name ?? po.supplierId }) });
+    } else if (po.ackDueAt <= until && !Object.values(s.followUps).some((f) => f.refId === po.id && f.kind === "supplier-chase")) {
+      out.push({
+        at: po.ackDueAt,
+        run: (x) => {
+          const fu = openFollowUp(x, { caseId: po.caseId, kind: "supplier-chase", owner: "buy-desk-analyst", refId: po.id, summary: `No confirmation of ${po.id} after ${SUPPLIER_ACK_SLA_HOURS}h; chase supplier` });
+          audit(x, { type: "followup.opened", actor: policyActor("po"), caseId: po.caseId, ruleVersion: x.policies.active, sources: [po.id, fu.id], summary: fu.summary, substantive: false });
+        },
+      });
+    }
+  }
+
+  for (const t of Object.values(s.tasks)) {
+    if (t.outcome || t.supersededAt) continue;
+    const reassignAt = addHours(t.openedAt, TASK_REASSIGN_HOURS);
+    const escalateAt = addHours(t.openedAt, TASK_ESCALATE_HOURS);
+    if (!t.reassignedAt && reassignAt <= until) {
+      out.push({
+        at: reassignAt,
+        run: (x) => {
+          const xt = x.tasks[t.id];
+          xt.reassignedAt = x.clock.now;
+          const fu = openFollowUp(x, { caseId: t.caseId, kind: "task-reassigned", owner: "buy-desk-lead", refId: t.id, summary: `${t.id} open ${TASK_REASSIGN_HOURS}h; reassign within ${t.role}` });
+          audit(x, { type: "task.reassigned", actor: policyActor("orchestrator"), caseId: t.caseId, caseRevision: t.caseRevision, ruleVersion: x.policies.active, sources: [t.id, fu.id], summary: fu.summary, substantive: false });
+        },
+      });
+    }
+    if (!t.escalatedAt && escalateAt <= until) {
+      out.push({
+        at: escalateAt,
+        run: (x) => {
+          const xt = x.tasks[t.id];
+          const to = NEXT_TIER[t.role] ?? "procurement-head";
+          xt.escalatedAt = x.clock.now;
+          xt.escalatedTo = to;
+          const fu = openFollowUp(x, { caseId: t.caseId, kind: "task-escalated", owner: to, refId: t.id, summary: `${t.id} open ${TASK_ESCALATE_HOURS}h; escalated to ${to}` });
+          audit(x, { type: "task.escalated", actor: policyActor("orchestrator"), caseId: t.caseId, caseRevision: t.caseRevision, ruleVersion: x.policies.active, sources: [t.id, fu.id], summary: fu.summary, substantive: false });
+        },
+      });
+    }
+  }
+  return out.sort((a, b) => a.at.localeCompare(b.at));
+}
+
 function advance(state: DomainState, cmd: Extract<Command, { type: "clock.advance" }>): CommandResult {
   if (state.processedKeys[cmd.idempotencyKey]) return { ok: true, state, eventIds: [], duplicate: true };
   const s = structuredClone(state);
-  s.clock.now = addMinutes(s.clock.now, cmd.minutes);
+  const target = addMinutes(s.clock.now, cmd.minutes);
+  const before = s.audit.length;
+  /* Timers fire in time order, each stamped at its own due time. */
+  for (const ev of dueTimers(s, target)) {
+    s.clock.now = ev.at;
+    ev.run(s);
+  }
+  s.clock.now = target;
   s.processedKeys[cmd.idempotencyKey] = `CLOCK-${s.clock.now}`;
+  return { ok: true, state: s, eventIds: s.audit.slice(before).map((e) => e.id) };
+}
+
+function acknowledge(state: DomainState, cmd: Extract<Command, { type: "po.acknowledge" }>): CommandResult {
+  if (state.processedKeys[cmd.idempotencyKey]) return { ok: true, state, eventIds: [], duplicate: true };
+  const po = state.pos[cmd.poId];
+  if (!po) return fail(state, "unknown-case", `No PO ${cmd.poId}`);
+  if (po.acknowledgedAt) return { ok: true, state, eventIds: [], duplicate: true, caseId: po.caseId, poId: po.id };
+  const s = structuredClone(state);
+  const id = acknowledgePo(s, cmd.poId, cmd.actor, cmd.idempotencyKey)!;
+  s.processedKeys[cmd.idempotencyKey] = id;
+  return { ok: true, state: s, eventIds: [id], caseId: po.caseId, poId: po.id };
+}
+
+function setFailures(state: DomainState, cmd: Extract<Command, { type: "failures.set" }>): CommandResult {
+  const s = structuredClone(state);
+  if (cmd.erpPo !== undefined) s.failures.erpPo = Math.max(0, Math.floor(cmd.erpPo));
+  if (cmd.supplierSilent !== undefined) s.failures.supplierSilent = cmd.supplierSilent;
   return { ok: true, state: s, eventIds: [] };
 }
 
@@ -530,7 +677,11 @@ export function handleCommand(state: DomainState, cmd: Command): CommandResult {
       return decide(state, cmd);
     case "po.release":
       return release(state, cmd);
+    case "po.acknowledge":
+      return acknowledge(state, cmd);
     case "clock.advance":
       return advance(state, cmd);
+    case "failures.set":
+      return setFailures(state, cmd);
   }
 }

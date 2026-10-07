@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104588",
+    "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+    "agent": "Risk Screening Agent",
+    "flow_step": "Flow 4 · 4.0–5.0",
+    "timestamp": "2026-10-10T09:31:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "supplier": {
+    "name": "NovaOps Consulting Ltd",
+    "companies_house": "11873402",
+    "directors": [
+      "A. Rahman",
+      "L. Ford"
+    ],
+    "country": "GB"
+  },
+  "screens_requested": [
+    "Sanctions & PEP",
+    "Financial health",
+    "Adverse media",
+    "Cyber posture",
+    "Companies House filings"
+  ]
+}

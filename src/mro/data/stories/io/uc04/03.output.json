@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104588",
+    "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+    "agent": "Risk Screening Agent",
+    "flow_step": "Flow 4 · 4.0–5.0",
+    "timestamp": "2026-10-10T09:33:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "results": {
+    "sanctions_pep": "CLEAR",
+    "financial_health": {
+      "score": 58,
+      "tier": "MEDIUM"
+    },
+    "adverse_media": "None found",
+    "cyber": {
+      "rating": "B",
+      "note": "No MFA evidence on remote access"
+    },
+    "filings": "Up to date"
+  },
+  "proposed_risk_tier": "MEDIUM",
+  "proposed_conditions": [
+    "Value cap £60K until 2 years accounts reviewed",
+    "MFA evidence before system access"
+  ],
+  "confidence": {
+    "score": 0.9,
+    "signals": {
+      "sanctions": {
+        "score": 1.0,
+        "weight": 0.35,
+        "evidence": "No hits (UK, EU, OFAC)"
+      },
+      "financial": {
+        "score": 0.78,
+        "weight": 0.3,
+        "evidence": "Credit score 58/100 – moderate"
+      },
+      "cyber": {
+        "score": 0.85,
+        "weight": 0.2,
+        "evidence": "External rating B"
+      },
+      "filings": {
+        "score": 0.95,
+        "weight": 0.15,
+        "evidence": "Accounts filed on time"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "No activation with sanctions hit",
+      "status": "PASS",
+      "detail": "Clear"
+    },
+    {
+      "rule": "Medium risk needs human review",
+      "status": "TRIPPED",
+      "detail": "Financial tier MEDIUM"
+    }
+  ],
+  "lane_decision": {
+    "lane": "HiTL",
+    "band": "HARD_CONSTRAINT",
+    "reason": "Guardrail tripped: Medium risk – Risk Analyst decision required",
+    "route_to": {
+      "persona": "Risk Analyst",
+      "org": "Client",
+      "task": "Accept with conditions or reject",
+      "sla_hours": 48,
+      "escalate_if": "High risk or sanctions → Risk Committee"
+    }
+  },
+  "then": "Master Data Agent → Finance (Client) bank call-back → supplier active; PO blocked until active",
+  "audit": {
+    "providers": [
+      "Sanctions list feed",
+      "Credit bureau",
+      "Cyber rating service"
+    ],
+    "model_version": "riskscreen-v2.0"
+  }
+}

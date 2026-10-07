@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104611",
+    "use_case": "UC10 – Non-standard contract language: clause band and fallback",
+    "agent": "Contract Agent",
+    "flow_step": "Flow 3 · 1.0–1.1",
+    "timestamp": "2026-10-08T08:40:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "trigger": {
+    "type": "AWARD",
+    "source": "Flow 2 · 6.0 award confirmed"
+  },
+  "award": {
+    "award_id": "AWD-26-07720",
+    "supplier": "SUP-20411 Midlands Hydraulics",
+    "value_gbp": 21200,
+    "term_months": 12,
+    "category": "MRO services",
+    "data_access": "None",
+    "ip_created": false,
+    "jurisdiction": "England & Wales"
+  },
+  "knowledge_refs": {
+    "template_library": "TPL-SERVICES-v5.2",
+    "clause_library": "CL-2026Q3",
+    "authority_matrix": "AUTH-CLAUSE-v3"
+  }
+}

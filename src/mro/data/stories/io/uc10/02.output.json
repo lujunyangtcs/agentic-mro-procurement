@@ -1,0 +1,125 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104611",
+    "use_case": "UC10 – Non-standard contract language: clause band and fallback",
+    "agent": "Clause Compare Agent",
+    "flow_step": "Flow 3 · 2.0–3.0",
+    "timestamp": "2026-10-10T12:15:05Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "clause_assessment": [
+    {
+      "clause": "12.1 Limitation of liability",
+      "proposal": "100% of fees",
+      "band": "AMBER",
+      "library_match": "Fallback F2 allows ≥100% for low-risk services ≤£50K – delegated approver",
+      "recommended_response": "Accept 100% with carve-outs for data, IP and wilful default retained",
+      "approver": "Delegated Approver – Procurement (Client)"
+    },
+    {
+      "clause": "9.2 Payment terms",
+      "proposal": "30 days",
+      "band": "RED",
+      "library_match": "No fallback below 45 days (payment terms policy)",
+      "recommended_response": "Counter at 45 days with 2% early-payment discount option",
+      "approver": "Client Legal + Finance policy owner",
+      "cost_of_concession": "Working-capital cost of 30 vs 60 days on £21.2K"
+    },
+    {
+      "clause": "14.3 Warranty",
+      "proposal": "6 months",
+      "band": "AMBER",
+      "library_match": "Fallback F1: 9 months minimum",
+      "recommended_response": "Counter at 9 months (fallback F1)",
+      "approver": "Delegated Approver – Business (Client)"
+    },
+    {
+      "clause": "18.1 Termination",
+      "proposal": "60 days",
+      "band": "GREEN",
+      "library_match": "Pre-approved fallback (≤60 days)",
+      "recommended_response": "Accept",
+      "approver": "Agent – pre-approved by Client Legal"
+    }
+  ],
+  "summary": {
+    "green": 1,
+    "amber": 2,
+    "red": 1,
+    "predicted_negotiation_rounds": 1,
+    "commercial_value_protected": "Payment terms held at ≥45 days; warranty at 9 months"
+  },
+  "confidence": {
+    "score": 0.9,
+    "signals": {
+      "clause_mapping": {
+        "score": 0.93,
+        "weight": 0.5,
+        "evidence": "All 4 clauses mapped to library"
+      },
+      "jurisdiction": {
+        "score": 1.0,
+        "weight": 0.2,
+        "evidence": "England & Wales"
+      },
+      "friction_prediction": {
+        "score": 0.78,
+        "weight": 0.3,
+        "evidence": "Supplier accepted counters on 2 of 3 past deviations"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "No acceptance outside library",
+      "status": "PASS",
+      "detail": "Only Green auto-accepted"
+    },
+    {
+      "rule": "Red always Client Legal",
+      "status": "TRIPPED",
+      "detail": "Clause 9.2"
+    }
+  ],
+  "lane_decision": {
+    "lane": "HiTL",
+    "band": "HARD_CONSTRAINT",
+    "reason": "Guardrail tripped: Red clause 9.2 – Client Legal; Amber clauses 12.1, 14.3 – Delegated Approvers",
+    "route_to": {
+      "steps": [
+        {
+          "persona": "Contract Analyst",
+          "org": "TCS",
+          "task": "Assemble recommendation pack",
+          "sla_hours": 24
+        },
+        {
+          "persona": "Delegated Approver – Procurement / Business",
+          "org": "Client",
+          "task": "Decide Amber 12.1, 14.3",
+          "sla_hours": 48
+        },
+        {
+          "persona": "Client Legal",
+          "org": "Client",
+          "task": "Decide Red 9.2",
+          "sla_hours": 72
+        }
+      ]
+    }
+  },
+  "deviation_log": {
+    "entries": 4,
+    "to": "Quarterly clause refresh (Flow 3 · 11.0)",
+    "pattern_note": "Payment-term pushback seen on 6 MRO suppliers this quarter"
+  },
+  "audit": {
+    "evidence_ids": [
+      "CL-2026Q3",
+      "AUTH-CLAUSE-v3"
+    ],
+    "model_version": "clausecompare-v1.3"
+  }
+}

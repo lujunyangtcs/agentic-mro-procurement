@@ -8,7 +8,7 @@
  */
 
 import type {
-  ConfidenceDimension,
+  ConfidenceSignal,
   Lane,
   Pence,
   Policy,
@@ -55,7 +55,7 @@ export type GateInput = {
   ruleChange?: { councilApproved: boolean };
   evidenceRefs: string[];
   confidence: {
-    components: Partial<Record<ConfidenceDimension, number>>;
+    signals: ConfidenceSignal[];
     pattern: string;
     pausedPattern?: boolean;
     missingMandatory?: string[];
@@ -70,11 +70,15 @@ export type ControlResult = { id: ControlId; result: "pass" | "fail" | "na"; rea
 export type StageName = "scope" | "controls" | "authority" | "lane" | "confidence";
 
 export type ConfidenceResult = {
+  /** Weighted sum rounded to two decimals, as agents report it. */
   score: number;
-  weightVersion: string;
-  components: { dimension: ConfidenceDimension; score: number | null; weight: number; note?: string }[];
+  policyVersion: string;
+  components: { key: string; score: number | null; weight: number; evidence: string; note?: string }[];
   blocks: string[];
 };
+
+/** Lane band as the I/O envelope names it; a tripped guardrail overrides the score band. */
+export type LaneBand = "touchless" | "review" | "client" | "hard-constraint";
 
 export type GateResult = {
   allowed: boolean;
@@ -88,61 +92,56 @@ export type GateResult = {
   controls: ControlResult[];
   authority: { result: "pass" | "fail" | "na"; standing: boolean; requiredRole?: Role; reason?: string };
   lane: Lane;
+  band: LaneBand;
   laneSatisfied: boolean;
   confidence: ConfidenceResult;
 };
-
-const DIMENSIONS: ConfidenceDimension[] = [
-  "completeness",
-  "classification",
-  "matchStrength",
-  "priceBenchmark",
-  "supplierStatus",
-  "patternHistory",
-];
 
 const CLIENT_BANK_VERIFIERS: Role[] = ["finance-bp", "finance-controller"];
 
 /* ── Confidence ─────────────────────────────────────────────────────────── */
 
+const round2 = (n: number) => Math.round(n * 100 + 1e-9) / 100;
+
 export function scoreConfidence(policy: Policy, input: GateInput["confidence"]): ConfidenceResult {
-  const rule = policy.patternRules[input.pattern];
   const blocks: string[] = [];
   const rows: ConfidenceResult["components"] = [];
   let weighted = 0;
   let applicableWeight = 0;
 
-  for (const d of DIMENSIONS) {
-    const weight = policy.weights.values[d];
-    const value = input.components[d];
-    const inapplicable = rule?.inapplicable[d];
-    if (value === undefined) {
-      if (inapplicable) {
-        rows.push({ dimension: d, score: null, weight: 0, note: inapplicable });
-      } else {
-        rows.push({ dimension: d, score: null, weight, note: "missing, no pattern rule" });
-        blocks.push(`Missing score for ${d} with no pattern rule`);
-        applicableWeight += weight;
+  const declared = input.signals.reduce((t, s) => t + s.weight, 0);
+  if (input.signals.length === 0) blocks.push("No confidence signals reported");
+  else if (Math.abs(declared - 1) > 0.001) blocks.push(`Signal weights sum to ${declared.toFixed(2)}, not 1.00`);
+
+  for (const s of input.signals) {
+    if (s.score === null) {
+      if (s.inapplicable) rows.push({ key: s.key, score: null, weight: 0, evidence: s.evidence, note: s.inapplicable });
+      else {
+        rows.push({ key: s.key, score: null, weight: s.weight, evidence: s.evidence, note: "missing, no pattern rule" });
+        blocks.push(`Missing score for ${s.key} with no pattern rule`);
+        applicableWeight += s.weight;
       }
       continue;
     }
-    const bounded = Math.max(0, Math.min(1, value));
-    rows.push({ dimension: d, score: bounded, weight });
-    weighted += bounded * weight;
-    applicableWeight += weight;
+    const bounded = Math.max(0, Math.min(1, s.score));
+    rows.push({ key: s.key, score: bounded, weight: s.weight, evidence: s.evidence });
+    weighted += bounded * s.weight;
+    applicableWeight += s.weight;
   }
 
-  /* An inapplicable dimension's weight is redistributed over the rest, by the
-     pattern's explicit rule — never filled with a perfect score. */
-  const score = applicableWeight > 0 ? Math.round((weighted / applicableWeight) * 1000) / 1000 : 0;
-  for (const r of rows) if (r.score !== null && applicableWeight > 0) r.weight = Math.round((r.weight / applicableWeight) * 1000) / 1000;
+  /* An inapplicable signal's weight is redistributed over the rest by its
+     recorded reason — never filled with a perfect score. */
+  const score = applicableWeight > 0 ? round2(weighted / applicableWeight) : 0;
+  if (applicableWeight > 0 && applicableWeight < 0.999) {
+    for (const r of rows) if (r.score !== null) r.weight = Math.round((r.weight / applicableWeight) * 1000) / 1000;
+  }
 
   if (input.missingMandatory?.length) blocks.push(`Missing mandatory: ${input.missingMandatory.join(", ")}`);
   if (input.expiredEvidence?.length) blocks.push(`Expired evidence: ${input.expiredEvidence.join(", ")}`);
   if (input.ambiguousIdentity) blocks.push("Ambiguous identity");
   if (input.pausedPattern) blocks.push(`Pattern ${input.pattern} is paused`);
 
-  return { score, weightVersion: policy.weights.version, components: rows, blocks };
+  return { score, policyVersion: policy.confidencePolicy, components: rows, blocks };
 }
 
 export function laneFor(policy: Policy, score: number): Lane {
@@ -291,7 +290,15 @@ function laneSatisfied(lane: Lane, input: GateInput): boolean {
 
 /* ── Entry point ────────────────────────────────────────────────────────── */
 
+const BAND_FOR_LANE: Record<Lane, LaneBand> = { touchless: "touchless", "tcs-review": "review", "client-decision": "client" };
+
 export function evaluateGate(input: GateInput): GateResult {
+  const r = evaluate(input);
+  const band: LaneBand = r.failedStage === "scope" || r.failedStage === "controls" ? "hard-constraint" : BAND_FOR_LANE[r.lane];
+  return { ...r, band };
+}
+
+function evaluate(input: GateInput): Omit<GateResult, "band"> {
   const { policy } = input;
   const confidence = scoreConfidence(policy, input.confidence);
   const lane = confidence.blocks.length > 0 ? "client-decision" : laneFor(policy, confidence.score);

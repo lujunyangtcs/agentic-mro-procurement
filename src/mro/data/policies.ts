@@ -1,15 +1,24 @@
 /**
- * POL-DEMO-1 — illustrative demo settings (PRD §4, §5). These are build
- * parameters, not a statement of any client's actual delegation.
+ * Demo policy, versioned with the references the use-case I/O samples cite:
+ * DoA matrix DOA-2026.2, channel rules CHR-v4.1 and confidence policy
+ * CONF-v1.0. Values are illustrative build settings, not a statement of any
+ * client's actual delegation.
+ *
+ * - Auto-approve limit £5,000 (`auto_approve_limit_gbp` in the UC6 Channel
+ *   Decision input).
+ * - Lanes: touchless ≥0.90, buy-desk review 0.70–0.89, client decides <0.70;
+ *   a tripped guardrail always routes to a person.
  */
 
 import type { Policy } from "@/mro/domain/types";
 import { pence } from "@/mro/domain/money";
 
-export const POL_DEMO_1: Policy = {
-  version: "POL-DEMO-1",
+export const DEMO_POLICY: Policy = {
+  version: "DOA-2026.2",
+  channelRules: "CHR-v4.1",
+  confidencePolicy: "CONF-v1.0",
   effectiveFrom: "2026-10-01T00:00:00.000Z",
-  autoApproveLimit: pence(3_000),
+  autoApproveLimit: pence(5_000),
   doa: [
     { role: "budget-holder", maxInclusive: pence(30_000) },
     { role: "category-lead", maxInclusive: pence(100_000) },
@@ -17,24 +26,7 @@ export const POL_DEMO_1: Policy = {
   ],
   strategicHandoffFrom: pence(250_000),
   lanes: { touchless: 0.9, tcsReview: 0.7 },
-  weights: {
-    version: "W-DEMO-1",
-    values: {
-      completeness: 0.2,
-      classification: 0.15,
-      matchStrength: 0.25,
-      priceBenchmark: 0.15,
-      supplierStatus: 0.15,
-      patternHistory: 0.1,
-    },
-  },
-  patternRules: {
-    "catalogue-call-off": { inapplicable: {} },
-    /* A first-time service scope has no history to learn from; its weight is
-       spread over the other five dimensions rather than scored as perfect. */
-    "new-service-scope": { inapplicable: { patternHistory: "No prior instances of this scope" } },
-  },
-  allowedStandingCategories: ["ppe-consumables", "bearings"],
+  allowedStandingCategories: ["ppe-consumables"],
 };
 
-export const POLICIES: Record<string, Policy> = { [POL_DEMO_1.version]: POL_DEMO_1 };
+export const POLICIES: Record<string, Policy> = { [DEMO_POLICY.version]: DEMO_POLICY };

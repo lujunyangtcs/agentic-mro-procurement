@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104611",
+    "use_case": "UC10 – Non-standard contract language: clause band and fallback",
+    "agent": "Contract Agent",
+    "flow_step": "Flow 3 · 1.0–1.1",
+    "timestamp": "2026-10-08T08:40:02Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "triage": {
+    "in_desk_scope": true,
+    "risk_tier": "LOW",
+    "template": "TPL-SERVICES-v5.2 / Maintenance",
+    "clause_pack": "CP-MRO-STD"
+  },
+  "draft": {
+    "doc_id": "CTR-26-31877-D1",
+    "issued_to_supplier": "2026-10-08T08:45:00Z",
+    "redline_window_days": 5
+  },
+  "confidence": {
+    "score": 0.98,
+    "signals": {
+      "scope_fit": {
+        "score": 1.0,
+        "weight": 0.4,
+        "evidence": "<£250K, low risk tier"
+      },
+      "template_match": {
+        "score": 0.96,
+        "weight": 0.6,
+        "evidence": "Services – maintenance template"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Desk contracting <£250K",
+      "status": "PASS",
+      "detail": "£21,200"
+    },
+    {
+      "rule": "Approved template only",
+      "status": "PASS",
+      "detail": "v5.2 current"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next": "Supplier redlines → Clause Compare Agent"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "audit": {
+    "model_version": "contract-v1.9"
+  }
+}

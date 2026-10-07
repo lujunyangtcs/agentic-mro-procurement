@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104588",
+    "use_case": "UC4 – New consulting supplier request: redirect to preferred supplier",
+    "agent": "Onboarding Agent",
+    "flow_step": "Flow 4 · 3.0 (exception path)",
+    "timestamp": "2026-10-08T14:02:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "human_decision": {
+    "by": "Category Lead – Manufacturing Services",
+    "org": "Client",
+    "decision": "Approve onboarding exception",
+    "reason": "Requester needs NovaOps proprietary paint-line simulation tool; Kestrel cannot provide",
+    "timestamp": "2026-10-08T13:55:00Z"
+  },
+  "supplier": {
+    "name": "NovaOps Consulting Ltd",
+    "companies_house": "11873402",
+    "contact": "onboarding@novaops.example"
+  },
+  "required_documents": [
+    "Certificate of incorporation",
+    "VAT registration",
+    "Bank letter",
+    "Insurance (PI £2M, PL £5M)",
+    "Information security questionnaire",
+    "Modern Slavery statement"
+  ]
+}

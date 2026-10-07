@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "input",
+    "case_id": "TSM-2026-104640",
+    "use_case": "UC2 – Premium / single-manufacturer specification: approved equivalents",
+    "agent": "Sourcing Agent",
+    "flow_step": "Flow 2 · 3.0–6.0",
+    "timestamp": "2026-10-09T15:15:00Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "structured_request": {
+    "category": "MRO – sensors",
+    "gl": "640455",
+    "value_band": "£3K–£30K",
+    "starting_cost_gbp": 3840
+  },
+  "spec_challenge": {
+    "essential_attributes": [
+      "Sensing range 8mm",
+      "IP67",
+      "M18 thread",
+      "PNP output",
+      "24V DC"
+    ],
+    "non_essential": [
+      "Brand"
+    ],
+    "approved_equivalents": [
+      {
+        "part": "SensCo S18-8P",
+        "ref": "EQV-SENSORS-v7#114",
+        "indicative_price": 71
+      },
+      {
+        "part": "Orbis OP18-PNP",
+        "ref": "EQV-SENSORS-v7#115",
+        "indicative_price": 78
+      }
+    ],
+    "recommendation": "Widen RFQ to brand + 2 approved equivalents"
+  },
+  "requester_objection": null,
+  "panel": [
+    "SUP-11204 Industrial Distributor A",
+    "SUP-11980 Sensor Direct",
+    "SUP-12077 Industrial Distributor B"
+  ],
+  "knowledge_refs": {
+    "doa_matrix": "DOA-2026.2",
+    "channel_rules": "CHR-v4.1 (<£3K / £3–30K / £30–100K / £100–250K)",
+    "confidence_policy": "CONF-v1.0 (touchless ≥0.90; TCS review 0.70–0.89; Client decides <0.70)"
+  }
+}

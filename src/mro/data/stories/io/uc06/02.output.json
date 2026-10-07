@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104387",
+    "use_case": "UC6 – SaaS / desktop licence request: reuse before buy",
+    "agent": "Spend Intelligence Agent",
+    "flow_step": "Flow 0 · 3.0",
+    "timestamp": "2026-10-07T09:12:09Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "reuse_assessment": {
+    "unassigned_available": 18,
+    "inactive_reclaimable": 7,
+    "reuse_recommended_qty": 12,
+    "source": "Unassigned pool (no reclaim needed)",
+    "new_purchase_qty": 0,
+    "spend_avoided_gbp": 14400,
+    "renewal_insight": {
+      "renewal_date": "2026-12-31",
+      "right_size_by": 7,
+      "note": "Inactive licences flagged to Flow 0 pipeline for renewal right-sizing"
+    }
+  },
+  "confidence": {
+    "score": 0.96,
+    "signals": {
+      "data_freshness": {
+        "score": 0.97,
+        "weight": 0.3,
+        "evidence": "SAM snapshot <24h old"
+      },
+      "tier_match": {
+        "score": 1.0,
+        "weight": 0.3,
+        "evidence": "Same product and tier"
+      },
+      "utilisation_evidence": {
+        "score": 0.9,
+        "weight": 0.25,
+        "evidence": "7 licences unused >90 days"
+      },
+      "ea_terms": {
+        "score": 0.95,
+        "weight": 0.15,
+        "evidence": "Reassignment allowed under EA clause 6.2"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "Enterprise agreement terms",
+      "status": "PASS",
+      "detail": "EA clause 6.2 allows internal reassignment"
+    },
+    {
+      "rule": "No access-level change",
+      "status": "PASS",
+      "detail": "Same tier; no admin rights"
+    }
+  ],
+  "lane_decision": {
+    "lane": "TOUCHLESS",
+    "band": "≥0.90",
+    "reason": "Confidence ≥0.90 and all guardrails passed",
+    "route_to": {
+      "next_agent": "Channel Decision Agent"
+    },
+    "post_audit": "Eligible for 5% random sample (TCS AI Ops)"
+  },
+  "pipeline_signal": {
+    "pipeline_item": "PIPE-SW-0912",
+    "lever": "Licence right-sizing at renewal",
+    "est_value_gbp": 8400,
+    "to": "Category Lead (Client) – Flow 0 · 4.0"
+  },
+  "audit": {
+    "evidence_ids": [
+      "SAM-2026-10-06",
+      "EA-SW-2024-017"
+    ],
+    "model_version": "spend-intel-v1.8"
+  }
+}

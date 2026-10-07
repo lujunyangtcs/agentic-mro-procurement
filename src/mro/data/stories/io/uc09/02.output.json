@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "message_type": "output",
+    "case_id": "TSM-2026-104512",
+    "use_case": "UC9 – Supplier quote: price reasonableness and negotiation position",
+    "agent": "Bid Scoring Agent",
+    "flow_step": "Flow 2 · 4.0–5.0",
+    "timestamp": "2026-10-10T17:05:04Z",
+    "data_classification": "Illustrative / synthetic – Client internal"
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "supplier": "SUP-20411 Midlands Hydraulics",
+      "total": 21980,
+      "score": 0.86
+    },
+    {
+      "rank": 2,
+      "supplier": "SUP-20977 PressCare UK",
+      "total": 21130,
+      "score": 0.81
+    },
+    {
+      "rank": 3,
+      "supplier": "SUP-31002 Fluid Power Services",
+      "total": 23400,
+      "score": 0.74
+    }
+  ],
+  "anomalies": [
+    {
+      "supplier": "SUP-20977",
+      "line": 3,
+      "issue": "Engineer day £740 vs rate card £640 (+15.6%)"
+    },
+    {
+      "supplier": "SUP-20977",
+      "line": 4,
+      "issue": "Travel £1,150 – not charged on prior 2 POs"
+    },
+    {
+      "supplier": "SUP-20977",
+      "line": 1,
+      "issue": "£5,200 vs £4,750 last year (+9.5%) vs index +3.1%"
+    }
+  ],
+  "negotiation_position": {
+    "preferred_supplier": "SUP-20411",
+    "target_gbp": 20600,
+    "fallback_gbp": 21500,
+    "walk_away_gbp": 21980,
+    "levers": [
+      "Index-linked service price (+3.1%)",
+      "Engineer days at rate card",
+      "Travel included within 50 miles"
+    ],
+    "expected_saving_vs_starting_cost_pct": 15.9
+  },
+  "confidence": {
+    "score": 0.89,
+    "signals": {
+      "comparability": {
+        "score": 0.9,
+        "weight": 0.3,
+        "evidence": "3 like-for-like bids"
+      },
+      "benchmark_depth": {
+        "score": 0.82,
+        "weight": 0.3,
+        "evidence": "2 historic POs; rate card current"
+      },
+      "anomaly_confidence": {
+        "score": 0.88,
+        "weight": 0.25,
+        "evidence": "Labour +15.6% vs rate card; travel line not in history"
+      },
+      "supplier_status": {
+        "score": 1.0,
+        "weight": 0.15,
+        "evidence": "All active, low risk"
+      }
+    }
+  },
+  "guardrail_checks": [
+    {
+      "rule": "≥3 compliant quotes",
+      "status": "PASS",
+      "detail": "3 received"
+    },
+    {
+      "rule": "Award ≤£30K inside gate",
+      "status": "PASS",
+      "detail": "£21,980"
+    },
+    {
+      "rule": "Benchmark band",
+      "status": "WARN",
+      "detail": "Benchmark depth below threshold – thin history"
+    }
+  ],
+  "lane_decision": {
+    "lane": "HiTL",
+    "band": "0.70–0.89",
+    "reason": "Confidence below touchless threshold – TCS review",
+    "route_to": {
+      "persona": "Buy Desk Analyst",
+      "org": "TCS",
+      "task": "Validate comparability and lead negotiation with SUP-20411",
+      "sla_hours": 48,
+      "then": "Award Agent if final ≤ £21,980; Category Lead (Client) if any guardrail changes"
+    }
+  },
+  "escalation_rules": [
+    {
+      "if": "No agreement within 48h",
+      "to": "Buy Desk Lead (TCS)"
+    },
+    {
+      "if": "Final price > walk-away",
+      "to": "Category Lead (Client)"
+    }
+  ],
+  "value_record": {
+    "baseline_gbp": 24500,
+    "measurement": "Initial valid quote minus final negotiated award, adjusted for scope"
+  },
+  "audit": {
+    "evidence_ids": [
+      "PO-7702118",
+      "PO-7655010",
+      "RC-MRO-2026"
+    ],
+    "model_version": "bidscore-v1.6"
+  }
+}

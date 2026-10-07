@@ -7,8 +7,8 @@
 import type { DomainState, Role } from "@/mro/domain/types";
 import type { Lang } from "@/mro/data/procurement";
 
-export const SNAPSHOT_KEY = "ap-demo:snapshot:v1";
-const SNAPSHOT_VERSION = 1;
+export const SNAPSHOT_KEY = "ap-demo:snapshot:v2";
+const SNAPSHOT_VERSION = 2;
 
 export type Session = {
   reviewAs: Role;
@@ -23,7 +23,7 @@ export type Snapshot = {
   lang: Lang;
 };
 
-export const DEFAULT_SESSION: Session = { reviewAs: "buy-desk-analyst", supplierSeat: "SUP-AP-002" };
+export const DEFAULT_SESSION: Session = { reviewAs: "buy-desk-analyst", supplierSeat: "SUP-10418" };
 
 function storage(): Storage | undefined {
   try {
@@ -38,7 +38,7 @@ export function loadSnapshot(): Snapshot | undefined {
   if (!raw) return undefined;
   try {
     const parsed = JSON.parse(raw) as Partial<Snapshot>;
-    if (parsed.version !== SNAPSHOT_VERSION || parsed.domain?.schemaVersion !== 1) return undefined;
+    if (parsed.version !== SNAPSHOT_VERSION || parsed.domain?.schemaVersion !== 2) return undefined;
     if (parsed.lang !== "en" && parsed.lang !== "de") parsed.lang = "en";
     return parsed as Snapshot;
   } catch {
