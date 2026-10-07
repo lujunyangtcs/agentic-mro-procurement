@@ -115,17 +115,15 @@ export function Sidebar() {
       {/* Brand */}
       <div className="border-b border-divider px-5 pb-4 pt-6">
         <div className="flex items-center gap-3">
-          <span className="text-[26px] font-extralight leading-none tracking-[-0.04em] text-ink">JLR</span>
-          <span aria-hidden className="h-6 w-px bg-ink/25" />
           <div className="min-w-0 leading-tight">
-            <div className="jlr-eyebrow text-[10.5px] leading-[14px] text-ink">
+            <div className="aap-eyebrow text-[11.5px] leading-[16px] text-ink text-balance">
               {isSupplier ? t("sp.chip") : t("brand.name")}
             </div>
             <button
               type="button"
               onClick={() => setPresenter(true)}
               aria-haspopup="dialog"
-              className="jlr-link mt-0.5 inline-flex items-center gap-1 whitespace-nowrap text-[12px] text-mute hover:text-ink"
+              className="aap-link mt-0.5 inline-flex items-center gap-1 whitespace-nowrap text-[12px] text-mute hover:text-ink"
             >
               <SlidersHorizontal size={11} aria-hidden />
               {t("brand.demo")}
@@ -139,7 +137,7 @@ export function Sidebar() {
       <nav className="flex-1 overflow-y-auto pt-4">
         {sectionsForPersona.map((section) => (
           <div key={section.title} className="pb-4">
-            <div className="jlr-eyebrow px-5 pb-1.5 text-[11px] text-steel">
+            <div className="aap-eyebrow px-5 pb-1.5 text-[11px] text-steel">
               {section.title}
             </div>
             <ul>
@@ -154,7 +152,7 @@ export function Sidebar() {
                       onClick={() => item.view && go(item.view)}
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
-                        "jlr-nav-item w-full flex items-center gap-3 px-5 py-2 text-[13.5px] text-left transition-colors duration-150 ease-out",
+                        "aap-nav-item w-full flex items-center gap-3 px-5 py-2 text-[13.5px] text-left transition-colors duration-150 ease-out",
                         isActive && "bg-surface-fog text-ink font-medium",
                         !isActive && !item.comingSoon && "text-mute hover:text-ink hover:bg-surface-fog/60",
                         item.comingSoon && "text-mute cursor-not-allowed",
@@ -191,7 +189,7 @@ export function Sidebar() {
           <div className="text-[13px] text-ink truncate">
             {t(isSupplier ? "brand.desk.supplier" : "brand.desk.buyer")}
           </div>
-          <button type="button" onClick={signOut} className="jlr-link jlr-eyebrow mt-1 text-[11px] text-mute hover:text-ink">
+          <button type="button" onClick={signOut} className="aap-link aap-eyebrow mt-1 text-[11px] text-mute hover:text-ink">
             {t("nav.signOut")}
           </button>
         </div>

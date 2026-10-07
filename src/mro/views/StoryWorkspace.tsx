@@ -53,13 +53,13 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
         <button
           type="button"
           onClick={() => go({ kind: "agent", id: "intake" })}
-          className="ui-pill group jlr-cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap border border-ink/25 bg-white px-3.5 py-2 text-[12px] text-ink"
+          className="ui-pill group aap-cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap border border-ink/25 bg-white px-3.5 py-2 text-[12px] text-ink"
         >
           <ArrowLeft size={15} aria-hidden className="transition-transform duration-150 ease-out group-hover:-translate-x-1" />
           {c.back}
         </button>
         <div className="min-w-0 flex-1 border-l border-divider pl-4">
-          <p className="jlr-eyebrow truncate text-[11px] text-steel">
+          <p className="aap-eyebrow truncate text-[11px] text-steel">
             {run.story.ucLabel} · {run.story.caseId}
           </p>
           <p className="truncate text-[15px] leading-[21px] text-ink">{run.story.title[lang]}</p>
@@ -115,13 +115,13 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           </div>
 
           <aside className="flex flex-col gap-3">
-            <section className="jlr-fade-up border border-divider bg-white p-5" style={{ animationDelay: "120ms" }}>
+            <section className="aap-fade-up border border-divider bg-white p-5" style={{ animationDelay: "120ms" }}>
               <SectionHead title={c.theRequest} />
               <div className="mt-4">
                 <RequestSummary request={run.request} compact />
               </div>
             </section>
-            <section className="jlr-fade-up flex flex-col gap-3 border border-divider bg-white p-5" style={{ animationDelay: "220ms" }}>
+            <section className="aap-fade-up flex flex-col gap-3 border border-divider bg-white p-5" style={{ animationDelay: "220ms" }}>
               <SectionHead title={c.humanTouchpoints} />
               <ul className="flex flex-col gap-2">
                 {run.manifest.human_touchpoints.map((h) => (
@@ -132,7 +132,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
                 ))}
               </ul>
               <p className="border-t border-divider pt-3 text-[12px] leading-[17px] text-mute">
-                <span className="jlr-eyebrow mb-1 block text-[10.5px] text-steel">{c.flowPath}</span>
+                <span className="aap-eyebrow mb-1 block text-[10.5px] text-steel">{c.flowPath}</span>
                 {run.manifest.flow_path}
               </p>
             </section>
@@ -143,13 +143,13 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
   );
 }
 
-/** Block header in the jlr.com idiom: tracked capitals over a short ink rule. */
+/** Block header in the the reference site idiom: tracked capitals over a short ink rule. */
 function SectionHead({ title, aside }: { title: string; aside?: string }) {
   return (
     <div className="flex items-end gap-3">
       <div className="flex flex-col gap-2">
-        <h2 className="jlr-title text-[13px] leading-[18px] text-ink">{title}</h2>
-        <span aria-hidden className="jlr-rule block h-px w-8 bg-ink" />
+        <h2 className="aap-title text-[13px] leading-[18px] text-ink">{title}</h2>
+        <span aria-hidden className="aap-rule block h-px w-8 bg-ink" />
       </div>
       {aside && <span className="pb-0.5 text-[12.5px] text-mute">{aside}</span>}
     </div>
@@ -157,7 +157,7 @@ function SectionHead({ title, aside }: { title: string; aside?: string }) {
 }
 
 /**
- * The story's photograph with a frosted panel over it — the jlr.com strategy
+ * The story's photograph with a frosted panel over it — the the reference site strategy
  * card. The rule along the panel's foot fills as agents complete.
  */
 function StoryHero({
@@ -179,24 +179,24 @@ function StoryHero({
     <section aria-label={title} className="relative mx-5 mt-4 h-[248px] overflow-hidden bg-accent-navy">
       <img
         key={storyId}
-        src={`/jlr/story-${storyId.toLowerCase()}.png`}
+        src={`/media/story-${storyId.toLowerCase()}.png`}
         alt=""
-        className="jlr-settle absolute inset-0 h-full w-full object-cover"
+        className="aap-settle absolute inset-0 h-full w-full object-cover"
       />
       <div aria-hidden className="absolute inset-0 bg-[linear-gradient(90deg,rgb(12_18_28/0.35)_0%,transparent_60%)]" />
       <div className="relative flex h-full items-end p-5">
-        <div className="jlr-glass jlr-fade-up flex w-full max-w-[560px] flex-col px-7 pb-5 pt-6" style={{ animationDelay: "150ms" }}>
-          <p className="jlr-eyebrow text-[11px] text-mute">
-            <span className="jlr-line">
+        <div className="aap-glass aap-fade-up flex w-full max-w-[560px] flex-col px-7 pb-5 pt-6" style={{ animationDelay: "150ms" }}>
+          <p className="aap-eyebrow text-[11px] text-mute">
+            <span className="aap-line">
               <span style={{ animationDelay: "260ms" }}>{eyebrow}</span>
             </span>
           </p>
-          <h1 className="jlr-title mt-3 text-balance text-[22px] leading-[30px] text-ink">
-            <span className="jlr-line">
+          <h1 className="aap-title mt-3 text-balance text-[22px] leading-[30px] text-ink">
+            <span className="aap-line">
               <span style={{ animationDelay: "360ms" }}>{title}</span>
             </span>
           </h1>
-          <p className="jlr-fade-up mt-2 line-clamp-2 text-pretty text-[14px] font-light leading-[21px] text-ink" style={{ animationDelay: "480ms" }}>
+          <p className="aap-fade-up mt-2 line-clamp-2 text-pretty text-[14px] font-light leading-[21px] text-ink" style={{ animationDelay: "480ms" }}>
             {useCase}
           </p>
           <div className="mt-4 flex items-center gap-3">
@@ -213,7 +213,7 @@ function StoryHero({
                 style={{ width: `${progress * 100}%` }}
               />
             </div>
-            <span className="jlr-eyebrow shrink-0 text-[10.5px] text-mute tabular-nums">{progressLabel}</span>
+            <span className="aap-eyebrow shrink-0 text-[10.5px] text-mute tabular-nums">{progressLabel}</span>
           </div>
         </div>
       </div>

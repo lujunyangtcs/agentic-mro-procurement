@@ -1,5 +1,5 @@
 /**
- * Presenter drawer, opened from the "Demo environment" label. It changes who
+ * Presenter drawer, opened from the "Presenter controls" label. It changes who
  * is reviewing, the demo clock and injected failures — all through domain
  * commands — and can launch or reset stories. It never decides anything.
  */

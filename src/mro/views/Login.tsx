@@ -52,11 +52,6 @@ export function Login() {
           )}
         </main>
 
-        <footer className="relative z-10 px-6 pb-7 text-center sm:px-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/55">
-            Demo environment · illustrative data
-          </p>
-        </footer>
       </div>
     </div>
   );
@@ -107,10 +102,7 @@ function TopBar({
         </span>
         <span className="flex flex-col leading-tight">
           <span className="text-[15px] font-bold tracking-[-0.01em] text-white">
-            Automotive Procurement
-          </span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/55">
-            Demo environment
+            Agentic Automotive Procurement
           </span>
         </span>
       </div>

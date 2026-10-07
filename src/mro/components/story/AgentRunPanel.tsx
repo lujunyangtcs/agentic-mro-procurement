@@ -13,7 +13,7 @@ function Working() {
   const { c } = useStoryCopy();
   const lines = [c.reading, c.checking, c.scoring];
   return (
-    <div className="jlr-scan flex flex-col gap-4 border border-divider bg-white px-6 py-6" role="status" aria-live="polite">
+    <div className="aap-scan flex flex-col gap-4 border border-divider bg-white px-6 py-6" role="status" aria-live="polite">
       {lines.map((l, i) => (
         <div
           key={l}
@@ -66,16 +66,16 @@ export function AgentRunPanel({
 
   return (
     <article className="flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
-      <header className="jlr-fade-up relative flex flex-wrap items-center gap-x-4 gap-y-1 bg-accent-navy px-5 py-4 text-ink-inverse">
-        <span aria-hidden className="jlr-rule absolute inset-x-0 bottom-0 block h-[2px] bg-sand" />
+      <header className="aap-fade-up relative flex flex-wrap items-center gap-x-4 gap-y-1 bg-accent-navy px-5 py-4 text-ink-inverse">
+        <span aria-hidden className="aap-rule absolute inset-x-0 bottom-0 block h-[2px] bg-sand" />
         <span className="grid h-10 w-10 shrink-0 place-items-center border border-sand/60 text-sand" aria-hidden>
           <Bot size={19} className={running ? "ai-pulse" : undefined} />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="jlr-eyebrow truncate text-[10.5px] text-sand">
+          <p className="aap-eyebrow truncate text-[10.5px] text-sand">
             {String(step.index + 1).padStart(2, "0")} · {r.flowStep}
           </p>
-          <h2 id={`agent-${step.index}`} className="jlr-title mt-1 truncate text-[17px] leading-[22px] text-ink-inverse">
+          <h2 id={`agent-${step.index}`} className="aap-title mt-1 truncate text-[17px] leading-[22px] text-ink-inverse">
             {r.agent}
           </h2>
         </div>
@@ -97,17 +97,17 @@ export function AgentRunPanel({
         <Working />
       ) : (
         <>
-          <section className="jlr-fade-up flex flex-col gap-4 border border-divider bg-white p-5" style={{ animationDelay: "80ms" }}>
+          <section className="aap-fade-up flex flex-col gap-4 border border-divider bg-white p-5" style={{ animationDelay: "80ms" }}>
             <div className="flex items-center gap-2">
               <div className="flex flex-col gap-2">
-                <h3 className="jlr-title text-[13px] leading-[18px] text-ink">{c.produced}</h3>
-                <span aria-hidden className="jlr-rule block h-px w-8 bg-ink" />
+                <h3 className="aap-title text-[13px] leading-[18px] text-ink">{c.produced}</h3>
+                <span aria-hidden className="aap-rule block h-px w-8 bg-ink" />
               </div>
               <button
                 type="button"
                 onClick={() => setShowInput((v) => !v)}
                 aria-expanded={showInput}
-                className="jlr-link ml-auto inline-flex items-center gap-1 whitespace-nowrap py-1 text-[12.5px] text-surface-deep"
+                className="aap-link ml-auto inline-flex items-center gap-1 whitespace-nowrap py-1 text-[12.5px] text-surface-deep"
               >
                 {showInput ? c.hideInput : c.showInput}
                 <ChevronDown size={14} className={cn("transition-transform", showInput && "rotate-180")} aria-hidden />
@@ -165,14 +165,14 @@ export function AgentRunPanel({
           ))}
 
           {canHandOff && (
-            <div className="jlr-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
+            <div className="aap-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
               <p className="min-w-0 flex-1 text-[13px] leading-[19px] text-mute">
                 {step.tasks.length === 0 ? c.policyHandoff : c.decidedBy(step.tasks.map((t) => t.persona).join(", "))}
               </p>
               <button
                 type="button"
                 onClick={onHandOff}
-                className="ui-pill jlr-cta inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
+                className="ui-pill aap-cta inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
               >
                 {nextAgent ? c.handTo(nextAgent) : c.closeCase}
                 <ArrowRight size={16} aria-hidden />

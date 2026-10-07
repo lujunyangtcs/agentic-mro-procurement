@@ -3,7 +3,7 @@ import { CLOCK_START } from "@/mro/domain/clock";
 
 export const clientProfile: ClientProfile = {
   displayName: "Automotive Procurement",
-  environmentLabel: "Demo environment",
+  environmentLabel: "Agentic Automotive Procurement",
   currency: "GBP",
   locale: "en-GB",
   timeZone: "Europe/London",

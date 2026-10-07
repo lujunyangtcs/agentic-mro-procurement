@@ -4,8 +4,8 @@
  */
 
 export const AP_DICT: Record<string, { en: string; de: string }> = {
-  "brand.name": { en: "Automotive Procurement", de: "Automotive Procurement" },
-  "brand.demo": { en: "Demo environment", de: "Demoumgebung" },
+  "brand.name": { en: "Agentic Automotive Procurement", de: "Agentic Automotive Procurement" },
+  "brand.demo": { en: "Presenter controls", de: "Präsentationssteuerung" },
 
   "nav.desk": { en: "My desk", de: "Mein Desk" },
   "nav.newRequest": { en: "New request", de: "Neue Anforderung" },

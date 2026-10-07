@@ -46,7 +46,7 @@ export function AgentStepper({
         const selected = state.selected === i;
         const personas = s.tasks.map((t) => t.persona);
         return (
-          <li key={s.run.agent + i} className="jlr-fade-up h-full" style={{ animationDelay: `${i * 80}ms` }}>
+          <li key={s.run.agent + i} className="aap-fade-up h-full" style={{ animationDelay: `${i * 80}ms` }}>
             <button
               type="button"
               onClick={() => onSelect(i)}
@@ -55,7 +55,7 @@ export function AgentStepper({
               className={cn(
                 "group relative flex h-full w-full flex-col gap-3 border bg-white px-4 pb-4 pt-5 text-left transition-colors duration-150 ease-out disabled:cursor-not-allowed",
                 selected ? "border-ink" : "border-divider hover:border-ink/40",
-                st === "running" && "jlr-scan",
+                st === "running" && "aap-scan",
                 st === "locked" && "bg-white/60",
               )}
             >
@@ -113,7 +113,7 @@ export function AgentStepper({
               <span className="mt-auto flex items-center gap-2 border-t border-divider pt-3">
                 <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
                   {st === "locked" && i > state.reached ? (
-                    <span className="jlr-eyebrow text-[10.5px] text-mute">{c.locked}</span>
+                    <span className="aap-eyebrow text-[10.5px] text-mute">{c.locked}</span>
                   ) : personas.length > 0 ? (
                     personas.map((p) => (
                       <span

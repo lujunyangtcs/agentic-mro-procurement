@@ -36,13 +36,13 @@ export function ConsolePage({
         <SpringIn className="relative z-40 mt-3.5 flex items-center justify-between gap-4">
           <div className="min-w-0">
             {title && (
-              <h1 className="jlr-title text-[22px] leading-[30px] text-ink">
-                <span className="jlr-line">
+              <h1 className="aap-title text-[22px] leading-[30px] text-ink">
+                <span className="aap-line">
                   <span>{title}</span>
                 </span>
               </h1>
             )}
-            <span aria-hidden className="jlr-rule mb-2.5 mt-2 block h-px w-12 bg-ink" style={{ animationDelay: "200ms" }} />
+            <span aria-hidden className="aap-rule mb-2.5 mt-2 block h-px w-12 bg-ink" style={{ animationDelay: "200ms" }} />
             {/* One line. If it needs two, the page is explaining too much. */}
             {lead && <p className="truncate text-[14px] leading-[20px] text-mute mt-0.5">{lead}</p>}
           </div>
@@ -108,12 +108,12 @@ export function AiSummaryCard({
     /* z-40: the language menu in `right` must drop over whatever sits below. */
     <SpringIn className="relative z-40">
       <div className="relative bg-accent-navy px-5 py-4">
-        <span aria-hidden className="jlr-rule absolute inset-x-0 top-0 block h-[2px] bg-sand" />
+        <span aria-hidden className="aap-rule absolute inset-x-0 top-0 block h-[2px] bg-sand" />
         {(title || right) && (
           <div className="flex items-center justify-between gap-4 pb-2.5">
             {title && (
-              <h1 className="jlr-title text-[22px] leading-[30px] text-ink-inverse">
-                <span className="jlr-line">
+              <h1 className="aap-title text-[22px] leading-[30px] text-ink-inverse">
+                <span className="aap-line">
                   <span>{title}</span>
                 </span>
               </h1>
@@ -306,7 +306,7 @@ export function AgentStatusChip({
 }) {
   if (state === "processing") {
     return (
-      <span className="jlr-scan inline-flex items-center gap-2 whitespace-nowrap bg-sand px-3 py-1.5 text-[13px] text-ink">
+      <span className="aap-scan inline-flex items-center gap-2 whitespace-nowrap bg-sand px-3 py-1.5 text-[13px] text-ink">
         <Spinner size={13} />
         <StreamingText text={label} cps={26} caret={false} />
       </span>
@@ -394,7 +394,7 @@ export function Panel({
     <section className={cn("bg-white border border-divider", className)}>
       <header className="flex items-center justify-between gap-4 px-5 pt-4 pb-3">
         <div className="min-w-0">
-          <h2 className="jlr-title text-[14px] leading-[20px] text-ink">{title}</h2>
+          <h2 className="aap-title text-[14px] leading-[20px] text-ink">{title}</h2>
           {sub && <p className="truncate text-[13px] text-mute leading-snug mt-0.5">{sub}</p>}
         </div>
         {right && <div className="shrink-0">{right}</div>}

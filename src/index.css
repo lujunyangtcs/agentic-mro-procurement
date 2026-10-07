@@ -2,10 +2,10 @@
 @import "tailwindcss";
 
 /*
- * JLR corporate design language, read from jlr.com: monochrome ink on white,
+ * Corporate automotive design language: monochrome ink on white,
  * a sand primary, slate and steel neutrals, square corners, uppercase tracked
  * labels, chevrons that slide on hover and glass panels over photography.
- * Lexend stands in for the proprietary JLR Emeric face.
+ * Lexend stands in for a proprietary corporate face.
  */
 
 @theme inline {
@@ -39,7 +39,7 @@
 
   --font-sans: "Lexend", "Avenir Next", sans-serif;
 
-  /* JLR sets type light: body copy in the extralight cut, headings regular. */
+  /* Type is set light: body copy in the extralight cut, headings regular. */
   --font-weight-normal: 300;
   --font-weight-medium: 400;
   --font-weight-semibold: 500;
@@ -48,7 +48,7 @@
 
   --spacing-section: var(--section-pad-y);
 
-  /* Square corners throughout, as on jlr.com. Only true circles stay round. */
+  /* Square corners throughout, as on the reference site. Only true circles stay round. */
   --radius-xs: 0px;
   --radius-sm: 0px;
   --radius-md: 0px;
@@ -75,7 +75,7 @@
 }
 
 :root {
-  /* Neutrals — jlr.com body ink, slate secondary text, warm hairlines */
+  /* Neutrals — the reference site body ink, slate secondary text, warm hairlines */
   --background: #ffffff;
   --foreground: #202020;
 
@@ -85,14 +85,14 @@
   --divider: #e2e0db;
   --steel: #646e77;
 
-  /* Surfaces — the sand of JLR's primary button, its hover, a cool fog */
+  /* Surfaces — the sand of the reference primary button, its hover, a cool fog */
   --surface-mint: #e7e2db;
   --sand-deep: #dbdad4;
   --surface-sage: #a7b0b7;
   --surface-rose: #f2e6e3;
   --surface-fog: #f4f4f2;
 
-  /* Accents — JLR's deep corporate blue, near-black navy, racing green */
+  /* Accents — the reference deep corporate blue, near-black navy, racing green */
   --accent-green: #2f6b4f;
   --accent-green-deep: #27455c;
   --accent-navy: #0c121c;
@@ -105,7 +105,7 @@
   /* Section rhythm */
   --section-pad-y: 80px;
 
-  /* Motion — jlr.com runs hovers at 0.15s ease-out and reveals on the
+  /* Motion — the reference site runs hovers at 0.15s ease-out and reveals on the
      Material standard curve; nothing overshoots. */
   --motion-duration-hover: 150ms;
   --motion-duration-menu: 300ms;
@@ -302,7 +302,7 @@
     letter-spacing: 0.01em;
     margin: 0;
   }
-  /* jlr.com's focus ring: a 3px blue halo, never a recoloured outline. */
+  /* the reference focus ring: a 3px blue halo, never a recoloured outline. */
   *:focus-visible {
     outline: none;
     box-shadow: 0 0 0 3px #0066cc;
@@ -311,7 +311,7 @@
 
 /* ── Buttons ──────────────────────────────────────────────────────────────
    Square, and they do not lift. A hover sweeps a fill in from the left —
-   JLR's Width keyframe — and any trailing chevron or arrow slides on. */
+   the reference Width keyframe — and any trailing chevron or arrow slides on. */
 .ui-pill {
   border-radius: 0;
   transition:
@@ -333,9 +333,9 @@
   background-size: 0% 100%;
   letter-spacing: 0.02em;
 }
-/* The JLR call to action: uppercase, 1px tracking, square. Opt in per button
+/* The call to action: uppercase, 1px tracking, square. Opt in per button
    so toggles do not change width when they switch state. */
-.jlr-cta {
+.aap-cta {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 400;
@@ -358,59 +358,59 @@
 .ui-pill .lucide-chevron-right,
 .ui-pill .lucide-arrow-up-right,
 .ui-pill .lucide-move-right,
-.jlr-chevron-host .lucide-chevron-right,
-.jlr-chevron-host .lucide-arrow-right {
+.aap-chevron-host .lucide-chevron-right,
+.aap-chevron-host .lucide-arrow-right {
   transition: transform var(--motion-duration-hover) var(--motion-ease-hover);
 }
 .ui-pill:hover .lucide-arrow-right,
 .ui-pill:hover .lucide-chevron-right,
 .ui-pill:hover .lucide-move-right,
-.jlr-chevron-host:hover .lucide-chevron-right,
-.jlr-chevron-host:hover .lucide-arrow-right {
+.aap-chevron-host:hover .lucide-chevron-right,
+.aap-chevron-host:hover .lucide-arrow-right {
   transform: translateX(5px);
 }
 .ui-pill:hover .lucide-arrow-up-right {
   transform: translate(2px, -2px);
 }
 
-/* Thin strokes, like the chevrons on jlr.com. */
+/* Thin strokes, like the chevrons on the reference site. */
 svg.lucide {
   stroke-width: 1.5;
 }
 
-/* ── JLR building blocks ─────────────────────────────────────────────── */
+/* ── Brand building blocks ─────────────────────────────────────────────── */
 
 /* Block header — uppercase with generous tracking, never heavy. */
-.jlr-eyebrow {
+.aap-eyebrow {
   font-size: 12px;
   line-height: 16px;
   font-weight: 400;
   letter-spacing: 0.16em;
   text-transform: uppercase;
 }
-.jlr-title {
+.aap-title {
   font-weight: 400;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-/* Frosted panel laid over photography, as on the jlr.com strategy card. */
-.jlr-glass {
+/* Frosted panel laid over photography, as on the the reference site strategy card. */
+.aap-glass {
   background-color: rgb(255 255 255 / 0.62);
   backdrop-filter: blur(30px) saturate(1.1);
   -webkit-backdrop-filter: blur(30px) saturate(1.1);
 }
-.jlr-glass-dark {
+.aap-glass-dark {
   background-color: rgb(12 18 28 / 0.42);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 }
 
 /* Navigation item — a steel rule grows in on hover, ink when current. */
-.jlr-nav-item {
+.aap-nav-item {
   position: relative;
 }
-.jlr-nav-item::before {
+.aap-nav-item::before {
   content: "";
   position: absolute;
   left: 0;
@@ -421,85 +421,85 @@ svg.lucide {
   transform: scaleY(0);
   transition: transform var(--motion-duration-hover) ease-in-out;
 }
-.jlr-nav-item:hover::before {
+.aap-nav-item:hover::before {
   transform: scaleY(1);
 }
-.jlr-nav-item[aria-current="page"]::before {
+.aap-nav-item[aria-current="page"]::before {
   background: var(--ink);
   transform: scaleY(1);
 }
 
 /* Text underline that draws from the left. */
-.jlr-link {
+.aap-link {
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 0% 1px;
   transition: background-size 300ms var(--motion-ease-menu);
 }
-.jlr-link:hover {
+.aap-link:hover {
   background-size: 100% 1px;
 }
 
-/* A hairline that draws itself across — JLR's Width keyframe. */
-@keyframes jlr-width {
+/* A hairline that draws itself across — the reference Width keyframe. */
+@keyframes aap-width {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
-.jlr-rule {
+.aap-rule {
   transform-origin: left;
-  animation: jlr-width 900ms var(--motion-ease-reveal) both;
+  animation: aap-width 900ms var(--motion-ease-reveal) both;
 }
 
-/* JLR fade-in: copy rises out of its own line. */
-@keyframes jlr-rise {
+/* Fade-in: copy rises out of its own line. */
+@keyframes aap-rise {
   from { opacity: 0; transform: translateY(100%); }
   to { opacity: 1; transform: none; }
 }
-.jlr-line {
+.aap-line {
   display: block;
   overflow: hidden;
 }
-.jlr-line > span {
+.aap-line > span {
   display: inline-block;
-  animation: jlr-rise 760ms var(--motion-ease-reveal) both;
+  animation: aap-rise 760ms var(--motion-ease-reveal) both;
 }
 
-@keyframes jlr-fade-up {
+@keyframes aap-fade-up {
   from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
-.jlr-fade-up {
-  animation: jlr-fade-up 640ms var(--motion-ease-reveal) both;
+.aap-fade-up {
+  animation: aap-fade-up 640ms var(--motion-ease-reveal) both;
 }
 
 /* Photography settles slowly into frame. */
-@keyframes jlr-settle {
+@keyframes aap-settle {
   from { transform: scale(1.08); }
   to { transform: scale(1); }
 }
-.jlr-settle {
-  animation: jlr-settle 2400ms var(--motion-ease-reveal) both;
+.aap-settle {
+  animation: aap-settle 2400ms var(--motion-ease-reveal) both;
 }
 
 /* Card lift for imagery tiles — the image zooms, the card stays put. */
-.jlr-zoom-host .jlr-zoom {
+.aap-zoom-host .aap-zoom {
   transition: transform 700ms var(--motion-ease-reveal);
 }
-.jlr-zoom-host:hover .jlr-zoom {
+.aap-zoom-host:hover .aap-zoom {
   transform: scale(1.04);
 }
 
 /* Agent at work — a steel line runs along the bottom edge. */
-@keyframes jlr-scan {
+@keyframes aap-scan {
   from { transform: translateX(-100%); }
   to { transform: translateX(100%); }
 }
-.jlr-scan {
+.aap-scan {
   position: relative;
   overflow: hidden;
 }
-.jlr-scan::after {
+.aap-scan::after {
   content: "";
   position: absolute;
   left: 0;
@@ -507,23 +507,23 @@ svg.lucide {
   bottom: 0;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--steel), transparent);
-  animation: jlr-scan 1600ms var(--motion-ease-menu) infinite;
+  animation: aap-scan 1600ms var(--motion-ease-menu) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .jlr-rule,
-  .jlr-line > span,
-  .jlr-fade-up,
-  .jlr-settle,
-  .jlr-scan::after {
+  .aap-rule,
+  .aap-line > span,
+  .aap-fade-up,
+  .aap-settle,
+  .aap-scan::after {
     animation: none;
     opacity: 1;
     transform: none;
   }
   .ui-pill,
-  .jlr-link,
-  .jlr-nav-item::before,
-  .jlr-zoom-host .jlr-zoom {
+  .aap-link,
+  .aap-nav-item::before,
+  .aap-zoom-host .aap-zoom {
     transition: none;
   }
 }

@@ -2,7 +2,7 @@ import { cn } from "@/mro/lib/utils";
 
 type Kind = "critical" | "ready" | "progress" | "resolved" | "neutral" | "alert" | "active" | "ok";
 
-/* Square, tracked, uppercase — the JLR label rather than a rounded pill. */
+/* Square, tracked, uppercase — a tracked label rather than a rounded pill. */
 const styles: Record<Kind, { bg: string; dot: string; ink: string }> = {
   critical: { bg: "bg-surface-red border-transparent", dot: "bg-mark-red", ink: "text-mark-red" },
   ready: { bg: "bg-sand border-transparent", dot: "bg-surface-deep", ink: "text-ink" },

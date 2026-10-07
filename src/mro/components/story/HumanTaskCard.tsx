@@ -35,7 +35,7 @@ export function HumanTaskCard({
   return (
     <section
       className={cn(
-        "jlr-fade-up relative flex flex-col gap-4 border bg-white px-5 pb-5 pt-6 transition-colors duration-150",
+        "aap-fade-up relative flex flex-col gap-4 border bg-white px-5 pb-5 pt-6 transition-colors duration-150",
         chosen ? "border-divider" : waiting ? "border-mark-amber/50" : "border-divider opacity-60",
       )}
       style={{ animationDelay: "120ms" }}
@@ -45,12 +45,12 @@ export function HumanTaskCard({
         aria-hidden
         className={cn(
           "absolute inset-x-0 top-0 h-[3px] origin-left",
-          chosen ? "bg-ink" : waiting ? "jlr-rule bg-mark-amber" : "bg-divider",
+          chosen ? "bg-ink" : waiting ? "aap-rule bg-mark-amber" : "bg-divider",
         )}
       />
 
       {waiting && (
-        <p className="jlr-eyebrow -mt-1 flex items-center gap-2 text-[10.5px] text-mark-amber">
+        <p className="aap-eyebrow -mt-1 flex items-center gap-2 text-[10.5px] text-mark-amber">
           <span className="h-1.5 w-1.5 rounded-full bg-mark-amber ai-pulse" aria-hidden />
           {c.status.waiting}
         </p>
@@ -70,7 +70,7 @@ export function HumanTaskCard({
             <p className="text-[15px] leading-[20px] text-ink">{task.persona}</p>
             <span
               className={cn(
-                "jlr-eyebrow px-2 py-0.5 text-[10px]",
+                "aap-eyebrow px-2 py-0.5 text-[10px]",
                 task.org === "Client" ? "border border-divider text-surface-navy" : "bg-sand text-ink",
               )}
             >
@@ -114,7 +114,7 @@ export function HumanTaskCard({
       )}
 
       {chosen ? (
-        <div className="jlr-fade-up ml-14 flex flex-col gap-1 border-l-2 border-ink bg-surface-fog px-4 py-3">
+        <div className="aap-fade-up ml-14 flex flex-col gap-1 border-l-2 border-ink bg-surface-fog px-4 py-3">
           <p className="text-[13px] leading-[19px] text-ink">
             {c.decidedBy(task.persona)} · <span className="font-medium">{chosen.label[lang]}</span>
           </p>
@@ -130,7 +130,7 @@ export function HumanTaskCard({
           <button
             type="button"
             onClick={() => setSession({ reviewAs: needed })}
-            className="ui-pill jlr-cta inline-flex items-center gap-3 whitespace-nowrap border border-ink bg-white px-5 py-2.5 text-[12px] text-ink"
+            className="ui-pill aap-cta inline-flex items-center gap-3 whitespace-nowrap border border-ink bg-white px-5 py-2.5 text-[12px] text-ink"
           >
             {c.switchTo(role(needed))}
             <ChevronRight size={15} aria-hidden />
@@ -146,7 +146,7 @@ export function HumanTaskCard({
               onClick={() => onDecide(o.id)}
               className={cn(
                 "ui-pill inline-flex items-center gap-3 whitespace-nowrap px-5 py-2.5 text-[13px] disabled:cursor-not-allowed",
-                o.primary ? "jlr-cta bg-ink text-[12px] text-ink-inverse" : "border border-ink/30 bg-white text-ink",
+                o.primary ? "aap-cta bg-ink text-[12px] text-ink-inverse" : "border border-ink/30 bg-white text-ink",
               )}
             >
               {o.label[lang]}
