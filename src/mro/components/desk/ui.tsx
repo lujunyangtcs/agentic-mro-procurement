@@ -111,7 +111,7 @@ const chipTone: Record<ChipTone, string> = {
 
 export function Chip({ tone = "mute", children, className }: { tone?: ChipTone; children: React.ReactNode; className?: string }) {
   return (
-    <span data-one-line="" className={cn("inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2.5 py-0.5 text-[12px] font-bold", chipTone[tone], className)}>
+    <span data-one-line="" className={cn("inline-flex shrink-0 items-center whitespace-nowrap px-2.5 py-0.5 text-[12px] font-bold", chipTone[tone], className)}>
       {children}
     </span>
   );

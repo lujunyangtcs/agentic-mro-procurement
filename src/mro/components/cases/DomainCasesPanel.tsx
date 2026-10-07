@@ -31,7 +31,7 @@ const statusTone: Record<ProcurementCase["status"], string> = {
 
 function Pill({ className, children }: { className: string; children: React.ReactNode }) {
   return (
-    <span className={cn("inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-[13px] font-medium", className)}>
+    <span className={cn("inline-block whitespace-nowrap px-2.5 py-1 text-[13px] font-medium", className)}>
       {children}
     </span>
   );

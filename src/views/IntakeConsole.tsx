@@ -216,7 +216,7 @@ function OutlookInbox({ onOpen }: { onOpen: (e: IntakeEmail) => void }) {
         <span className="text-[11px] tracking-[0.08em] uppercase text-surface-deep font-medium">
           Inbox · intake queue
         </span>
-        <span className="ml-auto text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 rounded-full">
+        <span className="ml-auto text-[11px] font-bold text-surface-deep bg-surface-mint px-2 py-0.5 ">
           {unread} unread
         </span>
       </div>
@@ -808,7 +808,7 @@ export function IntakeConsole() {
         <button
           type="button"
           onClick={() => setChatHidden(false)}
-          className="ui-pill fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-surface-deep text-ink-inverse px-4 py-2.5 text-[13px] font-bold shadow-lg hover:bg-accent-green"
+          className="ui-pill fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-surface-deep text-ink-inverse px-4 py-2.5 text-[13px] font-bold shadow-lg hover:bg-accent-green"
         >
           <Bot size={16} strokeWidth={1.9} /> Chat with Intake
         </button>

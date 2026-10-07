@@ -23,7 +23,7 @@ export function ToneChip({ value, tone, className }: { value: string; tone?: Ton
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center whitespace-nowrap rounded-full px-2 py-0.5 text-[11.5px] font-bold uppercase tracking-[0.04em]",
+        "inline-flex shrink-0 items-center whitespace-nowrap px-2 py-0.5 text-[11.5px] font-bold uppercase tracking-[0.04em]",
         TONE_CLASS[t],
         className,
       )}

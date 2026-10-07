@@ -141,7 +141,7 @@ export function AskAssistant({
                     disabled={thinking}
                     onClick={() => ask(s)}
                     className={cn(
-                      "ui-pill inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-left text-[12.5px] transition-colors",
+                      "ui-pill inline-flex items-center gap-1.5 border px-3 py-1.5 text-left text-[12.5px] transition-colors",
                       thinking
                         ? "cursor-not-allowed border-divider text-mute"
                         : "border-divider bg-white text-ink hover:border-surface-deep/40 hover:bg-surface-mint/40",

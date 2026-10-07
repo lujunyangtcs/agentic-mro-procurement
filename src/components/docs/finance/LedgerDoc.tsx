@@ -109,7 +109,7 @@ export function LedgerDoc({ recon = ledgerBlueRidge }: { recon?: LedgerRecon }) 
               <td className="px-3 py-2.5 border-b border-divider tabular-nums text-mark-red font-bold">{recon.openItem.daysOverdue}</td>
               <td className="px-3 py-2.5 border-b border-divider tabular-nums font-medium">{recon.openItem.currency} {recon.openItem.amount}</td>
               <td className="px-3 py-2.5 border-b border-divider">
-                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#bb0000] text-white text-[9px] font-bold">!</span>
+                <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-[#a1232b] text-white text-[9px] font-bold">!</span>
               </td>
             </tr>
           </tbody>
@@ -127,7 +127,7 @@ export function LedgerDoc({ recon = ledgerBlueRidge }: { recon?: LedgerRecon }) 
       </div>
 
       <div className="px-4 py-3 flex items-center gap-2.5 border-t border-divider">
-        <span className={cn("w-3 h-3 rounded-full ring-2", tie ? "bg-[#107e3e] ring-[#107e3e]/25" : "bg-[#bb0000] ring-[#bb0000]/25")} />
+        <span className={cn("w-3 h-3 rounded-full ring-2", tie ? "bg-[#2f6b4f] ring-[#2f6b4f]/25" : "bg-[#a1232b] ring-[#a1232b]/25")} />
         <span className="text-[12.5px] text-ink">
           {tie ? "GL control ties to the AR sub-ledger" : "GL and sub-ledger out of balance"} —{" "}
           <span className="font-bold tabular-nums">USD {recon.openItem.amount}</span> open on {recon.openItem.invoice}, {recon.openItem.daysOverdue} past the Net-45 due date.

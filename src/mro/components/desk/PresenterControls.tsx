@@ -99,7 +99,7 @@ export function PresenterControls({ open, onClose }: { open: boolean; onClose: (
                 )}
               >
                 <span className="min-w-0 flex-1 truncate">{role(r)}</span>
-                {pending(r) > 0 && <span className="shrink-0 rounded-full bg-surface-amber px-2 py-0.5 text-[11.5px] font-bold text-mark-amber">{d.pendingFor(pending(r))}</span>}
+                {pending(r) > 0 && <span className="shrink-0 bg-surface-amber px-2 py-0.5 text-[11.5px] font-bold text-mark-amber">{d.pendingFor(pending(r))}</span>}
               </button>
             ))}
           </div>

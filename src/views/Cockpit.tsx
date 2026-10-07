@@ -59,7 +59,7 @@ function FeedbackLoopTeaser() {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="text-[13px] font-bold text-ink">Finance → Procurement feedback loop</span>
-            <span className="text-[11px] font-bold text-surface-deep bg-white/80 px-2 py-0.5 rounded-full">
+            <span className="text-[11px] font-bold text-surface-deep bg-white/80 px-2 py-0.5 ">
               4 insights ready
             </span>
           </div>

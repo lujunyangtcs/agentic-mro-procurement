@@ -294,7 +294,7 @@ export function RfqDraftsModal({
           <button
             type="button"
             onClick={onClose}
-            className="ui-pill shrink-0 rounded-full border border-divider px-4 py-2.5 text-[13px] font-bold text-ink hover:border-surface-deep"
+            className="ui-pill shrink-0 border border-divider px-4 py-2.5 text-[13px] font-bold text-ink hover:border-surface-deep"
           >
             Close
           </button>

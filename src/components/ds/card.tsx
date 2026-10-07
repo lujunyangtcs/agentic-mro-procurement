@@ -37,7 +37,7 @@ export function PhotoCard({
         backgroundImage: image
           ? `linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.05)), url(${image})`
           : undefined,
-        backgroundColor: "#084337",
+        backgroundColor: "#27455c",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

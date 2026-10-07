@@ -13,15 +13,19 @@ function Working() {
   const { c } = useStoryCopy();
   const lines = [c.reading, c.checking, c.scoring];
   return (
-    <div className="flex flex-col gap-3 rounded-md border border-divider bg-white p-5" role="status" aria-live="polite">
+    <div className="jlr-scan flex flex-col gap-4 border border-divider bg-white px-6 py-6" role="status" aria-live="polite">
       {lines.map((l, i) => (
         <div
           key={l}
-          className="flex items-center gap-3 opacity-0 [animation:story-line_400ms_ease-out_forwards]"
+          className="flex items-center gap-4 opacity-0 [animation:story-line_500ms_cubic-bezier(0.22,1,0.36,1)_forwards]"
           style={{ animationDelay: `${i * 450}ms` }}
         >
-          <span className="h-2 w-2 shrink-0 rounded-full bg-surface-sage ai-pulse" aria-hidden />
+          <span className="text-[12px] font-extralight tabular-nums text-steel" aria-hidden>
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span className="h-px w-6 bg-steel/50" aria-hidden />
           <span className="text-[14px] leading-[20px] text-ink">{l}…</span>
+          <span className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-steel ai-pulse" aria-hidden />
         </div>
       ))}
     </div>
@@ -62,20 +66,23 @@ export function AgentRunPanel({
 
   return (
     <article className="flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-divider bg-white px-4 py-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-surface-deep text-ink-inverse" aria-hidden>
-          <Bot size={18} strokeWidth={1.75} />
+      <header className="jlr-fade-up relative flex flex-wrap items-center gap-x-4 gap-y-1 bg-accent-navy px-5 py-4 text-ink-inverse">
+        <span aria-hidden className="jlr-rule absolute inset-x-0 bottom-0 block h-[2px] bg-sand" />
+        <span className="grid h-10 w-10 shrink-0 place-items-center border border-sand/60 text-sand" aria-hidden>
+          <Bot size={19} className={running ? "ai-pulse" : undefined} />
         </span>
         <div className="min-w-0 flex-1">
-          <h2 id={`agent-${step.index}`} className="truncate text-[17px] font-bold leading-[22px] text-ink">
+          <p className="jlr-eyebrow truncate text-[10.5px] text-sand">
+            {String(step.index + 1).padStart(2, "0")} · {r.flowStep}
+          </p>
+          <h2 id={`agent-${step.index}`} className="jlr-title mt-1 truncate text-[17px] leading-[22px] text-ink-inverse">
             {r.agent}
           </h2>
-          <p className="truncate text-[12.5px] leading-[17px] text-mute">
-            {r.flowStep} · {r.caseId}
-          </p>
         </div>
         {!running && (
-          <p className="shrink-0 text-[12px] leading-[16px] text-mute">
+          <p className="shrink-0 text-right text-[12px] font-light leading-[17px] text-ink-inverse/75">
+            {r.caseId}
+            <br />
             {r.model && `${c.model} ${r.model} · `}
             {c.ran(seconds)}
           </p>
@@ -83,21 +90,24 @@ export function AgentRunPanel({
       </header>
 
       {paused && isFrontier && !finished ? (
-        <p role="status" className="rounded-md border border-[color-mix(in_srgb,var(--mark-amber)_40%,white)] bg-surface-amber/60 px-4 py-3 text-[13.5px] leading-[19px] text-ink">
+        <p role="status" className="border-t-[3px] border-mark-amber bg-surface-amber px-5 py-4 text-[13.5px] leading-[20px] text-ink">
           {c.pausedNotice}
         </p>
       ) : running ? (
         <Working />
       ) : (
         <>
-          <section className="flex flex-col gap-3 rounded-md border border-divider bg-white p-4">
+          <section className="jlr-fade-up flex flex-col gap-4 border border-divider bg-white p-5" style={{ animationDelay: "80ms" }}>
             <div className="flex items-center gap-2">
-              <h3 className="text-[13px] font-bold uppercase tracking-[0.06em] text-ink">{c.produced}</h3>
+              <div className="flex flex-col gap-2">
+                <h3 className="jlr-title text-[13px] leading-[18px] text-ink">{c.produced}</h3>
+                <span aria-hidden className="jlr-rule block h-px w-8 bg-ink" />
+              </div>
               <button
                 type="button"
                 onClick={() => setShowInput((v) => !v)}
                 aria-expanded={showInput}
-                className="ml-auto inline-flex items-center gap-1 whitespace-nowrap rounded-md px-2 py-1 text-[12.5px] font-medium text-surface-deep hover:bg-surface-fog"
+                className="jlr-link ml-auto inline-flex items-center gap-1 whitespace-nowrap py-1 text-[12.5px] text-surface-deep"
               >
                 {showInput ? c.hideInput : c.showInput}
                 <ChevronDown size={14} className={cn("transition-transform", showInput && "rotate-180")} aria-hidden />
@@ -155,17 +165,17 @@ export function AgentRunPanel({
           ))}
 
           {canHandOff && (
-            <div className="flex flex-wrap items-center gap-3 rounded-md border border-divider bg-white px-4 py-3">
-              <p className="min-w-0 flex-1 text-[13px] leading-[18px] text-mute">
+            <div className="jlr-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
+              <p className="min-w-0 flex-1 text-[13px] leading-[19px] text-mute">
                 {step.tasks.length === 0 ? c.policyHandoff : c.decidedBy(step.tasks.map((t) => t.persona).join(", "))}
               </p>
               <button
                 type="button"
                 onClick={onHandOff}
-                className="ui-pill inline-flex items-center gap-2 whitespace-nowrap rounded-md bg-surface-deep px-4 py-2.5 text-[13px] font-medium text-ink-inverse hover:brightness-110 active:translate-y-px"
+                className="ui-pill jlr-cta inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
               >
                 {nextAgent ? c.handTo(nextAgent) : c.closeCase}
-                <ArrowRight size={15} aria-hidden />
+                <ArrowRight size={16} aria-hidden />
               </button>
             </div>
           )}

@@ -99,7 +99,7 @@ export function RfqFlow({ rfq, onComplete }: { rfq: RfqSpec; onComplete: () => v
 
       <SpringIn>
         <div className="bg-white border border-divider rounded-md overflow-hidden">
-          <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#354a5f]">
+          <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#27455c]">
             <Sparkles size={12} className="text-ink shrink-0" />
             <span className="text-[10.5px] uppercase tracking-[0.06em] text-ink font-bold">
               {phase === "idle"
@@ -168,7 +168,7 @@ export function RfqFlow({ rfq, onComplete }: { rfq: RfqSpec; onComplete: () => v
               <button
                 type="button"
                 onClick={startSearch}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
+                className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
               >
                 <Globe size={14} /> Web search for vendors
               </button>
@@ -176,7 +176,7 @@ export function RfqFlow({ rfq, onComplete }: { rfq: RfqSpec; onComplete: () => v
               <button
                 type="button"
                 onClick={() => setDraftsOpen(true)}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
+                className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
               >
                 <Mail size={14} /> Read the {rfq.vendors.length} drafts
               </button>
@@ -184,7 +184,7 @@ export function RfqFlow({ rfq, onComplete }: { rfq: RfqSpec; onComplete: () => v
               <button
                 type="button"
                 onClick={onComplete}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green"
+                className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green"
               >
                 <CornerUpRight size={14} /> Continue to vendor selection
               </button>
@@ -324,7 +324,7 @@ function VendorCard({
               onClick={onOpen}
               className="ui-pill w-full text-left rounded-md border border-divider bg-surface-fog/40 px-2.5 py-2 transition-colors hover:border-surface-deep hover:bg-surface-fog"
             >
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#107e3e]">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2f6b4f]">
                 <Mail size={12} /> Email reply · quote
               </div>
               <div className="text-[12.5px] font-bold text-ink tabular-nums mt-0.5">{vendor.quote.headline}</div>
@@ -335,7 +335,7 @@ function VendorCard({
             </button>
           ) : (
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#107e3e]">
+              <div className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#2f6b4f]">
                 <Mail size={12} /> Email reply · quote
               </div>
               <div className="text-[12.5px] font-bold text-ink tabular-nums">{vendor.quote.headline}</div>

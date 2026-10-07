@@ -88,14 +88,14 @@ export function FollowUpModal({
                 <button
                   type="button"
                   onClick={() => setPhase("calendar")}
-                  className="ui-pill flex-1 rounded-full bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
+                  className="ui-pill flex-1 bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
                 >
                   Yes, schedule it
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="ui-pill flex-1 rounded-full border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
+                  className="ui-pill flex-1 border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
                 >
                   Not now
                 </button>
@@ -148,7 +148,7 @@ export function FollowUpModal({
                 <button
                   type="button"
                   onClick={save}
-                  className="ui-pill inline-flex items-center gap-1.5 rounded-full bg-surface-deep px-5 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
+                  className="ui-pill inline-flex items-center gap-1.5 bg-surface-deep px-5 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
                 >
                   <Check size={15} strokeWidth={3} /> Save follow-up
                 </button>

@@ -4,7 +4,7 @@
  * gives them one consistent SAP chrome — a steel-blue shell title bar, grey
  * section bands, SAP display-field label/value pairs and a compact table — so
  * the whole pipeline reads as one genuine ERP document family. The palette is
- * SAP's own (Fiori/Belize): steel-blue shell #354a5f, SAP blue #0a6ed1 accents,
+ * SAP's own (Fiori/Belize): steel-blue shell #27455c, SAP blue #0a6ed1 accents,
  * semantic ObjectStatus colours. Presentational only.
  */
 
@@ -17,7 +17,7 @@ import { exportElementAsHtml, fileStem } from "@/lib/exportDoc";
 export function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div className="min-w-0">
-      <div className="text-[10px] tracking-[0.04em] uppercase text-[#5b6b7b] font-medium mb-1">{label}</div>
+      <div className="text-[10px] tracking-[0.04em] uppercase text-[#646e77] font-medium mb-1">{label}</div>
       <div
         className={cn(
           "text-[12.5px] text-ink leading-snug rounded-[3px] bg-[#f4f6f9] border border-[#e1e6ec] px-2 py-1",
@@ -34,8 +34,8 @@ export function Field({ label, value, mono }: { label: string; value: React.Reac
 export function SectionBand({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-[#eef1f5] border-y border-[#dfe4ea] px-4 py-1.5 flex items-center gap-2">
-      <span className="w-1 h-3 rounded-sm bg-[#354a5f]" />
-      <span className="text-[10.5px] tracking-[0.1em] uppercase text-[#354a5f] font-bold">{children}</span>
+      <span className="w-1 h-3 rounded-sm bg-[#27455c]" />
+      <span className="text-[10.5px] tracking-[0.1em] uppercase text-[#27455c] font-bold">{children}</span>
     </div>
   );
 }
@@ -61,7 +61,7 @@ export function DocTitleBand({
     if (shell) exportElementAsHtml(shell, `${fileStem(number)}.html`);
   };
   return (
-    <div className="bg-[#354a5f] text-white px-4 py-3 flex items-start justify-between gap-4">
+    <div className="bg-[#27455c] text-white px-4 py-3 flex items-start justify-between gap-4">
       <div className="leading-tight">
         <div className="flex items-center gap-2">
           <span className="text-[15px] font-bold tabular-nums">{number}</span>

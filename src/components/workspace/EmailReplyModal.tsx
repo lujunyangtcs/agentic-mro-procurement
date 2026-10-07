@@ -29,14 +29,14 @@ function EmailCard({
       <div
         className={cn(
           "px-4 py-2.5 border-l-[3px] flex items-start justify-between gap-3",
-          outbound ? "border-[#0a6ed1] bg-[#0a6ed1]/[0.05]" : "border-[#354a5f] bg-[#354a5f]/[0.05]",
+          outbound ? "border-[#0a6ed1] bg-[#0a6ed1]/[0.05]" : "border-[#27455c] bg-[#27455c]/[0.05]",
         )}
       >
         <div className="min-w-0">
           <div
             className={cn(
               "flex items-center gap-1.5 text-[10px] uppercase tracking-[0.07em] font-bold",
-              outbound ? "text-[#0a6ed1]" : "text-[#354a5f]",
+              outbound ? "text-[#0a6ed1]" : "text-[#27455c]",
             )}
           >
             {outbound ? <CornerUpRight size={12} /> : <Mail size={12} />}

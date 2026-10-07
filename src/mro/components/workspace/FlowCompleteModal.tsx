@@ -142,14 +142,14 @@ export function FlowCompleteModal({
             <button
               type="button"
               onClick={onClose}
-              className="ui-pill flex-1 rounded-full border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
+              className="ui-pill flex-1 border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
             >
               Stay on the run
             </button>
             <button
               type="button"
               onClick={onBackToCockpit}
-              className="ui-pill flex-1 rounded-full bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
+              className="ui-pill flex-1 bg-surface-deep px-4 py-2.5 text-[13px] font-bold text-ink-inverse hover:bg-accent-green"
             >
               {t("run.backToDashboard")}
             </button>

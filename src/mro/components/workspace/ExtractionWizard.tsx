@@ -336,7 +336,7 @@ export function ExtractionWizard({
             match stages — previous columns stay, the new one fills in. */}
         <SpringIn key={isMatch ? "match-box" : stageIdx}>
           <div className="bg-white border border-divider rounded-md overflow-hidden">
-            <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#354a5f]">
+            <div className="flex items-center gap-2 px-3.5 py-2 bg-[#eef1f5] border-b border-divider border-l-[3px] border-l-[#27455c]">
               <Sparkles size={12} className="text-ink shrink-0" />
               <span className="text-[10.5px] uppercase tracking-[0.06em] text-ink font-bold">
                 {wt(`stage.${stageIdx}.title`, stage.title)}
@@ -426,14 +426,14 @@ export function ExtractionWizard({
                 type="button"
                 onClick={proceed}
                 disabled={!filled}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green disabled:opacity-45"
+                className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-ink-inverse hover:bg-accent-green disabled:opacity-45"
               >
                 <CornerUpRight size={14} /> {t("run.validateProceed")}
               </button>
               <button
                 type="button"
                 onClick={discard}
-                className="ui-pill inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
+                className="ui-pill inline-flex items-center gap-1.5 px-3.5 py-2 text-[13px] font-medium bg-white text-ink border border-ink/30 hover:bg-surface-fog"
               >
                 <RotateCcw size={14} /> {t("run.discard")}
               </button>

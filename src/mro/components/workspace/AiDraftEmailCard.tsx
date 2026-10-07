@@ -69,7 +69,7 @@ export function AiDraftEmailCard({
             </span>
           ) : sent ? (
             <>
-              <span className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#107e3e]">
+              <span className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#2f6b4f]">
                 <Check size={14} strokeWidth={3} /> {sentLabel ?? (hasReply ? "Sent · reply received" : "Sent")}
               </span>
               {hasReply && onViewThread && (
@@ -86,7 +86,7 @@ export function AiDraftEmailCard({
             <button
               type="button"
               onClick={onSend}
-              className="ui-pill inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
+              className="ui-pill inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
             >
               <CornerUpRight size={14} /> {sendLabel}
             </button>

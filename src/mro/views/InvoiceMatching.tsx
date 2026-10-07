@@ -119,7 +119,7 @@ function TieoutRow({
         </span>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-medium whitespace-nowrap",
+            "inline-flex items-center gap-1.5 px-3 py-1 text-[13px] font-medium whitespace-nowrap",
             agrees
               ? "bg-surface-mint text-surface-deep"
               : "bg-surface-rose text-mark-red",
@@ -137,7 +137,7 @@ function TieoutRow({
           </span>
         )}
         {claimed && (
-          <span className="rounded-full bg-surface-mint px-3 py-1 text-[13px] font-medium text-surface-deep whitespace-nowrap">
+          <span className="bg-surface-mint px-3 py-1 text-[13px] font-medium text-surface-deep whitespace-nowrap">
             Claim raised
           </span>
         )}
@@ -218,7 +218,7 @@ function TieoutRow({
               </PillButton>
             )}
             {!agrees && claimed && (
-              <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-mint px-3.5 py-2 text-[13px] font-medium text-surface-deep">
+              <span className="inline-flex items-center gap-2 whitespace-nowrap bg-surface-mint px-3.5 py-2 text-[13px] font-medium text-surface-deep">
                 <Check size={14} strokeWidth={2.6} />
                 Claim raised with the supplier
               </span>

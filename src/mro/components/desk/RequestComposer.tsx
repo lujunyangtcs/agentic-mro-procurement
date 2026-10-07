@@ -69,7 +69,7 @@ export function RequestComposer() {
               onClick={() => setText(EXAMPLES[k])}
               aria-pressed={text === EXAMPLES[k]}
               className={cn(
-                "ui-pill whitespace-nowrap rounded-full border px-2.5 py-1 text-[12px] font-medium",
+                "ui-pill whitespace-nowrap border px-2.5 py-1 text-[12px] font-medium",
                 text === EXAMPLES[k] ? "border-surface-deep bg-surface-mint text-surface-deep" : "border-divider bg-white text-ink hover:bg-surface-fog",
               )}
             >

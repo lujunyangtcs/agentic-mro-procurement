@@ -138,7 +138,7 @@ function SavingsAlert() {
         className="ui-pill relative inline-flex h-[38px] w-[38px] items-center justify-center rounded-md border border-divider bg-white hover:bg-surface-rose/40"
       >
         <BellRing size={16} className="text-mark-red" strokeWidth={2} />
-        <span className="absolute -top-1.5 -right-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-mark-red px-[3px] text-[10.5px] font-bold leading-none text-ink-inverse ring-2 ring-white">
+        <span className="absolute -top-1.5 -right-1.5 flex h-[17px] min-w-[17px] items-center justify-center bg-mark-red px-[3px] text-[10.5px] font-bold leading-none text-ink-inverse ring-2 ring-white">
           {total}
         </span>
       </button>
@@ -529,7 +529,7 @@ export function Cockpit() {
                     </span>
                   </span>
                   <span
-                    className="shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 text-[12px] font-medium"
+                    className="shrink-0 whitespace-nowrap px-2.5 py-1 text-[12px] font-medium"
                     style={{ color: accent, background: `color-mix(in srgb, ${accent} 12%, white)` }}
                   >
                     {t(`exc.${type}`)}
@@ -589,7 +589,7 @@ export function Cockpit() {
                     </span>
                     <span
                       className={cn(
-                        "justify-self-start whitespace-nowrap rounded-full px-2.5 py-1 text-[12px] font-medium",
+                        "justify-self-start whitespace-nowrap px-2.5 py-1 text-[12px] font-medium",
                         ok ? "bg-surface-mint text-surface-deep" : "bg-surface-rose text-mark-red",
                       )}
                     >

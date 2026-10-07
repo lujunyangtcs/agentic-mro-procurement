@@ -207,7 +207,7 @@ function SignInPanel({ signIn }: { signIn: () => void }) {
             <Boxes size={16} strokeWidth={1.75} />
           </span>
           <span
-            className="rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
+            className="px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
             style={{ color: ACCENT.hex, background: `${ACCENT.hex}14`, border: `1px solid ${ACCENT.hex}55` }}
           >
             {PERSONA.badge}

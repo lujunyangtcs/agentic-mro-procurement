@@ -79,7 +79,7 @@ function Bubble({ turn }: { turn: Turn }) {
     return (
       <div className="flex flex-col items-end">
         <div className="flex items-center gap-2 pb-1">
-          <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-surface-fog px-2 py-0.5 text-[12px] text-ink">
+          <span className="inline-flex items-center gap-1 whitespace-nowrap bg-surface-fog px-2 py-0.5 text-[12px] text-ink">
             {turn.channel === "email" ? <Mail size={11} /> : null}
             {turn.channel === "email" ? "sent by email" : "sent in the portal"}
           </span>
@@ -103,7 +103,7 @@ function Bubble({ turn }: { turn: Turn }) {
         <div className="flex min-w-0 max-w-[80%] flex-col">
           <div className="flex items-center gap-2 pb-1">
             <span className="text-[12px] font-semibold text-ink">{supplier.name}</span>
-            <span className="whitespace-nowrap rounded-full bg-surface-mint px-2 py-0.5 text-[12px] font-medium text-surface-deep">
+            <span className="whitespace-nowrap bg-surface-mint px-2 py-0.5 text-[12px] font-medium text-surface-deep">
               {src.emoji} wrote in {src.native}
             </span>
           </div>
@@ -125,7 +125,7 @@ function Bubble({ turn }: { turn: Turn }) {
         <div className="min-w-0 max-w-[80%]">
           <div className="flex items-center gap-2 pb-1">
             <span className="text-[12px] font-semibold text-ink">Assistant</span>
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
               <Clock size={11} />
               Waiting on you
             </span>
@@ -151,7 +151,7 @@ function Bubble({ turn }: { turn: Turn }) {
         <div className="flex items-center gap-2 pb-1">
           <span className="text-[12px] font-semibold text-ink">Assistant</span>
           {turn.lang !== "en" && (
-            <span className="whitespace-nowrap rounded-full bg-surface-mint px-2 py-0.5 text-[12px] font-medium text-surface-deep">
+            <span className="whitespace-nowrap bg-surface-mint px-2 py-0.5 text-[12px] font-medium text-surface-deep">
               {src.emoji} replied in {src.native}
             </span>
           )}
@@ -203,7 +203,7 @@ function SuggestionCard({
         />
         <header className="flex items-center gap-2 border-b border-divider px-4 py-2.5">
           <span className="text-[14px] font-bold text-ink">{c.id}</span>
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
             <ShieldAlert size={11} />
             Strategic
           </span>
@@ -249,13 +249,13 @@ function SuggestionCard({
                   <div className="flex items-center gap-2">
                     <span className="text-[13px] font-bold text-ink">{o.label}</span>
                     {i === 0 && (
-                      <span className="whitespace-nowrap rounded-full bg-surface-deep px-2 py-0.5 text-[11px] font-medium text-ink-inverse">
+                      <span className="whitespace-nowrap bg-surface-deep px-2 py-0.5 text-[11px] font-medium text-ink-inverse">
                         Suggested
                       </span>
                     )}
                     <span
                       className={cn(
-                        "ml-auto whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-medium",
+                        "ml-auto whitespace-nowrap px-2 py-0.5 text-[11px] font-medium",
                         tone.cls,
                       )}
                     >
@@ -594,7 +594,7 @@ export function ServiceDesk() {
           title="Conversation with the supplier"
           sub={`${supplier.name} · shown in their language, with an AI summary in English under every line.`}
           right={
-            <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-mint px-3 py-1.5 text-[13px] font-medium text-surface-deep">
+            <span className="inline-flex items-center gap-2 whitespace-nowrap bg-surface-mint px-3 py-1.5 text-[13px] font-medium text-surface-deep">
               <AIDot size={7} tone="deep" pulse />
               Assistant online
             </span>

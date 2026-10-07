@@ -17,7 +17,7 @@ export function LiveHoldsPanel() {
     <section className="overflow-hidden rounded-md border border-divider bg-white">
       <header className="flex items-center gap-2 px-4 pb-2.5 pt-3.5">
         <h2 className="min-w-0 flex-1 text-[15px] font-bold text-ink">{d.qExceptions}</h2>
-        <span className="rounded-full bg-surface-fog px-2 py-0.5 text-[12px] font-bold text-ink">{rows.length}</span>
+        <span className="bg-surface-fog px-2 py-0.5 text-[12px] font-bold text-ink">{rows.length}</span>
       </header>
       {rows.length === 0 ? (
         <p className="border-t border-divider px-4 py-5 text-center text-[13px] text-mute">{d.qEmptyExceptions}</p>

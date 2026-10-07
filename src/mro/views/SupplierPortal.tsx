@@ -87,7 +87,7 @@ function Bubble({
         <div className="min-w-0 max-w-[80%]">
           <div className="flex items-center gap-2 pb-1">
             <span className="text-[12px] font-semibold text-ink">{t("sp.chat.specialist")}</span>
-            <span className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-surface-fog px-2 py-0.5 text-[12px] text-mute">
+            <span className="inline-flex items-center gap-1 whitespace-nowrap bg-surface-fog px-2 py-0.5 text-[12px] text-mute">
               {turn.channel === "email" ? <Mail size={11} /> : null}
               {turn.channel === "email" ? t("sp.chat.byEmail") : t("sp.chat.inPortal")}
             </span>
@@ -110,7 +110,7 @@ function Bubble({
         <div className="flex items-center gap-2 pb-1">
           <span className="text-[12px] font-semibold text-ink">{t("sp.chat.assistant")}</span>
           {pending && (
-            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap bg-surface-rose px-2.5 py-0.5 text-[12px] font-medium text-mark-red">
               <Clock size={11} />
               {t("sp.chat.withSpecialist")}
             </span>
@@ -132,7 +132,7 @@ function Bubble({
                 )}
               </p>
               <div className="mt-2.5 flex flex-wrap items-center gap-2 border-t border-mark-red/15 pt-2.5">
-                <span className="rounded-full bg-white px-2.5 py-1 text-[12px] font-medium text-ink whitespace-nowrap">
+                <span className="bg-white px-2.5 py-1 text-[12px] font-medium text-ink whitespace-nowrap">
                   {turn.caseId}
                 </span>
               </div>
@@ -199,7 +199,7 @@ function InvoicesPanel({ tieouts, className }: { tieouts: InvoiceTieout[]; class
                   <Td align="right">
                     <span
                       className={cn(
-                        "inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-[13px] font-medium",
+                        "inline-block whitespace-nowrap px-2.5 py-1 text-[13px] font-medium",
                         ok ? "bg-surface-mint text-surface-deep" : "bg-surface-rose text-mark-red",
                       )}
                     >
@@ -279,7 +279,7 @@ function PurchaseRequestsPanel({ requisitions }: { requisitions: Requisition[] }
                   <Td align="right">
                     <span
                       className={cn(
-                        "inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-[13px] font-medium",
+                        "inline-block whitespace-nowrap px-2.5 py-1 text-[13px] font-medium",
                         st.tone === "ok" && "bg-surface-mint text-surface-deep",
                         st.tone === "hold" && "bg-surface-rose text-mark-red",
                         st.tone === "run" && "bg-surface-fog text-ink",
@@ -538,7 +538,7 @@ const TYPED_QUESTIONS = ["Q-PAY-5581", "Q-PAY-5588"];
               title={t("sp.chat.title")}
               sub={t("sp.chat.sub", { lang: langName })}
               right={
-                <span className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-surface-mint px-3 py-1.5 text-[13px] font-medium text-surface-deep">
+                <span className="inline-flex items-center gap-2 whitespace-nowrap bg-surface-mint px-3 py-1.5 text-[13px] font-medium text-surface-deep">
                   <AIDot size={7} tone="deep" pulse />
                   {t("sp.chat.online")}
                 </span>
@@ -597,7 +597,7 @@ const TYPED_QUESTIONS = ["Q-PAY-5581", "Q-PAY-5588"];
                           key={q.id}
                           type="button"
                           onClick={() => fire(q)}
-                          className="ui-pill inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-surface-deep/35 bg-white px-3 py-1.5 text-[12.5px] text-ink transition-colors hover:bg-surface-mint/40"
+                          className="ui-pill inline-flex items-center gap-1.5 whitespace-nowrap border border-surface-deep/35 bg-white px-3 py-1.5 text-[12.5px] text-ink transition-colors hover:bg-surface-mint/40"
                         >
                           {q.chip[lang]}
                           <Send size={11} className="shrink-0 text-ink" />

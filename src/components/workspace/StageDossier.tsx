@@ -17,7 +17,7 @@ import type { StageDossier as StageDossierData, DossierRow } from "@/data/runSte
 const LANE_META: Record<DossierRow["lane"], { icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>; tint: string }> = {
   "Key process steps": { icon: ListChecks, tint: "text-mute" },
   "AI intervention points": { icon: Sparkles, tint: "text-surface-deep" },
-  "Value delivered": { icon: TrendingUp, tint: "text-[#107e3e]" },
+  "Value delivered": { icon: TrendingUp, tint: "text-[#2f6b4f]" },
   "Key controls": { icon: ShieldCheck, tint: "text-mute" },
   "Systems / tools": { icon: Boxes, tint: "text-mute" },
 };

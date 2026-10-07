@@ -46,10 +46,10 @@ function ExcelSheet({ sheet, last }: { sheet: RefSheet; last: boolean }) {
     <div className={cn("rounded-[4px] border border-[#cfd6cf] overflow-hidden", !last && "mb-3")}>
       {/* Filename strip (Excel green) */}
       <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#e7f0e9] border-b border-[#cfd6cf]">
-        <span className="grid place-items-center w-4 h-4 rounded-[2px] bg-[#107c41] text-white text-[8px] font-bold leading-none">X</span>
-        <span className="text-[11px] font-semibold text-[#0f5132] truncate">{sheet.file}</span>
+        <span className="grid place-items-center w-4 h-4 rounded-[2px] bg-[#2f6b4f] text-white text-[8px] font-bold leading-none">X</span>
+        <span className="text-[11px] font-semibold text-[#1f4d3a] truncate">{sheet.file}</span>
         {sheet.usedNote && (
-          <span className="ml-auto text-[10px] text-[#0f5132]/80 truncate">{sheet.usedNote}</span>
+          <span className="ml-auto text-[10px] text-[#1f4d3a]/80 truncate">{sheet.usedNote}</span>
         )}
       </div>
 
@@ -80,21 +80,21 @@ function ExcelSheet({ sheet, last }: { sheet: RefSheet; last: boolean }) {
               <tr key={ri} {...(r.flag ? { "data-ai-anchor": true } : {})} className={r.matched ? "bg-[#e2f3e8]" : r.flag ? "bg-[#fff3c4]" : "bg-white"}>
                 <td className={cn(
                   "w-6 text-center text-[9px] border border-[#e0e4e0]",
-                  r.matched ? "bg-[#bfe4cd] text-[#0f5132] font-bold" : "bg-[#f3f5f3] text-[#8a938a]",
+                  r.matched ? "bg-[#bfe4cd] text-[#1f4d3a] font-bold" : "bg-[#f3f5f3] text-[#8a938a]",
                 )}>
                   {ri + 2}
                 </td>
                 {r.cells.map((cell, ci) => (
                   <td key={ci} className={cn(
                     "px-2 py-1 border border-[#e0e4e0] tabular-nums whitespace-nowrap",
-                    r.matched ? "text-[#0f5132] font-semibold" : "text-ink",
+                    r.matched ? "text-[#1f4d3a] font-semibold" : "text-ink",
                   )}>
                     {cell}
                   </td>
                 ))}
                 <td className="px-1.5 py-1 border border-[#e0e4e0] text-center">
                   {r.matched && (
-                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-white bg-[#107c41] px-1.5 py-[1px] rounded-full whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-white bg-[#2f6b4f] px-1.5 py-[1px] whitespace-nowrap">
                       ✓ used
                     </span>
                   )}
@@ -107,7 +107,7 @@ function ExcelSheet({ sheet, last }: { sheet: RefSheet; last: boolean }) {
 
       {/* Sheet tab */}
       <div className="flex items-stretch px-2 pt-1 bg-[#f3f5f3] border-t border-[#e0e4e0]">
-        <span className="text-[10px] font-semibold text-[#0f5132] border-t-2 border-[#107c41] bg-white px-2.5 py-1 rounded-t-[2px]">
+        <span className="text-[10px] font-semibold text-[#1f4d3a] border-t-2 border-[#2f6b4f] bg-white px-2.5 py-1 rounded-t-[2px]">
           {sheet.tab}
         </span>
         <span className="text-[10px] text-[#8a938a] px-2.5 py-1">＋</span>

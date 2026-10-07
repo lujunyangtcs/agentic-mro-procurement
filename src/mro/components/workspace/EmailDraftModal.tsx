@@ -155,7 +155,7 @@ export function EmailDraftModal({ draft, onClose, onSent }: { draft: EmailDraft;
                   onClick={() => setPreviewOpen(true)}
                   className="flex w-full items-center gap-3 rounded-xl border border-divider bg-surface-fog px-3.5 py-3 text-left hover:border-surface-deep"
                 >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#d4342a]/10 text-[#d4342a]"><FileText size={18} /></span>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#a1232b]/10 text-[#a1232b]"><FileText size={18} /></span>
                   <span className="min-w-0 flex-1">
                     <span className="block text-[13px] font-bold text-ink truncate">{fileName}</span>
                     <span className="block text-[11px] text-mute">PDF · click to preview</span>
@@ -174,9 +174,9 @@ export function EmailDraftModal({ draft, onClose, onSent }: { draft: EmailDraft;
               <p className="mb-3 flex items-center justify-center gap-1.5 text-[12.5px] font-bold text-surface-deep"><CalendarCheck size={14} /> Follow-up reminder set for Jun {scheduled}, 2026 · logged</p>
             )}
             <div className="flex items-stretch gap-3">
-              <button type="button" onClick={onSent} className="ui-pill flex flex-1 items-center justify-center rounded-full bg-surface-deep px-4 py-2.5 text-[13.5px] font-bold text-white hover:brightness-110">Send</button>
-              <button type="button" onClick={onClose} className="ui-pill flex flex-1 items-center justify-center rounded-full border border-divider px-4 py-2.5 text-[13.5px] font-bold text-ink hover:border-surface-deep">Discard</button>
-              <button type="button" onClick={() => setShowCal((v) => !v)} className={cn("ui-pill flex flex-1 items-center justify-center gap-1.5 rounded-full border px-4 py-2.5 text-[13.5px] font-bold", showCal ? "border-surface-deep bg-surface-mint text-surface-deep" : "border-divider text-ink hover:border-surface-deep")}><CalendarPlus size={15} /> Follow-up</button>
+              <button type="button" onClick={onSent} className="ui-pill flex flex-1 items-center justify-center bg-surface-deep px-4 py-2.5 text-[13.5px] font-bold text-white hover:brightness-110">Send</button>
+              <button type="button" onClick={onClose} className="ui-pill flex flex-1 items-center justify-center border border-divider px-4 py-2.5 text-[13.5px] font-bold text-ink hover:border-surface-deep">Discard</button>
+              <button type="button" onClick={() => setShowCal((v) => !v)} className={cn("ui-pill flex flex-1 items-center justify-center gap-1.5 border px-4 py-2.5 text-[13.5px] font-bold", showCal ? "border-surface-deep bg-surface-mint text-surface-deep" : "border-divider text-ink hover:border-surface-deep")}><CalendarPlus size={15} /> Follow-up</button>
             </div>
           </footer>
         )}
@@ -186,7 +186,7 @@ export function EmailDraftModal({ draft, onClose, onSent }: { draft: EmailDraft;
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 px-4 py-6" onClick={() => setPreviewOpen(false)}>
           <div onClick={(e) => e.stopPropagation()} className="ai-spring flex max-h-[90vh] w-full max-w-[680px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
             <header className="flex items-center gap-2 border-b border-divider px-5 py-3 shrink-0">
-              <FileText size={15} className="text-[#d4342a]" />
+              <FileText size={15} className="text-[#a1232b]" />
               <span className="truncate text-[13px] font-bold text-ink">{fileName}</span>
               <button type="button" onClick={() => setPreviewOpen(false)} aria-label="Close preview" className="ui-pill ml-auto flex h-7 w-7 items-center justify-center rounded-full text-mute hover:bg-surface-fog hover:text-ink"><X size={16} /></button>
             </header>

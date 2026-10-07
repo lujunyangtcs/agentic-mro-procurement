@@ -1,10 +1,19 @@
-import { Check, UserRound, Lock, Loader2 } from "lucide-react";
+import { Check, UserRound, Lock, Loader2, ChevronRight } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import type { StoryRun } from "@/mro/data/stories/runModel";
 import type { RunState } from "@/mro/components/story/useStoryRun";
 import { useStoryCopy } from "@/mro/components/story/copy";
 
 type StepStatus = "done" | "running" | "waiting" | "locked" | "ready";
+
+/** The rule along each card's head: what the step is doing, at a glance. */
+const barTone: Record<StepStatus, string> = {
+  done: "bg-ink",
+  ready: "bg-ink",
+  waiting: "bg-mark-amber",
+  running: "bg-steel",
+  locked: "bg-divider",
+};
 
 /** The agent chain as equal-height cards, in manifest order. */
 export function AgentStepper({
@@ -31,68 +40,99 @@ export function AgentStepper({
   };
 
   return (
-    <ol className="grid grid-cols-1 items-stretch gap-2 md:grid-cols-3" data-equal-row>
+    <ol className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-3" data-equal-row>
       {run.steps.map((s, i) => {
         const st = statusOf(i);
         const selected = state.selected === i;
         const personas = s.tasks.map((t) => t.persona);
         return (
-          <li key={s.run.agent + i} className="h-full">
+          <li key={s.run.agent + i} className="jlr-fade-up h-full" style={{ animationDelay: `${i * 80}ms` }}>
             <button
               type="button"
               onClick={() => onSelect(i)}
               disabled={st === "locked"}
               aria-current={selected ? "step" : undefined}
               className={cn(
-                "flex h-full w-full flex-col gap-2 rounded-md border bg-white p-3 text-left transition-colors disabled:cursor-not-allowed",
-                selected ? "border-surface-deep shadow-[0_0_0_1px_var(--accent-green-deep)]" : "border-divider hover:border-surface-sage",
-                st === "locked" && "opacity-55",
+                "group relative flex h-full w-full flex-col gap-3 border bg-white px-4 pb-4 pt-5 text-left transition-colors duration-150 ease-out disabled:cursor-not-allowed",
+                selected ? "border-ink" : "border-divider hover:border-ink/40",
+                st === "running" && "jlr-scan",
+                st === "locked" && "bg-white/60",
               )}
             >
-              <div className="flex items-center gap-2.5">
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute inset-x-0 top-0 h-[3px] origin-left transition-transform duration-300 ease-out",
+                  barTone[st],
+                  selected || st === "waiting" || st === "running" ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                )}
+              />
+
+              <div className="flex items-start justify-between gap-3">
                 <span
                   className={cn(
-                    "grid h-7 w-7 shrink-0 place-items-center rounded-full text-[12px] font-bold",
+                    "text-[30px] font-extralight leading-none tabular-nums tracking-[-0.02em]",
+                    st === "locked" ? "text-mute/50" : "text-ink",
+                  )}
+                  aria-hidden
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={cn(
+                    "grid h-7 w-7 shrink-0 place-items-center border",
                     st === "done" || st === "ready"
-                      ? "bg-surface-deep text-ink-inverse"
+                      ? "border-ink bg-ink text-ink-inverse"
                       : st === "waiting"
-                        ? "bg-surface-amber text-mark-amber"
+                        ? "border-mark-amber bg-surface-amber text-mark-amber"
                         : st === "running"
-                          ? "bg-surface-mint text-surface-deep"
-                          : "bg-surface-fog text-mute",
+                          ? "border-steel text-steel"
+                          : "border-divider text-mute",
                   )}
                   aria-hidden
                 >
                   {st === "done" || st === "ready" ? (
-                    <Check size={14} strokeWidth={2.5} />
+                    <Check size={14} />
                   ) : st === "waiting" ? (
-                    <UserRound size={14} />
+                    <UserRound size={14} className="ai-pulse" />
                   ) : st === "running" ? (
                     <Loader2 size={14} className="animate-spin" />
-                  ) : st === "locked" && i > state.reached ? (
-                    <Lock size={12} />
                   ) : (
-                    i + 1
+                    <Lock size={12} />
                   )}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[14px] font-bold leading-[19px] text-ink">{s.run.agent}</span>
-                  <span className="block truncate text-[12px] leading-[16px] text-mute">{s.run.flowStep}</span>
-                </span>
               </div>
-              <span className="mt-auto flex flex-wrap items-center gap-1.5">
-                {st === "locked" && i > state.reached ? (
-                  <span className="text-[12px] text-mute">{c.locked}</span>
-                ) : personas.length > 0 ? (
-                  personas.map((p) => (
-                    <span key={p} className="max-w-full truncate rounded-full bg-surface-amber px-2 py-0.5 text-[11.5px] font-medium text-mark-amber">
-                      {p}
-                    </span>
-                  ))
-                ) : (
-                  <span className="rounded-full bg-surface-mint px-2 py-0.5 text-[11.5px] font-medium text-surface-deep">
-                    {s.run.lane?.lane ?? "—"}
-                  </span>
+
+              <span className="min-w-0">
+                <span className={cn("block truncate text-[14px] leading-[20px]", st === "locked" ? "text-mute" : "text-ink")}>
+                  {s.run.agent}
+                </span>
+                <span className="mt-0.5 block truncate text-[12px] leading-[16px] text-mute">{s.run.flowStep}</span>
+              </span>
+
+              <span className="mt-auto flex items-center gap-2 border-t border-divider pt-3">
+                <span className="flex min-w-0 flex-1 flex-wrap items-center gap-1.5">
+                  {st === "locked" && i > state.reached ? (
+                    <span className="jlr-eyebrow text-[10.5px] text-mute">{c.locked}</span>
+                  ) : personas.length > 0 ? (
+                    personas.map((p) => (
+                      <span
+                        key={p}
+                        className="max-w-full truncate bg-surface-amber px-2 py-0.5 text-[11.5px] text-mark-amber"
+                      >
+                        {p}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="bg-sand px-2 py-0.5 text-[11.5px] text-ink">{s.run.lane?.lane ?? "—"}</span>
+                  )}
+                </span>
+                {st !== "locked" && (
+                  <ChevronRight
+                    size={16}
+                    aria-hidden
+                    className="shrink-0 text-steel transition-transform duration-150 ease-out group-hover:translate-x-1"
+                  />
                 )}
               </span>
             </button>

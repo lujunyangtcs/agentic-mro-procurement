@@ -101,20 +101,20 @@ export function AiDraftEmailModal({
                 <button
                   type="button"
                   onClick={send}
-                  className="ui-pill inline-flex items-center gap-1.5 rounded-full px-5 py-2.5 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
+                  className="ui-pill inline-flex items-center gap-1.5 px-5 py-2.5 text-[13px] font-bold bg-surface-deep text-white hover:brightness-110"
                 >
                   <CornerUpRight size={15} /> {sendLabel}
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="ui-pill rounded-full border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
+                  className="ui-pill border border-ink/25 bg-white px-4 py-2.5 text-[13px] font-medium text-ink hover:bg-surface-fog"
                 >
                   Close
                 </button>
               </>
             ) : (
-              <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#107e3e]">
+              <span className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#2f6b4f]">
                 <Check size={15} strokeWidth={3} /> {sentLabel}
               </span>
             )}

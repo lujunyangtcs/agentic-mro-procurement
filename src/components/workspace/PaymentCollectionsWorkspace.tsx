@@ -135,7 +135,7 @@ export function PaymentCollectionsWorkspace() {
             </button>
           ) : (
             <>
-              <span className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#107e3e]">
+              <span className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-[#2f6b4f]">
                 <Check size={14} strokeWidth={3} /> Sent · logged to the account
               </span>
               {followUp ? (

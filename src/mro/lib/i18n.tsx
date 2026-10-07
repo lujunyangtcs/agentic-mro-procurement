@@ -2935,7 +2935,7 @@ export function TranslatedBadge({ from }: { from: Lang }) {
   const src = LANGUAGES.find((l) => l.code === from);
   if (!src) return null;
   return (
-    <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep">
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap bg-surface-mint px-2.5 py-1 text-[12px] font-medium text-surface-deep">
       {src.flag} → {t("xlat.translated")}
     </span>
   );

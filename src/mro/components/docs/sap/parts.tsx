@@ -4,7 +4,7 @@
  * gives them one consistent SAP chrome — a steel-blue shell title bar, grey
  * section bands, SAP display-field label/value pairs and a compact table — so
  * the whole pipeline reads as one genuine ERP document family. The palette is
- * SAP's own (Fiori/Belize): steel-blue shell #354a5f, SAP blue #0a6ed1 accents,
+ * SAP's own (Fiori/Belize): steel-blue shell #27455c, SAP blue #0a6ed1 accents,
  * semantic ObjectStatus colours. Presentational only.
  */
 
@@ -17,7 +17,7 @@ import { exportElementAsHtml, fileStem } from "@/mro/lib/exportDoc";
 export function Field({ label, value, mono }: { label: string; value: React.ReactNode; mono?: boolean }) {
   return (
     <div className="min-w-0">
-      <div className="text-[10px] tracking-[0.04em] uppercase text-[#5b6b7b] font-medium mb-1">{label}</div>
+      <div className="text-[10px] tracking-[0.04em] uppercase text-[#646e77] font-medium mb-1">{label}</div>
       <div
         className={cn(
           "text-[12.5px] text-ink leading-snug rounded-[3px] bg-[#f4f6f9] border border-[#e1e6ec] px-2 py-1",
@@ -34,7 +34,7 @@ export function Field({ label, value, mono }: { label: string; value: React.Reac
 export function SectionBand({ children }: { children: React.ReactNode }) {
   return (
     <div className="bg-[#eef1f5] border-y border-[#dfe4ea] px-4 py-1.5 flex items-center gap-2">
-      <span className="w-1 h-3 rounded-sm bg-[#354a5f]" />
+      <span className="w-1 h-3 rounded-sm bg-[#27455c]" />
       <span className="text-[10.5px] tracking-[0.1em] uppercase text-ink font-bold">{children}</span>
     </div>
   );
@@ -61,7 +61,7 @@ export function DocTitleBand({
     if (shell) exportElementAsHtml(shell, `${fileStem(number)}.html`);
   };
   return (
-    <div className="bg-[#354a5f] text-white px-4 py-3 flex items-start justify-between gap-4">
+    <div className="bg-[#27455c] text-white px-4 py-3 flex items-start justify-between gap-4">
       <div className="leading-tight">
         <div className="flex items-center gap-2">
           <span className="text-[15px] font-bold tabular-nums">{number}</span>
@@ -94,14 +94,14 @@ export function DocTitleBand({
 /** The grey SAP system toolbar — command field (tcode) + GUI function icons. */
 function SapToolbar({ tcode, tname }: { tcode: string; tname?: string }) {
   const Glyph = ({ icon: Icon }: { icon: typeof Check }) => (
-    <span className="grid place-items-center w-[18px] h-[18px] rounded-[2px] text-[#1c3a5e] hover:bg-white/70">
+    <span className="grid place-items-center w-[18px] h-[18px] rounded-[2px] text-[#27455c] hover:bg-white/70">
       <Icon size={12} strokeWidth={2} />
     </span>
   );
   return (
     <div className="flex items-center gap-1.5 bg-[#dfe4ea] border-b border-[#c4ccd6] px-2 py-1">
-      <span className="inline-flex items-center gap-1 rounded-[2px] bg-white border border-[#aab4c0] pl-1.5 pr-2 py-0.5 text-[11px] text-[#1c3a5e] font-medium tabular-nums">
-        <Check size={11} strokeWidth={2.5} className="text-[#107e3e]" />
+      <span className="inline-flex items-center gap-1 rounded-[2px] bg-white border border-[#aab4c0] pl-1.5 pr-2 py-0.5 text-[11px] text-[#27455c] font-medium tabular-nums">
+        <Check size={11} strokeWidth={2.5} className="text-[#2f6b4f]" />
         {tcode}
       </span>
       <span className="flex items-center gap-0.5">
@@ -128,8 +128,8 @@ export function DocTabs({ tabs }: { tabs: string[] }) {
           className={cn(
             "text-[11px] px-3 py-1.5 border border-b-0 rounded-t-[3px] -mb-px whitespace-nowrap",
             i === 0
-              ? "bg-white border-[#dfe4ea] text-[#1c3a5e] font-semibold"
-              : "bg-[#eaeef3] border-transparent text-[#5b6b7b]",
+              ? "bg-white border-[#dfe4ea] text-[#27455c] font-semibold"
+              : "bg-[#eaeef3] border-transparent text-[#646e77]",
           )}
         >
           {t}
@@ -143,8 +143,8 @@ export function DocTabs({ tabs }: { tabs: string[] }) {
 function SapStatus({ status }: { status: string }) {
   return (
     <div className="flex items-center gap-1.5 bg-[#eef1f5] border-t border-[#dfe4ea] px-3 py-1.5">
-      <span className="grid place-items-center w-3.5 h-3.5 rounded-full bg-[#107e3e] text-white text-[8px] font-bold">i</span>
-      <span className="text-[11px] text-[#107e3e] truncate">{status}</span>
+      <span className="grid place-items-center w-3.5 h-3.5 rounded-full bg-[#2f6b4f] text-white text-[8px] font-bold">i</span>
+      <span className="text-[11px] text-[#2f6b4f] truncate">{status}</span>
     </div>
   );
 }

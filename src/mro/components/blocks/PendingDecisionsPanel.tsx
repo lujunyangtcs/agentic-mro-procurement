@@ -30,7 +30,7 @@ export function PendingDecisionsPanel({ className }: { className?: string }) {
         </div>
         <span
           className={cn(
-            "px-2.5 py-0.5 rounded-full text-[11px] font-medium",
+            "px-2.5 py-0.5 text-[11px] font-medium",
             awaitingCount > 0
               ? "bg-mark-red text-ink-inverse"
               : "bg-surface-mint text-surface-deep",

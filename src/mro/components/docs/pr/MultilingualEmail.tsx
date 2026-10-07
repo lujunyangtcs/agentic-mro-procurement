@@ -71,7 +71,7 @@ export function MultilingualEmailDoc({
           <span className="text-[12px] font-semibold uppercase tracking-[0.05em] text-mute">
             {t("xlat.original")}
           </span>
-          <span className="rounded-full bg-surface-fog px-2.5 py-0.5 text-[12px] font-medium text-ink whitespace-nowrap">
+          <span className="bg-surface-fog px-2.5 py-0.5 text-[12px] font-medium text-ink whitespace-nowrap">
             {t("xlat.writtenIn")} {src.native}
           </span>
         </div>

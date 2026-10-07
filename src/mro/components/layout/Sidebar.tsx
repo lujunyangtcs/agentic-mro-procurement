@@ -113,20 +113,19 @@ export function Sidebar() {
   return (
     <aside className="flex flex-col w-[240px] shrink-0 h-screen bg-white border-r border-divider sticky top-0">
       {/* Brand */}
-      <div className="px-5 pt-6 pb-2">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-lg bg-surface-deep flex items-center justify-center">
-            <span className="text-ink-inverse text-[15px] leading-none font-bold">✦</span>
-          </div>
-          <div className="leading-tight">
-            <div className="whitespace-nowrap text-[14px] font-bold text-ink">
+      <div className="border-b border-divider px-5 pb-4 pt-6">
+        <div className="flex items-center gap-3">
+          <span className="text-[26px] font-extralight leading-none tracking-[-0.04em] text-ink">JLR</span>
+          <span aria-hidden className="h-6 w-px bg-ink/25" />
+          <div className="min-w-0 leading-tight">
+            <div className="jlr-eyebrow text-[10.5px] leading-[14px] text-ink">
               {isSupplier ? t("sp.chip") : t("brand.name")}
             </div>
             <button
               type="button"
               onClick={() => setPresenter(true)}
               aria-haspopup="dialog"
-              className="ui-pill -ml-1 inline-flex items-center gap-1 whitespace-nowrap rounded px-1 text-[12px] text-mute hover:bg-surface-fog hover:text-ink"
+              className="jlr-link mt-0.5 inline-flex items-center gap-1 whitespace-nowrap text-[12px] text-mute hover:text-ink"
             >
               <SlidersHorizontal size={11} aria-hidden />
               {t("brand.demo")}
@@ -137,10 +136,10 @@ export function Sidebar() {
       <PresenterControls open={presenter} onClose={() => setPresenter(false)} />
 
       {/* Sections */}
-      <nav className="flex-1 overflow-y-auto pt-3">
+      <nav className="flex-1 overflow-y-auto pt-4">
         {sectionsForPersona.map((section) => (
-          <div key={section.title} className="pb-3">
-            <div className="px-5 pb-1 text-[11px] font-medium uppercase tracking-[0.06em] text-mute">
+          <div key={section.title} className="pb-4">
+            <div className="jlr-eyebrow px-5 pb-1.5 text-[11px] text-steel">
               {section.title}
             </div>
             <ul>
@@ -153,21 +152,21 @@ export function Sidebar() {
                       type="button"
                       disabled={item.comingSoon}
                       onClick={() => item.view && go(item.view)}
+                      aria-current={isActive ? "page" : undefined}
                       className={cn(
-                        "ui-pill w-full flex items-center gap-2.5 px-5 py-1.5 text-[13px] text-left",
-                        "border-l-4 border-transparent",
-                        isActive && "bg-surface-mint border-surface-deep text-surface-deep font-medium",
-                        !isActive && !item.comingSoon && "text-ink hover:bg-surface-mint/40",
+                        "jlr-nav-item w-full flex items-center gap-3 px-5 py-2 text-[13.5px] text-left transition-colors duration-150 ease-out",
+                        isActive && "bg-surface-fog text-ink font-medium",
+                        !isActive && !item.comingSoon && "text-mute hover:text-ink hover:bg-surface-fog/60",
                         item.comingSoon && "text-mute cursor-not-allowed",
                       )}
                     >
-                      <Icon size={16} strokeWidth={isActive ? 2.2 : 1.8} />
+                      <Icon size={16} />
                       <span className="flex-1">{item.label}</span>
                       {item.badge?.kind === "star" && (
                         <span className="text-surface-deep text-[12px]">★</span>
                       )}
                       {item.badge?.kind === "count" && (
-                        <span className="text-[11px] rounded-full bg-surface-fog text-mute px-1.5 py-0.5">
+                        <span className="min-w-5 bg-ink px-1.5 py-0.5 text-center text-[11px] leading-[14px] text-ink-inverse tabular-nums">
                           {item.badge.value}
                         </span>
                       )}
@@ -184,15 +183,15 @@ export function Sidebar() {
       {/* Changing chairs means signing out and coming back through the door,
           the way a real person would — so there is no switch here. */}
       {/* Persona footer */}
-      <div className="px-4 pb-4 pt-1 flex items-center gap-2.5">
-        <div className="w-8 h-8 rounded-full bg-surface-deep flex items-center justify-center text-[12px] font-bold text-ink-inverse">
+      <div className="flex items-center gap-3 border-t border-divider px-5 py-4">
+        <div className="flex h-9 w-9 items-center justify-center border border-ink/25 text-[12px] tracking-[0.08em] text-ink">
           {isSupplier ? "AR" : "PB"}
         </div>
         <div className="leading-tight flex-1 min-w-0">
           <div className="text-[13px] text-ink truncate">
             {t(isSupplier ? "brand.desk.supplier" : "brand.desk.buyer")}
           </div>
-          <button type="button" onClick={signOut} className="text-[12px] text-mute hover:text-ink">
+          <button type="button" onClick={signOut} className="jlr-link jlr-eyebrow mt-1 text-[11px] text-mute hover:text-ink">
             {t("nav.signOut")}
           </button>
         </div>

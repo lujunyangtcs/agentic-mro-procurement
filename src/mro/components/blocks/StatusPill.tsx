@@ -2,15 +2,16 @@ import { cn } from "@/mro/lib/utils";
 
 type Kind = "critical" | "ready" | "progress" | "resolved" | "neutral" | "alert" | "active" | "ok";
 
+/* Square, tracked, uppercase — the JLR label rather than a rounded pill. */
 const styles: Record<Kind, { bg: string; dot: string; ink: string }> = {
-  critical: { bg: "bg-surface-rose", dot: "bg-mark-red", ink: "text-mark-red" },
-  ready: { bg: "bg-surface-mint", dot: "bg-surface-deep", ink: "text-surface-deep" },
-  progress: { bg: "bg-surface-fog", dot: "bg-mute", ink: "text-ink" },
-  resolved: { bg: "bg-surface-mint", dot: "bg-surface-deep", ink: "text-surface-deep" },
-  neutral: { bg: "bg-surface-fog", dot: "bg-mute", ink: "text-ink" },
-  alert: { bg: "bg-surface-rose", dot: "bg-mark-red", ink: "text-mark-red" },
-  active: { bg: "bg-surface-mint", dot: "bg-surface-deep", ink: "text-surface-deep" },
-  ok: { bg: "bg-surface-fog", dot: "bg-accent-green", ink: "text-ink" },
+  critical: { bg: "bg-surface-red border-transparent", dot: "bg-mark-red", ink: "text-mark-red" },
+  ready: { bg: "bg-sand border-transparent", dot: "bg-surface-deep", ink: "text-ink" },
+  progress: { bg: "bg-white border-divider", dot: "bg-steel", ink: "text-ink" },
+  resolved: { bg: "bg-white border-ink/30", dot: "bg-accent-green", ink: "text-ink" },
+  neutral: { bg: "bg-white border-divider", dot: "bg-steel", ink: "text-mute" },
+  alert: { bg: "bg-surface-red border-transparent", dot: "bg-mark-red", ink: "text-mark-red" },
+  active: { bg: "bg-accent-navy border-transparent", dot: "bg-sand", ink: "text-ink-inverse" },
+  ok: { bg: "bg-white border-divider", dot: "bg-accent-green", ink: "text-ink" },
 };
 
 export function StatusPill({
@@ -28,13 +29,13 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[12px] font-medium",
+        "inline-flex items-center gap-2 border px-2.5 py-1 text-[11px] uppercase leading-[16px] tracking-[0.1em]",
         s.bg,
         s.ink,
         className,
       )}
     >
-      <span className={cn("w-1.5 h-1.5 rounded-full", s.dot, pulse && "ai-pulse")} />
+      <span className={cn("h-1.5 w-1.5 shrink-0 rounded-full", s.dot, pulse && "ai-pulse")} />
       {label}
     </span>
   );

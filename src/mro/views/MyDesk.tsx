@@ -40,7 +40,7 @@ function Queue({
           {icon}
         </span>
         <h2 className="min-w-0 flex-1 truncate text-[15px] font-bold text-ink">{title}</h2>
-        <span className="rounded-full bg-surface-fog px-2 py-0.5 text-[12px] font-bold tabular-nums text-ink">{count}</span>
+        <span className="bg-surface-fog px-2 py-0.5 text-[12px] font-bold tabular-nums text-ink">{count}</span>
       </header>
       {count === 0 ? <p className="border-t border-divider px-4 py-6 text-center text-[13px] text-mute">{empty}</p> : <ul className="divide-y divide-divider border-t border-divider">{children}</ul>}
     </section>
