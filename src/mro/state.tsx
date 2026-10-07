@@ -42,6 +42,8 @@ export type DocId =
 export type View =
   | { kind: "login" }
   | { kind: "cockpit" }
+  /* The reviewer's personal queues; the dashboard stays the landing page. */
+  | { kind: "desk" }
   | { kind: "workspace"; flow: FlowId }
   /* A case from the client's use-case I/O, run agent by agent. */
   | { kind: "story"; storyId: StoryId; step?: number }

@@ -3,6 +3,7 @@ import { Sidebar } from "@/mro/components/layout/Sidebar";
 import { Login } from "@/mro/views/Login";
 import * as React from "react";
 import { MyDesk } from "@/mro/views/MyDesk";
+import { Dashboard } from "@/mro/views/Dashboard";
 import { CaseWorkspace } from "@/mro/views/CaseWorkspace";
 import { OpportunitiesBench, SourcingBench, SuppliersBench, ContractsBench } from "@/mro/views/Workbenches";
 import { ValueAssurance } from "@/mro/views/ValueAssurance";
@@ -27,6 +28,8 @@ function Router() {
     case "login":
       return <Login />;
     case "cockpit":
+      return <Dashboard />;
+    case "desk":
       return <MyDesk />;
     case "workspace":
       return <Workspace flow={view.flow} />;

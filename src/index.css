@@ -551,3 +551,43 @@ svg.lucide {
   [style*="entry-panel-in"], [style*="entry-photo-in"],
   [style*="entry-rise"], [style*="entry-card-in"] { animation: none !important; }
 }
+
+/* Case-complete card: the tick pops in, then tiles and records settle in order. */
+@keyframes case-complete-pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes case-complete-tile {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.case-complete-pop { animation: case-complete-pop 520ms var(--motion-ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1)) 80ms both; }
+.case-complete-tile { animation: case-complete-tile 360ms var(--motion-ease-reveal, ease-out) both; }
+@media (prefers-reduced-motion: reduce) {
+  .case-complete-pop, .case-complete-tile { animation: none !important; }
+}
+
+/* ── Guided story playback ───────────────────────────────────────────────
+   Bars grow from zero when a score lands, a packet crosses the handover
+   track, and a card that just arrived carries a brief outline glow. */
+@keyframes theatre-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.theatre-grow { transform-origin: left; animation: theatre-grow 900ms var(--motion-ease-reveal, ease-out) both; }
+@keyframes theatre-packet {
+  0% { left: 0%; opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  12% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  88% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { left: 100%; opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+}
+.theatre-packet { animation: theatre-packet 1.4s cubic-bezier(0.65, 0, 0.35, 1) infinite; }
+@keyframes theatre-arrive {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-navy) 35%, transparent); }
+  100% { box-shadow: 0 0 0 10px transparent; }
+}
+.theatre-arrive { animation: theatre-arrive 1100ms ease-out 1; }
+@media (prefers-reduced-motion: reduce) {
+  .theatre-grow, .theatre-packet, .theatre-arrive { animation: none !important; }
+}

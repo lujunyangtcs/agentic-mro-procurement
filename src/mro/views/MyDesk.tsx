@@ -64,7 +64,9 @@ export function MyDesk() {
   const { domain, session, lang } = useProcurement();
   const { d, role } = useDeskCopy();
   const { c } = useStoryCopy();
-  const { requests, approvals, exceptions } = useWorkQueue();
+  const queue = useWorkQueue();
+  const { approvals, exceptions } = queue;
+  const requests = queue.requests.filter((r) => !r.closed);
   const m = touchMetrics(domain);
   const mine = approvals.filter((a) => a.role === session.reviewAs);
 

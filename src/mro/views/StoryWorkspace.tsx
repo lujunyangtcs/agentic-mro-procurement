@@ -6,7 +6,10 @@
  */
 
 import * as React from "react";
-import { ArrowLeft, RotateCcw, UserRound } from "lucide-react";
+import { ArrowLeft, CircleCheck, RotateCcw, UserRound } from "lucide-react";
+import { useDashCopy } from "@/mro/components/dashboard/copy";
+import { CaseCompleteModal, useCloseCeremony } from "@/mro/components/dashboard/CaseCompleteModal";
+import { storyCompletion } from "@/mro/components/dashboard/completion";
 import { useApp } from "@/mro/state";
 import type { StoryId } from "@/mro/domain/types";
 import { storyRunById } from "@/mro/data/stories/runModel";
@@ -30,6 +33,9 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
     if (openStep !== undefined && openStep <= state.reached) select(openStep);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openStep]);
+
+  const k = useDashCopy();
+  const ceremony = useCloseCeremony(state.finished);
 
   const step = run.steps[state.selected];
   const doneCount = run.steps.filter((_, i) => stepDone(i) && (i < state.reached || state.finished)).length;
@@ -70,6 +76,15 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           pulse={status === "running" || status === "waiting"}
           className={status === "waiting" ? "max-w-[260px] truncate bg-surface-amber text-mark-amber" : "max-w-[260px] truncate"}
         />
+        {state.finished && (
+          <button
+            type="button"
+            onClick={ceremony.show}
+            className="ui-pill inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap border border-ink/25 bg-white px-3 py-2 text-[12px] text-ink"
+          >
+            <CircleCheck size={15} aria-hidden className="text-surface-deep" /> {k.summary}
+          </button>
+        )}
         <button
           type="button"
           onClick={restart}
@@ -139,6 +154,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           </aside>
         </div>
       </div>
+      {ceremony.open && <CaseCompleteModal summary={storyCompletion(run, state, k, lang)} onStay={ceremony.hide} onBack={() => go({ kind: "cockpit" })} />}
     </div>
   );
 }

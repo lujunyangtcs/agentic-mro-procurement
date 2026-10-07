@@ -7,7 +7,7 @@
  */
 
 import * as React from "react";
-import { ArrowLeft, Check, CircleAlert, Clock, Package, Truck } from "lucide-react";
+import { ArrowLeft, Check, CircleAlert, CircleCheck, Clock, Package, Truck } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import { useApp } from "@/mro/state";
 import { useProcurement } from "@/mro/data/store";
@@ -25,6 +25,10 @@ import { ActionButton, Card, Chip, KeyValue, OneLineText, type ChipTone } from "
 import { GateSummary } from "@/mro/components/desk/GateSummary";
 import { ApprovalTaskCard } from "@/mro/components/desk/ApprovalTaskCard";
 import { CaseTimeline } from "@/mro/components/desk/CaseTimeline";
+import { useDashCopy } from "@/mro/components/dashboard/copy";
+import { CaseCompleteModal, useCloseCeremony } from "@/mro/components/dashboard/CaseCompleteModal";
+import { catalogueComplete, catalogueCompletion } from "@/mro/components/dashboard/completion";
+import { SUPPLIER_ACK_AFTER_HOURS } from "@/mro/domain/reducer";
 
 const stepTone: Record<StepState, string> = {
   done: "bg-surface-deep text-ink-inverse",
@@ -121,8 +125,9 @@ function RequestCard({ caseId }: { caseId: string }) {
 }
 
 function PoCard({ caseId }: { caseId: string }) {
-  const { domain, lang } = useProcurement();
+  const { domain, dispatch, lang } = useProcurement();
   const { d } = useDeskCopy();
+  const k = useDashCopy();
   const view = caseView(domain, caseId)!;
   const po = view.po ?? view.failedPo;
   const holds = domain.cases[caseId].holds.filter((h) => !h.closedAt);
@@ -141,6 +146,11 @@ function PoCard({ caseId }: { caseId: string }) {
   }
 
   const chase = view.followUps.find((f) => f.kind === "supplier-chase" && !f.closedAt);
+  /* Demo clock only: how far until this supplier's confirmation is due to arrive. */
+  const ackInMinutes =
+    po.dispatch.state === "dispatched" && !po.acknowledgedAt && !po.withheldAck && !domain.failures.supplierSilent
+      ? Math.max(1, Math.ceil((Date.parse(po.dispatch.at) + SUPPLIER_ACK_AFTER_HOURS * 3_600_000 - Date.parse(domain.clock.now)) / 60_000))
+      : undefined;
   const tone: ChipTone = po.dispatch.state === "failed" ? "bad" : po.acknowledgedAt ? "ok" : chase ? "warn" : "info";
   return (
     <Card title={d.po} right={<Chip tone={tone}>{po.dispatch.state === "failed" ? d.stepState.failed : po.acknowledgedAt ? d.acked : chase ? d.chaser : d.dispatched}</Chip>}>
@@ -155,7 +165,21 @@ function PoCard({ caseId }: { caseId: string }) {
       </div>
       <div className="flex items-center gap-2 border-t border-divider px-4 py-3 text-[13px] text-ink">
         <Truck size={15} className="shrink-0 text-surface-deep" aria-hidden />
-        {po.acknowledgedAt ? `${d.acked} · ${londonDateTime(po.acknowledgedAt, lang)}` : `${d.ackDue} · ${londonDateTime(po.ackDueAt, lang)}`}
+        <span className="min-w-0 flex-1 truncate">
+          {po.acknowledgedAt ? `${d.acked} · ${londonDateTime(po.acknowledgedAt, lang)}` : `${d.ackDue} · ${londonDateTime(po.ackDueAt, lang)}`}
+        </span>
+        {ackInMinutes !== undefined && (
+          <ActionButton
+            tone="ghost"
+            icon={<Clock size={14} aria-hidden />}
+            onAction={() => {
+              const r = dispatch({ type: "clock.advance", actor: { kind: "agent", agentId: "orchestrator", policyVersion: domain.policies.active }, minutes: ackInMinutes, idempotencyKey: `case:${caseId}:to-ack:${domain.clock.now}` });
+              return { ok: r.ok, message: r.ok ? undefined : r.message };
+            }}
+          >
+            {k.toConfirmation(Math.ceil(ackInMinutes / 60))}
+          </ActionButton>
+        )}
       </div>
     </Card>
   );
@@ -163,8 +187,8 @@ function PoCard({ caseId }: { caseId: string }) {
 
 export function CaseWorkspace({ caseId }: { caseId: string }) {
   const { go } = useApp();
-  const { domain, lang } = useProcurement();
-  const { d, t, role } = useDeskCopy();
+  const { domain } = useProcurement();
+  const { d } = useDeskCopy();
   const c = domain.cases[caseId];
 
   if (!c) {
@@ -177,6 +201,18 @@ export function CaseWorkspace({ caseId }: { caseId: string }) {
       </div>
     );
   }
+
+  return <CaseWorkspaceBody caseId={caseId} />;
+}
+
+function CaseWorkspaceBody({ caseId }: { caseId: string }) {
+  const { go } = useApp();
+  const { domain, lang } = useProcurement();
+  const { d, t, role } = useDeskCopy();
+  const k = useDashCopy();
+  const c = domain.cases[caseId];
+  const complete = catalogueComplete(domain, caseId);
+  const ceremony = useCloseCeremony(complete);
 
   const view = caseView(domain, caseId)!;
   const rev = currentRevision(domain, caseId)!;
@@ -201,7 +237,16 @@ export function CaseWorkspace({ caseId }: { caseId: string }) {
             {`${siteById[c.site]?.name} · ${d.catalogue} · Flow 1 · ${c.policyVersion} · ${d.clock} ${londonDateTime(domain.clock.now, lang)}`}
           </p>
         </div>
-        <Chip tone={c.status === "po-dispatched" ? "ok" : c.status === "held" ? "warn" : "info"}>{t(`caseStatus.${c.status}`)}</Chip>
+        <Chip tone={c.status === "po-dispatched" || c.status === "closed" ? "ok" : c.status === "held" ? "warn" : "info"}>{t(`caseStatus.${c.status}`)}</Chip>
+        {complete && (
+          <button
+            type="button"
+            onClick={ceremony.show}
+            className="ui-pill inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border border-divider bg-white px-2.5 py-1.5 text-[13px] font-medium text-surface-deep hover:bg-surface-mint/40"
+          >
+            <CircleCheck size={15} aria-hidden /> {k.summary}
+          </button>
+        )}
         <LanguageSwitch />
       </header>
 
@@ -233,6 +278,9 @@ export function CaseWorkspace({ caseId }: { caseId: string }) {
           </aside>
         </div>
       </div>
+      {ceremony.open && (
+        <CaseCompleteModal summary={catalogueCompletion(domain, caseId, k, lang, role)} onStay={ceremony.hide} onBack={() => go({ kind: "cockpit" })} />
+      )}
     </div>
   );
 }

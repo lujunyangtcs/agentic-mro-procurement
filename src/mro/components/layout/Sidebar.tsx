@@ -19,6 +19,7 @@ import {
   BadgePoundSterling,
   Landmark,
   SlidersHorizontal,
+  ListChecks,
 } from "lucide-react";
 import { PresenterControls } from "@/mro/components/desk/PresenterControls";
 import { useWorkQueue } from "@/mro/components/desk/workQueue";
@@ -50,7 +51,8 @@ const buyerSectionsFor = (t: (key: string) => string, badges: { approvals: numbe
     /* The buyer's own desk — the work, rather than the workforce. */
     title: t("nav.myDesk"),
     items: [
-      { label: t("nav.desk"), icon: LayoutDashboard, view: { kind: "cockpit" }, badge: badges.approvals ? { kind: "count", value: badges.approvals } : undefined },
+      { label: t("nav.dashboard"), icon: LayoutDashboard, view: { kind: "cockpit" } },
+      { label: t("nav.desk"), icon: ListChecks, view: { kind: "desk" }, badge: badges.approvals ? { kind: "count", value: badges.approvals } : undefined },
       { label: t("nav.newRequest"), icon: PenLine, view: { kind: "agent", id: "intake" } },
       { label: t("nav.requisitions"), icon: FileText, view: { kind: "requisitions" } },
       { label: t("nav.exceptions"), icon: CircleAlert, view: { kind: "exceptions" }, badge: badges.holds ? { kind: "count", value: badges.holds } : undefined },

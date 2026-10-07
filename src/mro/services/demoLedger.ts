@@ -21,6 +21,10 @@ export type RunState = {
   endedBy?: Bi;
   /** Option id that ended the run, so value and supplier pages can branch on it. */
   endedWith?: string;
+  /** Guided playback: the presenter acknowledged the arrival and the chain may start. */
+  opened?: boolean;
+  /** Guided playback: step index → how many of its cards are on screen. */
+  beats?: Record<number, number>;
 };
 
 export type Signoff = { by: string; role: Role; at: string };

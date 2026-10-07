@@ -55,10 +55,12 @@ export function storyStatus(run: StoryRun, s: RunState | undefined): { status: S
 
 const RUN_MS = 1600;
 
-export function useStoryRun(run: StoryRun) {
+export function useStoryRun(run: StoryRun, opts: { guided?: boolean; runMs?: (step: number) => number } = {}) {
   const id = run.story.id;
   const ledger = useLedger();
   const state = ledger.runs[id] ?? freshRun();
+  /* Guided runs wait for the arrival to be acknowledged before the first agent starts. */
+  const held = Boolean(opts.guided && !state.opened);
 
   const update = React.useCallback(
     (fn: (s: RunState) => RunState) =>
@@ -70,15 +72,21 @@ export function useStoryRun(run: StoryRun) {
   const paused = ledger.paused.includes(agentKey(frontierAgent));
 
   /* The agent at the frontier "works" briefly before its output appears. */
-  const running = !state.revealed.includes(state.reached) && !state.finished && !paused;
+  const running = !state.revealed.includes(state.reached) && !state.finished && !paused && !held;
+  const runMs = opts.runMs?.(state.reached) ?? RUN_MS;
   React.useEffect(() => {
     if (!running) return;
     const t = window.setTimeout(
       () => update((s) => (s.revealed.includes(s.reached) ? s : { ...s, revealed: [...s.revealed, s.reached] })),
-      RUN_MS,
+      runMs,
     );
     return () => window.clearTimeout(t);
-  }, [running, state.reached, update]);
+  }, [running, state.reached, update, runMs]);
+
+  const open = () => update((s) => ({ ...s, opened: true }));
+  const beatOf = (i: number) => state.beats?.[i] ?? 0;
+  const advanceBeat = (i: number, to: number) =>
+    update((s) => ((s.beats?.[i] ?? 0) >= to ? s : { ...s, beats: { ...s.beats, [i]: to } }));
 
   const pendingTasks = (i: number) => pendingOf(run, state, i);
   const stepDone = (i: number) => state.revealed.includes(i) && pendingTasks(i).length === 0;
@@ -114,5 +122,5 @@ export function useStoryRun(run: StoryRun) {
   const derived = storyStatus(run, state);
   const status: Exclude<StoryStatus, "new"> = paused && !state.finished ? "waiting" : derived.status === "new" ? "running" : derived.status;
 
-  return { state, running, paused, stepDone, pendingTasks, decide, handOff, select, restart, humanDecisions, status };
+  return { state, running, paused, held, stepDone, pendingTasks, decide, handOff, select, restart, humanDecisions, status, open, beatOf, advanceBeat };
 }

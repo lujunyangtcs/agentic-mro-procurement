@@ -27,6 +27,8 @@ export type QueueRequest = {
   tone: "ok" | "warn" | "bad" | "info" | "mute";
   open: View;
   storyStatus?: StoryStatus;
+  /** The case has closed: it leaves every in-flight count and queue. */
+  closed: boolean;
 };
 
 export type QueueApproval = { key: string; ref: string; role: Role; persona: string; task: string; amount?: number; open: View; slaHours?: number };
@@ -44,16 +46,18 @@ export function useWorkQueue() {
     for (const c of caseSummaries(domain)) {
       const v = caseView(domain, c.id)!;
       const waiting = v.openTasks.length > 0;
+      const closed = c.status === "closed";
       requests.push({
         key: c.id,
         ref: c.id,
-        title: c.item,
+        title: domain.cases[c.id].title ?? c.item,
         site: domain.cases[c.id].site,
         amount: c.total,
         source: "catalogue",
-        status: c.po?.acknowledgedAt ? "confirmed" : c.po ? "po-dispatched" : waiting ? "waiting" : c.status,
-        tone: c.po ? "ok" : waiting || c.status === "held" ? "warn" : "info",
+        status: closed ? "done" : c.po?.acknowledgedAt ? "confirmed" : c.po ? "po-dispatched" : waiting ? "waiting" : c.status,
+        tone: c.po || closed ? "ok" : waiting || c.status === "held" ? "warn" : "info",
         open: { kind: "case", caseId: c.id },
+        closed,
       });
       for (const t of v.openTasks) {
         approvals.push({ key: t.id, ref: c.id, role: t.role, persona: t.role, task: t.decision, amount: t.amount, open: { kind: "case", caseId: c.id }, slaHours: 48 });
@@ -80,6 +84,7 @@ export function useWorkQueue() {
         tone: st.status === "done" ? "ok" : st.status === "ended" ? "mute" : st.status === "waiting" ? "warn" : "info",
         open: { kind: "story", storyId: run.story.id },
         storyStatus: st.status,
+        closed: st.status === "done" || st.status === "ended",
       });
       if (st.status === "waiting" && s) {
         const step = run.steps[s.reached];
