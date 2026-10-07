@@ -28,6 +28,9 @@
   --color-accent-sage: var(--surface-sage);
   --color-accent-navy: var(--accent-navy);
   --color-mark-red: var(--mark-red);
+  --color-mark-amber: var(--mark-amber);
+  --color-surface-amber: var(--surface-amber);
+  --color-surface-red: var(--surface-red);
 
   --font-sans: "DM Sans", sans-serif;
 
@@ -70,6 +73,10 @@
   --accent-green-deep: #084337;
   --accent-navy: #123456;
   --mark-red: #a6192e;
+  /* Human-in-the-loop and clause-band Amber: a decision is waiting on a person. */
+  --mark-amber: #a15c07;
+  --surface-amber: #fbefd8;
+  --surface-red: #f7e1e4;
 
   /* Section rhythm */
   --section-pad-y: 80px;
@@ -112,6 +119,17 @@
 }
 
 /* AI pulse — agent thinking */
+@keyframes story-line {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes hr-pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.35); opacity: 0.5; }

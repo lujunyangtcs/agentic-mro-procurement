@@ -1,262 +1,134 @@
 /**
- * The intake desk — where demand arrives, and where it becomes a requisition.
- *
- * Demand does not turn up as one tidy form. It arrives as an email in whatever
- * language the engineer works in, as a work order the maintenance system
- * raised, as a message through the supplier portal. The top of this page is
- * those channels, side by side, in plain words.
- *
- * Open one and the rest of the page goes to work: the document as it actually
- * arrived on the left, the agent reading and reasoning aloud in the middle,
- * and the request filling itself in on the right. You can also skip all of
- * that and type the six fields yourself — the form never stops being a form.
- *
- * What comes out is a purchase requisition, never an order. Everything this
- * demo checks — master data, duplicates, stock, warranty, contract price,
- * approval limits — happens while it is still a request. The order is what a
- * released requisition becomes, further down the line.
- *
- * The page reads from the guided runs and writes nothing back: these
- * requisitions already exist, and this is a replay of how they arrived.
+ * The front door. Each row is one of the client's five use cases arriving as
+ * its I/O records it — a front-door form, a handoff from another flow, or an
+ * award confirmation. Opening one shows the request untouched and the agent
+ * chain it will run through; running it opens the case workspace.
  */
 
 import * as React from "react";
-import { createPortal } from "react-dom";
-import { Mail, ClipboardList, MessageSquare, X, ArrowRight } from "lucide-react";
+import { ArrowRight, Bot } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import { useApp } from "@/mro/state";
-import { LANGUAGES } from "@/mro/data/procurement";
-import { channels, chips, type Channel, type IntakeSpec } from "@/mro/data/intakeChannels";
+import type { StoryId } from "@/mro/domain/types";
 import { ConsolePage } from "@/mro/components/console/kit";
 import { SpringIn } from "@/mro/components/ai/SpringIn";
-import { AiConversation, PrFormPanel } from "@/mro/components/console/IntakeAi";
+import { STORY_RUNS, storyRunById } from "@/mro/data/stories/runModel";
+import { useStoryCopy } from "@/mro/components/story/copy";
+import { RequestSummary } from "@/mro/components/story/RequestSummary";
+import { CHANNEL_ICON, gbpWhole } from "@/mro/components/story/format";
+import { ToneChip } from "@/mro/components/story/IoBody";
+import { hasProgress } from "@/mro/components/story/useStoryRun";
 
-const CHANNEL_ICON = {
-  mail: Mail,
-  workOrder: ClipboardList,
-  portal: MessageSquare,
-} as const;
-
-/* ── One channel, and what is sitting in it ─────────────────────────────── */
-
-function ChannelCard({
-  channel,
-  active,
-  onOpen,
-}: {
-  channel: Channel;
-  active: boolean;
-  onOpen: () => void;
-}) {
-  const Icon = CHANNEL_ICON[channel.icon];
-  const lang = LANGUAGES.find((l) => l.code === channel.open.lang);
-
+function RequestRow({ id, active, onOpen }: { id: StoryId; active: boolean; onOpen: () => void }) {
+  const { c, lang } = useStoryCopy();
+  const run = storyRunById[id];
+  const Icon = CHANNEL_ICON[run.request.channelKind];
+  const who = run.request.requester;
   return (
-    <SpringIn className="h-full">
-      <section className="flex h-full min-w-0 flex-col rounded-md border border-divider bg-white">
-        <header className="flex items-center gap-2.5 px-4 pb-2 pt-3.5">
-          <span className="text-surface-deep">
-            <Icon size={17} strokeWidth={1.75} />
-          </span>
-          <h2 className="text-[15px] font-bold leading-tight text-ink">{channel.label}</h2>
-        </header>
-        <p className="px-4 pb-2.5 text-[12px] leading-[16px] text-ink">{channel.meta}</p>
-
-        {/* The live one. Everything below it has already been dealt with. */}
-        <button
-          type="button"
-          onClick={onOpen}
-          className={cn(
-            "border-y border-divider px-4 py-2.5 text-left transition-colors",
-            active ? "bg-surface-mint/45" : "hover:bg-surface-fog",
-          )}
-        >
-          <span className="line-clamp-2 block text-[13px] font-medium leading-[18px] text-ink">
-            {channel.open.text}
-          </span>
-          <span className="mt-1 block text-[12px] leading-[16px] text-ink">
-            {lang?.emoji} {lang?.native} · {channel.open.lang === "de" ? "öffnen" : "open it"}
-          </span>
-        </button>
-
-        <ul className="mt-auto divide-y divide-divider">
-          {channel.history.map((h) => (
-            <li key={h.text} className="px-4 py-2">
-              <span className="line-clamp-2 block text-[13px] leading-[17px] text-ink/70">{h.text}</span>
-              <span className="mt-0.5 block text-[12px] leading-[15px] text-ink/70">{h.note}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </SpringIn>
-  );
-}
-
-/* ── The requisition, once it exists ────────────────────────────────────── */
-
-function ReceiptModal({
-  spec,
-  onClose,
-  onEnter,
-}: {
-  spec: IntakeSpec;
-  onClose: () => void;
-  onEnter: () => void;
-}) {
-  return createPortal(
-    <div className="fixed inset-0 z-[80] grid place-items-center bg-black/45 p-6" onClick={onClose}>
-      <div
-        className="flex max-h-[90vh] w-full max-w-[880px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+    <li>
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-pressed={active}
+        className={cn(
+          "flex w-full items-start gap-3 px-4 py-3 text-left transition-colors",
+          active ? "bg-surface-mint/45" : "hover:bg-surface-fog",
+        )}
       >
-        <header className="flex items-center gap-3 border-b border-divider px-5 py-3.5">
-          <div className="min-w-0">
-            <h3 className="text-[15px] font-bold leading-tight text-ink">{spec.receiptLabel}</h3>
-            <p className="mt-0.5 text-[12px] leading-[16px] text-ink">{spec.receiptStatus}</p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="ui-pill ml-auto grid h-8 w-8 shrink-0 place-items-center rounded-md text-ink hover:bg-surface-fog"
-          >
-            <X size={16} />
-          </button>
-        </header>
-
-        <div className="min-h-0 flex-1 overflow-y-auto bg-surface-fog/50 p-5">{spec.receipt}</div>
-
-        <footer className="flex items-center gap-4 border-t border-divider px-5 py-3.5">
-          <p className="min-w-0 flex-1 text-[12.5px] leading-[17px] text-ink">
-            Raised, not ordered. The workforce validates it before anything is bought.
-          </p>
-          <button
-            type="button"
-            onClick={onEnter}
-            className="ui-pill inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-md bg-surface-deep px-4 py-2.5 text-[13px] font-medium text-ink-inverse hover:brightness-110"
-          >
-            Watch it get validated
-            <ArrowRight size={15} />
-          </button>
-        </footer>
-      </div>
-    </div>,
-    document.body,
+        <span className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-md bg-surface-fog text-surface-deep" aria-hidden>
+          <Icon size={16} strokeWidth={1.75} />
+        </span>
+        <span className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="flex items-center gap-2">
+            <span className="min-w-0 flex-1 truncate text-[14px] font-bold leading-[19px] text-ink">{run.request.headline}</span>
+            <span className="shrink-0 text-[13px] font-bold tabular-nums text-ink">{gbpWhole(run.request.startingCostGBP)}</span>
+          </span>
+          <span className="truncate text-[12.5px] leading-[17px] text-mute">
+            {[who?.role, who?.site].filter(Boolean).join(" · ") || run.request.channel}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="rounded bg-surface-fog px-1.5 py-0.5 text-[11.5px] font-bold text-ink">{run.story.ucLabel}</span>
+            <span className="truncate text-[12px] text-mute">{run.story.title[lang]}</span>
+            <ToneChip
+              className="ml-auto"
+              value={run.needsHuman ? c.expectHuman : c.expectTouchless}
+              tone={run.needsHuman ? "warn" : "ok"}
+            />
+          </span>
+        </span>
+      </button>
+    </li>
   );
 }
-
-/* ── Page ───────────────────────────────────────────────────────────────── */
 
 export function IntakeConsole() {
-  const { go, setFlowProgress } = useApp();
-
-  const [spec, setSpec] = React.useState<IntakeSpec | null>(null);
-  /* Bumped on every new request — the conversation is keyed on it, so the
-     previous one unmounts and its timers go with it. */
-  const [runKey, setRunKey] = React.useState(0);
-  const [fill, setFill] = React.useState<{
-    key: number;
-    fields: IntakeSpec["fields"];
-    stagger: number;
-  } | null>(null);
-  const [receiptOpen, setReceiptOpen] = React.useState(false);
-
-  const play = React.useCallback((next: IntakeSpec) => {
-    setSpec(next);
-    setFill(null);
-    setReceiptOpen(false);
-    setRunKey((k) => k + 1);
-  }, []);
-
-  /* Stable identity — an inline arrow would restart the typing on every
-     render of the parent, and there are several during a staggered fill. */
-  const onConclude = React.useCallback(() => {
-    setSpec((s) => {
-      if (s) setFill({ key: runKey, fields: s.fields, stagger: s.stagger });
-      return s;
-    });
-  }, [runKey]);
-
-  /* Anything typed in is treated as the seal case — it is the one the demo
-     tells, and the agent says what it had to assume. */
-  const onAsk = React.useCallback(
-    (text: string) => play({ ...chips[0].spec, id: "typed", asked: text, original: null }),
-    [play],
-  );
-
-  const enterRun = () => {
-    if (!spec) return;
-    /* A complete record, not a merge: a second walkthrough must not inherit
-       the settled state — or the decisions — of the first. */
-    setFlowProgress(spec.flow, {
-      activeStep: 1,
-      approved: false,
-      settled: false,
-      decisions: { 0: "approved" },
-      sourcing: spec.sourcing,
-    });
-    go({ kind: "workspace", flow: spec.flow });
-  };
+  const { go } = useApp();
+  const { c, lang } = useStoryCopy();
+  const [openId, setOpenId] = React.useState<StoryId>(STORY_RUNS[0].story.id);
+  const run = storyRunById[openId];
 
   return (
-    <ConsolePage
-      title="New request"
-      lead="Everything the plants have asked for today — and what it takes to turn one into a requisition."
-    >
-      {/* ── What came in ─────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2 xl:grid-cols-3">
-        {channels.map((c) => (
-          <ChannelCard
-            key={c.id}
-            channel={c}
-            active={spec?.id === c.open.spec.id}
-            onOpen={() => play(c.open.spec)}
-          />
-        ))}
-      </div>
-
-      {/* ── The original · the agent · the request ────────────────────────── */}
-      <div className="grid min-h-[560px] grid-cols-1 items-stretch gap-3 xl:grid-cols-3">
-        <SpringIn className="h-full">
-          <section className="flex h-full min-w-0 flex-col rounded-md border border-divider bg-white">
-            <header className="px-4 pb-2.5 pt-3.5">
-              <h2 className="text-[15px] font-bold leading-tight text-ink">
-                {spec?.original ? spec.originalLabel : "The original"}
-              </h2>
-              <p className="mt-0.5 text-[12px] leading-[16px] text-ink">
-                {spec?.original ? spec.originalMeta : "Exactly what arrived, before anyone touched it."}
-              </p>
+    <ConsolePage title={c.newRequestTitle} lead={c.newRequestLead}>
+      <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+        <SpringIn>
+          <section className="overflow-hidden rounded-md border border-divider bg-white">
+            <header className="flex items-center gap-2 px-4 pb-2.5 pt-3.5">
+              <h2 className="text-[15px] font-bold leading-tight text-ink">{c.inbox}</h2>
+              <span className="ml-auto text-[12px] text-mute">{STORY_RUNS.length}</span>
             </header>
-            <div className="min-h-0 flex-1 overflow-y-auto border-t border-divider bg-surface-fog/50 p-3">
-              {spec?.original ?? (
-                <p className="py-12 text-center text-[13px] leading-[19px] text-ink">
-                  {spec
-                    ? "Nothing to read — you told me directly."
-                    : "Open something above to see it as it arrived."}
-                </p>
-              )}
-            </div>
+            <ul className="divide-y divide-divider border-t border-divider">
+              {STORY_RUNS.map((r) => (
+                <RequestRow key={r.story.id} id={r.story.id} active={r.story.id === openId} onOpen={() => setOpenId(r.story.id)} />
+              ))}
+            </ul>
           </section>
         </SpringIn>
 
-        <SpringIn className="h-full">
-          <AiConversation
-            key={runKey}
-            spec={spec}
-            onConclude={onConclude}
-            onAsk={onAsk}
-            chips={chips.map((c) => ({ label: c.label, onPick: () => play(c.spec) }))}
-          />
-        </SpringIn>
+        <SpringIn>
+          <section className="flex flex-col rounded-md border border-divider bg-white" aria-live="polite">
+            <header className="flex items-center gap-2 px-5 pb-2.5 pt-3.5">
+              <h2 className="text-[15px] font-bold leading-tight text-ink">{c.asArrived}</h2>
+              <span className="ml-auto text-[12px] font-medium text-mute">
+                {run.story.caseId} · {run.story.ucLabel}
+              </span>
+            </header>
+            <div className="border-t border-divider px-5 py-4">
+              <RequestSummary request={run.request} />
+            </div>
 
-        <SpringIn className="h-full">
-          <PrFormPanel fill={fill} onRaise={() => setReceiptOpen(true)} />
+            <div className="flex flex-col gap-2.5 border-t border-divider px-5 py-4">
+              <h3 className="text-[13px] font-bold uppercase tracking-[0.06em] text-ink">{c.agentChain}</h3>
+              <ol className="flex flex-col gap-2">
+                {run.steps.map((s, i) => (
+                  <li key={s.run.agent + i} className="flex items-center gap-3">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-surface-fog text-[12px] font-bold text-ink" aria-hidden>
+                      {i + 1}
+                    </span>
+                    <Bot size={15} strokeWidth={1.75} className="shrink-0 text-surface-deep" aria-hidden />
+                    <span className="min-w-0 flex-1 truncate text-[13.5px] font-medium text-ink">{s.run.agent}</span>
+                    <span className="shrink-0 text-[12px] text-mute">{s.run.flowStep}</span>
+                  </li>
+                ))}
+              </ol>
+              <p className="text-[12.5px] leading-[18px] text-mute text-pretty">
+                {c.humanTouchpoints}: {run.manifest.human_touchpoints.join(" · ")}
+              </p>
+            </div>
+
+            <footer className="flex flex-wrap items-center gap-3 border-t border-divider px-5 py-3.5">
+              <p className="min-w-0 flex-1 truncate text-[12.5px] leading-[17px] text-mute">{run.story.title[lang]}</p>
+              <button
+                type="button"
+                onClick={() => go({ kind: "story", storyId: openId })}
+                className="ui-pill inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-md bg-surface-deep px-4 py-2.5 text-[13px] font-medium text-ink-inverse hover:brightness-110 active:translate-y-px"
+              >
+                {hasProgress(openId) ? c.resume : c.run}
+                <ArrowRight size={15} aria-hidden />
+              </button>
+            </footer>
+          </section>
         </SpringIn>
       </div>
-
-      {receiptOpen && spec && (
-        <ReceiptModal spec={spec} onClose={() => setReceiptOpen(false)} onEnter={enterRun} />
-      )}
     </ConsolePage>
   );
 }

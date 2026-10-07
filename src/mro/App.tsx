@@ -3,6 +3,7 @@ import { Sidebar } from "@/mro/components/layout/Sidebar";
 import { Login } from "@/mro/views/Login";
 import { Cockpit } from "@/mro/views/Cockpit";
 import { Workspace } from "@/mro/views/Workspace";
+import { StoryWorkspace } from "@/mro/views/StoryWorkspace";
 import { DocView } from "@/mro/views/DocView";
 import { IntakeConsole } from "@/mro/views/IntakeConsole";
 import { AgentProfile } from "@/mro/views/AgentProfile";
@@ -23,6 +24,8 @@ function Router() {
       return <Cockpit />;
     case "workspace":
       return <Workspace flow={view.flow} />;
+    case "story":
+      return <StoryWorkspace storyId={view.storyId} />;
     case "agent":
       /* Intake keeps its own desk — it is where free-text requests land.
          Every other agent shows what it reads, produces and stops for. */

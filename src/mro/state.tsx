@@ -6,6 +6,7 @@
 
 import * as React from "react";
 import { agents, type AgentId, type AutonomyLevel } from "@/mro/data/agents";
+import type { StoryId } from "@/mro/domain/types";
 
 /**
  * The guided runs this workspace plays: the clean pump-diaphragm request, the four
@@ -42,6 +43,8 @@ export type View =
   | { kind: "login" }
   | { kind: "cockpit" }
   | { kind: "workspace"; flow: FlowId }
+  /* A case from the client's use-case I/O, run agent by agent. */
+  | { kind: "story"; storyId: StoryId }
   | { kind: "agent"; id: AgentId }
   | { kind: "doc"; id: DocId }
   /* Work-menu pages — the procurement desk's own surfaces. */
