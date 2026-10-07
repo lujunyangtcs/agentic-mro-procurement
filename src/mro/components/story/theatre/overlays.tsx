@@ -166,7 +166,9 @@ export function AiAnalysisModal({
   const [complete, setComplete] = React.useState(false);
   const titleId = React.useId();
   const onDoneRef = React.useRef(onDone);
-  onDoneRef.current = onDone;
+  React.useEffect(() => {
+    onDoneRef.current = onDone;
+  });
 
   React.useEffect(() => {
     const step = duration / (items.length + 1);
@@ -245,7 +247,9 @@ const HANDOVER_MS = 3200;
 export function HandoverOverlay({ from, to, final, payload, onDone }: { from: string; to: string; final?: boolean; payload: string[]; onDone: () => void }) {
   const { t } = useTheatreCopy();
   const onDoneRef = React.useRef(onDone);
-  onDoneRef.current = onDone;
+  React.useEffect(() => {
+    onDoneRef.current = onDone;
+  });
   useEscape(undefined);
 
   React.useEffect(() => {

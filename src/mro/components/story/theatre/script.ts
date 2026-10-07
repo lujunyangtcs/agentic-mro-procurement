@@ -67,7 +67,7 @@ const UC06: TheatreScript = {
         { label: { en: "Searching open requests for duplicates", de: "Suche offene Anforderungen nach Dubletten" } },
       ],
       signalDocs: { data_completeness: req.request_id, starting_cost: "PO-7781223", classification_certainty: req.request_id },
-      guardDocs: { "Front door only": req.request_id, "Budget available": "BUD-CC4471-FY27" },
+      guardDocs: { "Front door only": req.request_id, "Coding not TBD": req.request_id, "Budget available": "BUD-CC4471-FY27" },
       handover: [
         { en: `Structured request ${req.request_id} · ${u6.intake.output.structured_request.quantity} licence-years`, de: `Strukturierte Anforderung ${req.request_id} · 12 Lizenzjahre` },
         { en: `Category ${u6.intake.output.structured_request.category.code} · GL ${u6.intake.output.structured_request.gl}`, de: `Kategorie ${u6.intake.output.structured_request.category.code} · Sachkonto ${u6.intake.output.structured_request.gl}` },
@@ -98,7 +98,7 @@ const UC06: TheatreScript = {
         { label: { en: "Assigning 12 licences in the SAM tool", de: "Weise 12 Lizenzen im SAM-Tool zu" }, doc: "SAM-ASSIGN-77120" },
         { label: { en: `Notifying ${req.requester.name}`, de: `Benachrichtige ${req.requester.name}` }, doc: "MAIL-118204" },
       ],
-      signalDocs: { match_strength: sam },
+      signalDocs: { match_strength: sam, policy_fit: "APP-CV-01" },
       guardDocs: { "Application Owner approval": "APP-CV-01" },
       produces: ["SAM-ASSIGN-77120", "MAIL-118204", vr.value_record_id],
       handover: [

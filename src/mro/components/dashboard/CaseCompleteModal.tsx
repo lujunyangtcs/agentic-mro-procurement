@@ -11,7 +11,35 @@ import { cn } from "@/mro/lib/utils";
 import { SpringIn } from "@/mro/components/ai/SpringIn";
 import { useDashCopy } from "@/mro/components/dashboard/copy";
 
-export type CompletionDoc = { key: string; label: string; meta?: string; settled: boolean };
+export type CompletionDoc = { key: string; label: string; meta?: string; settled: boolean; onOpen?: () => void };
+
+/** Counts a "£14,400"-style figure up from zero; anything without digits shows as is. */
+function CountUp({ value }: { value: string }) {
+  const m = value.match(/^(\D*)([\d,]+)(.*)$/);
+  const target = m ? Number(m[2].replace(/,/g, "")) : 0;
+  const [n, setN] = React.useState(0);
+  React.useEffect(() => {
+    if (!m || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setN(target);
+    let raf = 0;
+    const t0 = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - t0) / 1200);
+      setN(Math.round(target * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target]);
+  if (!m) return <>{value}</>;
+  return (
+    <>
+      {m[1]}
+      {n.toLocaleString("en-GB")}
+      {m[3]}
+    </>
+  );
+}
 
 export type CompletionSummary = {
   tone: "complete" | "ended";
@@ -20,6 +48,10 @@ export type CompletionSummary = {
   metrics: { value: string; label: string }[];
   caption: string;
   docs: CompletionDoc[];
+  /** The headline money figure, counted up above the tiles. */
+  hero?: { value: string; label: string };
+  /** What changed for the business, one line each. */
+  impact?: string[];
 };
 
 export function CaseCompleteModal({ summary, onStay, onBack }: { summary: CompletionSummary; onStay: () => void; onBack: () => void }) {
@@ -72,6 +104,15 @@ export function CaseCompleteModal({ summary, onStay, onBack }: { summary: Comple
             {summary.title}
           </h2>
 
+          {summary.hero && (
+            <div className="case-complete-tile mt-5 flex w-full flex-col items-center gap-1 rounded-xl bg-surface-mint/70 px-4 py-5" style={{ animationDelay: "60ms" }}>
+              <span className="whitespace-nowrap text-[40px] font-bold leading-none tracking-[-0.02em] text-surface-deep tabular-nums">
+                <CountUp value={summary.hero.value} />
+              </span>
+              <span className="text-[13.5px] text-ink">{summary.hero.label}</span>
+            </div>
+          )}
+
           <ul className="mt-5 grid w-full grid-cols-2 gap-2.5">
             {summary.metrics.map((x, i) => (
               <li
@@ -85,7 +126,22 @@ export function CaseCompleteModal({ summary, onStay, onBack }: { summary: Comple
             ))}
           </ul>
 
-          <p className="mt-4 text-pretty text-[14px] leading-[21px] text-mute">{summary.caption}</p>
+          {summary.caption && <p className="mt-4 text-pretty text-[14px] leading-[21px] text-mute">{summary.caption}</p>}
+
+          {summary.impact && summary.impact.length > 0 && (
+            <ul className="mt-5 flex w-full flex-col gap-2 text-left">
+              {summary.impact.map((line, i) => (
+                <li
+                  key={line}
+                  className="case-complete-tile flex items-start gap-2.5 text-pretty text-[13.5px] leading-[20px] text-ink"
+                  style={{ animationDelay: `${420 + i * 90}ms` }}
+                >
+                  <Check size={15} strokeWidth={2.6} className="mt-[3px] shrink-0 text-surface-deep" aria-hidden />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          )}
 
           <div className="mt-5 flex w-full flex-col gap-2 text-left">
             <p className="text-[12.5px] font-medium text-mute">{k.produced}</p>
@@ -106,6 +162,11 @@ export function CaseCompleteModal({ summary, onStay, onBack }: { summary: Comple
                     <span className="ml-auto min-w-0 truncate text-right text-[12.5px] text-mute" title={d.meta}>
                       {d.meta}
                     </span>
+                  )}
+                  {d.onOpen && (
+                    <button type="button" onClick={d.onOpen} className="ui-pill shrink-0 whitespace-nowrap rounded px-2 py-1 text-[12.5px] font-medium text-surface-deep hover:bg-surface-fog">
+                      {k.open}
+                    </button>
                   )}
                 </li>
               ))}

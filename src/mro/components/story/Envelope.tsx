@@ -26,7 +26,7 @@ function Card({ icon: Icon, title, aside, children }: { icon: typeof Gauge; titl
 
 const bandTone = (score: number) => (score >= 0.9 ? "ok" : score >= 0.7 ? "warn" : "bad");
 
-export function ConfidenceCard({ confidence }: { confidence: NonNullable<AgentRun["confidence"]> }) {
+export function ConfidenceCard({ confidence, animate }: { confidence: NonNullable<AgentRun["confidence"]>; animate?: boolean }) {
   const { c } = useStoryCopy();
   const pct = (n: number) => `${Math.round(n * 100)}%`;
   const tone = bandTone(confidence.score);
@@ -38,7 +38,11 @@ export function ConfidenceCard({ confidence }: { confidence: NonNullable<AgentRu
           <div className="absolute inset-y-0 left-[70%] w-[20%] bg-surface-amber" />
           <div className="absolute inset-y-0 left-[90%] right-0 bg-surface-mint" />
           <div
-            className={cn("absolute top-1/2 h-4 w-1 -translate-y-1/2 rounded-full", tone === "ok" ? "bg-surface-deep" : tone === "warn" ? "bg-mark-amber" : "bg-mark-red")}
+            className={cn(
+              "absolute top-1/2 h-4 w-1 -translate-y-1/2 rounded-full",
+              tone === "ok" ? "bg-surface-deep" : tone === "warn" ? "bg-mark-amber" : "bg-mark-red",
+              animate && "theatre-slide",
+            )}
             style={{ left: `calc(${pct(confidence.score)} - 2px)` }}
             aria-hidden
           />
@@ -60,8 +64,8 @@ export function ConfidenceCard({ confidence }: { confidence: NonNullable<AgentRu
               <span className="w-24 shrink-0">
                 <span className="block h-1.5 overflow-hidden rounded-full bg-surface-fog">
                   <span
-                    className={cn("block h-full rounded-full", (s.score ?? 0) >= 0.9 ? "bg-surface-deep" : "bg-mark-amber")}
-                    style={{ width: pct(s.score ?? 0) }}
+                    className={cn("block h-full rounded-full", (s.score ?? 0) >= 0.9 ? "bg-surface-deep" : "bg-mark-amber", animate && "theatre-grow")}
+                    style={{ width: pct(s.score ?? 0), animationDelay: animate ? `${confidence.signals.indexOf(s) * 120}ms` : undefined }}
                   />
                 </span>
               </span>

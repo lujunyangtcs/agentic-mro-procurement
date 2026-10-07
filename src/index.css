@@ -588,6 +588,10 @@ svg.lucide {
   100% { box-shadow: 0 0 0 10px transparent; }
 }
 .theatre-arrive { animation: theatre-arrive 1100ms ease-out 1; }
+@keyframes theatre-slide {
+  from { left: 0; }
+}
+.theatre-slide { animation: theatre-slide 1100ms cubic-bezier(0.22, 1, 0.36, 1) both; }
 @media (prefers-reduced-motion: reduce) {
-  .theatre-grow, .theatre-packet, .theatre-arrive { animation: none !important; }
+  .theatre-grow, .theatre-packet, .theatre-arrive, .theatre-slide { animation: none !important; }
 }

@@ -5,13 +5,12 @@
  */
 
 import * as React from "react";
-import { X, Clock, RotateCcw, Play, History } from "lucide-react";
+import { X, Clock, RotateCcw, History } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import { useApp, type FlowId } from "@/mro/state";
 import { useProcurement } from "@/mro/data/store";
 import { resetLedger } from "@/mro/services/demoLedger";
 import { londonDateTime } from "@/mro/domain/clock";
-import { STORY_RUNS } from "@/mro/data/stories/runModel";
 import { useDeskCopy } from "@/mro/components/desk/copy";
 import { REVIEW_ROLES } from "@/mro/components/desk/personas";
 import { useWorkQueue } from "@/mro/components/desk/workQueue";
@@ -143,26 +142,6 @@ export function PresenterControls({ open, onClose }: { open: boolean; onClose: (
             />
             {d.supplierSilent}
           </label>
-        </Section>
-
-        <Section title={d.launch}>
-          <div className="flex flex-col gap-1">
-            {STORY_RUNS.map((r) => (
-              <button
-                key={r.story.id}
-                type="button"
-                onClick={() => {
-                  onClose();
-                  go({ kind: "story", storyId: r.story.id });
-                }}
-                className="ui-pill flex items-center gap-2 rounded-md px-3 py-1.5 text-left text-[13px] text-ink hover:bg-surface-fog"
-              >
-                <Play size={13} className="shrink-0 text-surface-deep" aria-hidden />
-                <span className="shrink-0 font-bold">{`${r.story.id} · ${r.story.ucLabel}`}</span>
-                <span className="min-w-0 flex-1 truncate">{r.story.title[lang]}</span>
-              </button>
-            ))}
-          </div>
         </Section>
 
         <Section title={d.legacy}>

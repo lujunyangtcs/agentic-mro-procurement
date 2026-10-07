@@ -22,6 +22,7 @@ import { SpringIn } from "@/mro/components/ai/SpringIn";
 import { useDeskCopy } from "@/mro/components/desk/copy";
 import { useDashCopy } from "@/mro/components/dashboard/copy";
 import { useDashboardModel } from "@/mro/components/dashboard/model";
+import { UseCasesCard } from "@/mro/components/dashboard/UseCasesCard";
 import {
   AttentionCard,
   HeldByReasonCard,
@@ -121,6 +122,8 @@ export function Dashboard() {
       </SpringIn>
 
       <KPIStrip items={kpis} className="grid-cols-2 xl:grid-cols-4" />
+
+      <UseCasesCard />
 
       <div className="grid grid-cols-1 items-stretch gap-3 lg:grid-cols-[1.55fr_1fr]">
         <RequisitionsCard m={m} />

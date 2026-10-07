@@ -34,7 +34,6 @@ export function PdfViewer({ doc, onClose }: { doc: SourceDoc | null; onClose: ()
 
   React.useEffect(() => {
     if (!doc) return;
-    setZoom(100);
     closeRef.current?.focus();
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);

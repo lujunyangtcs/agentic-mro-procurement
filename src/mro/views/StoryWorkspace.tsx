@@ -21,12 +21,74 @@ import { AgentStepper } from "@/mro/components/story/AgentStepper";
 import { AgentRunPanel } from "@/mro/components/story/AgentRunPanel";
 import { OutcomeCard } from "@/mro/components/story/OutcomeCard";
 import { RequestSummary } from "@/mro/components/story/RequestSummary";
+import { THEATRE, fetchMs, type TheatreScript } from "@/mro/components/story/theatre/script";
+import { TheatrePanel, SourceFiles } from "@/mro/components/story/theatre/TheatrePanel";
+import { ArrivalModal, HandoverOverlay } from "@/mro/components/story/theatre/overlays";
+import { PdfViewer, type SourceDoc } from "@/mro/components/story/theatre/pdf";
+import { useTheatreCopy } from "@/mro/components/story/theatre/copy";
+import type { CompletionSummary } from "@/mro/components/dashboard/CaseCompleteModal";
+
+/** The close card for a guided story: the money first, then what changed for the business. */
+function guidedCompletion(base: CompletionSummary, script: TheatreScript, gathered: SourceDoc[], lang: "en" | "de", open: (d: SourceDoc) => void): CompletionSummary {
+  const done = script.completion(lang);
+  const produced = new Set(script.steps.flatMap((s) => s.produces ?? []));
+  return {
+    ...base,
+    hero: done.hero,
+    metrics: done.metrics,
+    impact: done.impact,
+    caption: "",
+    docs: gathered
+      .filter((d) => produced.has(d.id))
+      .map((d) => ({ key: d.id, label: d.title, meta: d.id, settled: true, onOpen: () => open(d) })),
+  };
+}
 
 export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; step?: number }) {
   const { go } = useApp();
   const { c, lang } = useStoryCopy();
+  const { t: tc } = useTheatreCopy();
   const run = storyRunById[storyId];
-  const { state, running, paused, stepDone, pendingTasks, decide, handOff, select, restart, humanDecisions, status } = useStoryRun(run);
+  const script = THEATRE[run.story.uc];
+  const { state, running, paused, held, stepDone, pendingTasks, decide, handOff, select, restart: restartRun, humanDecisions, status, open, beatOf, advanceBeat } =
+    useStoryRun(run, { guided: !!script, runMs: script ? (i) => fetchMs(script.steps[i]) : undefined });
+  const docs = React.useMemo(() => Object.fromEntries((script?.docs ?? []).map((d) => [d.id, d])), [script]);
+  const [viewing, setViewing] = React.useState<SourceDoc | null>(null);
+  const closeDoc = React.useCallback(() => setViewing(null), []);
+  const [arrivalDismissed, setArrivalDismissed] = React.useState(false);
+  const [handing, setHanding] = React.useState<{ from: string; to: string; final: boolean; payload: string[] } | null>(null);
+  const restart = () => {
+    setArrivalDismissed(false);
+    setHanding(null);
+    restartRun();
+  };
+  const startGuided = () => {
+    setArrivalDismissed(true);
+    open();
+  };
+  const guidedHandOff = () => {
+    const s = script?.steps[state.reached];
+    if (!script || !s) return handOff();
+    const nextStep = run.steps[state.reached + 1];
+    setHanding({
+      from: run.steps[state.reached].run.agent,
+      to: nextStep?.run.agent ?? s.finalOwner?.[lang] ?? "",
+      final: !nextStep,
+      payload: s.handover.map((h) => h[lang]),
+    });
+  };
+
+  /* Files the agents have opened or written so far, in the order they appeared. */
+  const gathered = React.useMemo(() => {
+    if (!script || held) return [];
+    const ids: string[] = [script.arrival.doc];
+    script.steps.forEach((s, i) => {
+      if (i > state.reached || (i === state.reached && !state.revealed.includes(i))) return;
+      s.fetch.forEach((f) => f.doc && ids.push(f.doc));
+      (s.produces ?? []).forEach((id) => ids.push(id));
+    });
+    return [...new Set(ids)].map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
+  }, [script, held, state.reached, state.revealed, docs]);
 
   /* Deep links from the workbenches open a step that has already run. */
   React.useEffect(() => {
@@ -113,6 +175,29 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
         <div className="grid grid-cols-1 items-start gap-3 xl:grid-cols-[minmax(0,1fr)_320px]">
           <div className="flex min-w-0 flex-col gap-3">
             {state.finished && <OutcomeCard run={run} endedBy={state.endedBy} humanDecisions={humanDecisions} />}
+            {script && script.steps[state.selected] ? (
+              <TheatrePanel
+                key={state.selected}
+                uc={run.story.uc}
+                step={step}
+                script={script.steps[state.selected]}
+                docs={docs}
+                held={held}
+                paused={paused}
+                running={running && state.selected === state.reached}
+                isFrontier={state.selected === state.reached}
+                finished={state.finished}
+                beat={beatOf(state.selected)}
+                decisions={state.decisions}
+                pendingCount={pendingTasks(state.selected).length}
+                nextAgent={run.steps[state.selected + 1]?.run.agent}
+                onStart={startGuided}
+                onBeat={(to) => advanceBeat(state.selected, to)}
+                onOpenDoc={setViewing}
+                onDecide={decide}
+                onHandOff={guidedHandOff}
+              />
+            ) : (
             <AgentRunPanel
               key={state.selected}
               uc={run.story.uc}
@@ -127,6 +212,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
               onDecide={decide}
               onHandOff={handOff}
             />
+            )}
           </div>
 
           <aside className="flex flex-col gap-3">
@@ -136,6 +222,12 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
                 <RequestSummary request={run.request} compact />
               </div>
             </section>
+            {script && (
+              <section className="aap-fade-up flex flex-col gap-3 border border-divider bg-white p-5" style={{ animationDelay: "170ms" }}>
+                <SectionHead title={tc.sourceFiles} aside={gathered.length ? String(gathered.length) : undefined} />
+                <SourceFiles docs={gathered} onOpen={setViewing} />
+              </section>
+            )}
             <section className="aap-fade-up flex flex-col gap-3 border border-divider bg-white p-5" style={{ animationDelay: "220ms" }}>
               <SectionHead title={c.humanTouchpoints} />
               <ul className="flex flex-col gap-2">
@@ -154,7 +246,37 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           </aside>
         </div>
       </div>
-      {ceremony.open && <CaseCompleteModal summary={storyCompletion(run, state, k, lang)} onStay={ceremony.hide} onBack={() => go({ kind: "cockpit" })} />}
+      {ceremony.open && (
+        <CaseCompleteModal
+          summary={script ? guidedCompletion(storyCompletion(run, state, k, lang), script, gathered, lang, setViewing) : storyCompletion(run, state, k, lang)}
+          onStay={ceremony.hide}
+          onBack={() => go({ kind: "cockpit" })}
+        />
+      )}
+      {script && held && !arrivalDismissed && (
+        <ArrivalModal
+          title={script.arrival.title[lang]}
+          request={run.request}
+          caseId={run.story.caseId}
+          firstAgent={run.steps[0].run.agent}
+          onOpenForm={() => setViewing(docs[script.arrival.doc] ?? null)}
+          onStart={startGuided}
+          onLater={() => setArrivalDismissed(true)}
+        />
+      )}
+      {handing && (
+        <HandoverOverlay
+          from={handing.from}
+          to={handing.to}
+          final={handing.final}
+          payload={handing.payload}
+          onDone={() => {
+            setHanding(null);
+            handOff();
+          }}
+        />
+      )}
+      <PdfViewer key={viewing?.id ?? "none"} doc={viewing} onClose={closeDoc} />
     </div>
   );
 }
