@@ -51,13 +51,14 @@ function ActorLabel({ actor }: { actor: Actor }) {
   return (
     <span className="whitespace-nowrap">
       {actor.name}
-      <span className="text-mute"> · {actor.role}</span>
+      <span className="text-mute"> · {t(`role.${actor.role}`)}</span>
     </span>
   );
 }
 
 function AuditTrail({ events }: { events: AuditEvent[] }) {
   const { t } = useT();
+  const { lang } = useProcurement();
   return (
     <table className="w-full border-collapse">
       <thead>
@@ -71,7 +72,7 @@ function AuditTrail({ events }: { events: AuditEvent[] }) {
       <tbody>
         {events.map((e) => (
           <tr key={e.id} className="border-b border-divider last:border-0">
-            <Td className="whitespace-nowrap tabular-nums text-mute">{londonDateTime(e.at)}</Td>
+            <Td className="whitespace-nowrap tabular-nums text-mute">{londonDateTime(e.at, lang)}</Td>
             <Td className="whitespace-nowrap font-medium text-ink">{t(`event.${e.type}`)}</Td>
             <Td>
               <ActorLabel actor={e.actor} />
