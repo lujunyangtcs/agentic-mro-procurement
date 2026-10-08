@@ -3,7 +3,7 @@
  * it is one of its own decisions — there is no generic "approve anyway".
  */
 
-import { UserRound, Clock, Check, ChevronRight } from "lucide-react";
+import { UserRound, Clock, Check, ChevronRight, Sparkles } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
 import type { HumanTask } from "@/mro/data/stories/runModel";
 import { useStoryCopy } from "@/mro/components/story/copy";
@@ -16,6 +16,8 @@ export function HumanTaskCard({
   decided,
   active,
   onDecide,
+  action,
+  note,
 }: {
   task: HumanTask;
   /** Id of the option chosen, once decided. */
@@ -23,6 +25,10 @@ export function HumanTaskCard({
   /** Earlier tasks in the same lane must be decided first. */
   active: boolean;
   onDecide: (optionId: string) => void;
+  /** Guided playback: one button that opens the prepared decision instead of bare option buttons. */
+  action?: { label: string; onOpen: () => void };
+  /** Guided playback: what the person typed or changed, shown once decided. */
+  note?: string;
 }) {
   const { c, lang } = useStoryCopy();
   const { role } = useDeskCopy();
@@ -118,10 +124,15 @@ export function HumanTaskCard({
           <p className="text-[13px] leading-[19px] text-ink">
             {c.decidedBy(task.persona)} · <span className="font-medium">{chosen.label[lang]}</span>
           </p>
-          {task.recorded && decided !== "redirect" && (
-            <p className="text-pretty text-[12.5px] leading-[18px] text-mute">
-              {c.recordedReason}: {task.recorded.reason}
-            </p>
+          {note ? (
+            <p className="text-pretty text-[12.5px] leading-[18px] text-mute">{note}</p>
+          ) : (
+            task.recorded &&
+            decided !== "redirect" && (
+              <p className="text-pretty text-[12.5px] leading-[18px] text-mute">
+                {c.recordedReason}: {task.recorded.reason}
+              </p>
+            )
           )}
         </div>
       ) : active && !mayDecide ? (
@@ -134,6 +145,18 @@ export function HumanTaskCard({
           >
             {c.switchTo(role(needed))}
             <ChevronRight size={15} aria-hidden />
+          </button>
+        </div>
+      ) : action ? (
+        <div className="ml-14 flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={!active}
+            onClick={action.onOpen}
+            className="ui-pill aap-cta group inline-flex items-center gap-2.5 whitespace-nowrap bg-ink px-5 py-2.5 text-[12px] text-ink-inverse disabled:cursor-not-allowed"
+          >
+            <Sparkles size={15} aria-hidden /> {action.label}
+            <ChevronRight size={15} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
       ) : (

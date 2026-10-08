@@ -28,6 +28,20 @@ export function DocIcon({ kind, className }: { kind: SourceDoc["kind"]; classNam
   return kind === "mail" ? <Mail size={14} className={className} aria-hidden /> : <FileText size={14} className={className} aria-hidden />;
 }
 
+export function DocChip({ doc, onOpen, className }: { doc: SourceDoc; onOpen: (d: SourceDoc) => void; className?: string }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onOpen(doc)}
+      title={`${doc.title} · ${doc.system}`}
+      className={cn("ui-pill inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded border border-divider bg-white px-2 py-1 text-[12px] text-ink hover:border-ink/40 hover:bg-surface-fog", className)}
+    >
+      <DocIcon kind={doc.kind} className="shrink-0 text-steel" />
+      <span className="truncate">{doc.id}</span>
+    </button>
+  );
+}
+
 export function PdfViewer({ doc, onClose }: { doc: SourceDoc | null; onClose: () => void }) {
   const [zoom, setZoom] = React.useState(100);
   const closeRef = React.useRef<HTMLButtonElement>(null);
@@ -43,7 +57,7 @@ export function PdfViewer({ doc, onClose }: { doc: SourceDoc | null; onClose: ()
   if (!doc) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-ink/60 p-3 sm:p-6" onClick={onClose}>
+    <div data-pdf-viewer className="fixed inset-0 z-[90] flex items-center justify-center bg-ink/60 p-3 sm:p-6" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"

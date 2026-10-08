@@ -21,7 +21,7 @@ import { AgentStepper } from "@/mro/components/story/AgentStepper";
 import { AgentRunPanel } from "@/mro/components/story/AgentRunPanel";
 import { OutcomeCard } from "@/mro/components/story/OutcomeCard";
 import { RequestSummary } from "@/mro/components/story/RequestSummary";
-import { THEATRE, fetchMs, type TheatreScript } from "@/mro/components/story/theatre/script";
+import { THEATRE, fetchMs, producedIds, type CompletionCtx, type TheatreScript } from "@/mro/components/story/theatre/script";
 import { TheatrePanel, SourceFiles } from "@/mro/components/story/theatre/TheatrePanel";
 import { ArrivalModal, HandoverOverlay } from "@/mro/components/story/theatre/overlays";
 import { PdfViewer, type SourceDoc } from "@/mro/components/story/theatre/pdf";
@@ -29,9 +29,16 @@ import { useTheatreCopy } from "@/mro/components/story/theatre/copy";
 import type { CompletionSummary } from "@/mro/components/dashboard/CaseCompleteModal";
 
 /** The close card for a guided story: the money first, then what changed for the business. */
-function guidedCompletion(base: CompletionSummary, script: TheatreScript, gathered: SourceDoc[], lang: "en" | "de", open: (d: SourceDoc) => void): CompletionSummary {
-  const done = script.completion(lang);
-  const produced = new Set(script.steps.flatMap((s) => s.produces ?? []));
+function guidedCompletion(
+  base: CompletionSummary,
+  script: TheatreScript,
+  gathered: SourceDoc[],
+  lang: "en" | "de",
+  ctx: CompletionCtx,
+  open: (d: SourceDoc) => void,
+): CompletionSummary {
+  const done = script.completion(lang, ctx);
+  const produced = producedIds(script);
   return {
     ...base,
     hero: done.hero,
@@ -86,9 +93,10 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
       if (i > state.reached || (i === state.reached && !state.revealed.includes(i))) return;
       s.fetch.forEach((f) => f.doc && ids.push(f.doc));
       (s.produces ?? []).forEach((id) => ids.push(id));
+      run.steps[i]?.tasks.forEach((task, n) => state.decisions[task.id] && (s.tasks?.[n]?.produces ?? []).forEach((id) => ids.push(id)));
     });
     return [...new Set(ids)].map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
-  }, [script, held, state.reached, state.revealed, docs]);
+  }, [script, held, state.reached, state.revealed, state.decisions, run.steps, docs]);
 
   /* Deep links from the workbenches open a step that has already run. */
   React.useEffect(() => {
@@ -189,6 +197,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
                 finished={state.finished}
                 beat={beatOf(state.selected)}
                 decisions={state.decisions}
+                inputs={state.inputs ?? {}}
                 pendingCount={pendingTasks(state.selected).length}
                 nextAgent={run.steps[state.selected + 1]?.run.agent}
                 onStart={startGuided}
@@ -248,7 +257,11 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
       </div>
       {ceremony.open && (
         <CaseCompleteModal
-          summary={script ? guidedCompletion(storyCompletion(run, state, k, lang), script, gathered, lang, setViewing) : storyCompletion(run, state, k, lang)}
+          summary={
+            script
+              ? guidedCompletion(storyCompletion(run, state, k, lang), script, gathered, lang, { endedWith: state.endedWith, inputs: state.inputs ?? {} }, setViewing)
+              : storyCompletion(run, state, k, lang)
+          }
           onStay={ceremony.hide}
           onBack={() => go({ kind: "cockpit" })}
         />
@@ -259,6 +272,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           request={run.request}
           caseId={run.story.caseId}
           firstAgent={run.steps[0].run.agent}
+          fileName={docs[script.arrival.doc]?.file}
           onOpenForm={() => setViewing(docs[script.arrival.doc] ?? null)}
           onStart={startGuided}
           onLater={() => setArrivalDismissed(true)}

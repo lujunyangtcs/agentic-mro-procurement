@@ -9,9 +9,9 @@
 import * as React from "react";
 import type { StoryId } from "@/mro/domain/types";
 import type { StoryRun } from "@/mro/data/stories/runModel";
-import { freshRun, getLedger, updateLedger, useLedger, type RunState } from "@/mro/services/demoLedger";
+import { freshRun, getLedger, updateLedger, useLedger, type RunState, type TaskInput } from "@/mro/services/demoLedger";
 
-export type { RunState };
+export type { RunState, TaskInput };
 
 export type StoryStatus = "new" | "running" | "waiting" | "ready" | "done" | "ended";
 
@@ -91,7 +91,7 @@ export function useStoryRun(run: StoryRun, opts: { guided?: boolean; runMs?: (st
   const pendingTasks = (i: number) => pendingOf(run, state, i);
   const stepDone = (i: number) => state.revealed.includes(i) && pendingTasks(i).length === 0;
 
-  const decide = (taskId: string, optionId: string) => {
+  const decide = (taskId: string, optionId: string, input?: TaskInput) => {
     const step = run.steps.find((s) => s.tasks.some((t) => t.id === taskId));
     const option = step?.tasks.find((t) => t.id === taskId)?.options.find((o) => o.id === optionId);
     update((s) =>
@@ -100,6 +100,7 @@ export function useStoryRun(run: StoryRun, opts: { guided?: boolean; runMs?: (st
         : {
             ...s,
             decisions: { ...s.decisions, [taskId]: optionId },
+            ...(input ? { inputs: { ...s.inputs, [taskId]: input } } : {}),
             ...(option?.endsRun ? { finished: true, endedBy: option.endsRun, endedWith: option.id } : {}),
           },
     );

@@ -8,11 +8,43 @@
 
 import { IO, type UseCaseKey } from "@/mro/data/stories/io";
 import type { SourceDoc } from "@/mro/components/story/theatre/pdf";
+import type { TaskInput } from "@/mro/services/demoLedger";
 import { UC06_DOCS } from "@/mro/components/story/theatre/uc06Docs";
+import { UC04 } from "@/mro/components/story/theatre/uc04Script";
 
-type Bi = { en: string; de: string };
+export type Bi = { en: string; de: string };
 
 export type FetchLine = { label: Bi; doc?: string };
+
+/* ── How a person decides a task during guided playback ─────────────────── */
+
+/** One side of a fork the agent laid out for a person, e.g. panel supplier vs named supplier. */
+export type ChoiceOption = {
+  /** Matches the HumanOption id the decision records. */
+  id: string;
+  tag: Bi;
+  recommended?: boolean;
+  title: string;
+  figure: string;
+  figureNote: Bi;
+  facts: { label: Bi; value: Bi }[];
+  docs?: string[];
+  /** Choosing this option needs a typed reason, saved against the case. */
+  reason?: { label: Bi; suggestion: Bi; suggestionLabel: Bi };
+};
+
+export type FormField =
+  | { key: string; kind: "money"; label: Bi; proposed: number; min?: number; minError?: Bi; why: Bi; doc?: string }
+  | { key: string; kind: "number"; label: Bi; proposed: number; min?: number; minError?: Bi; suffix: Bi; why: Bi; doc?: string }
+  | { key: string; kind: "check"; label: Bi; proposed: boolean; why: Bi; doc?: string };
+
+export type TaskUi =
+  /** Pick between options the agent prepared side by side. */
+  | { kind: "choice"; cta: Bi; prep: Bi[]; options: ChoiceOption[]; produces?: string[] }
+  /** Review, edit and send an e-mail the agent drafted. */
+  | { kind: "email"; cta: Bi; option: string; from: string; to: string; subject: string; body: string[]; attach?: string[]; send: Bi; produces?: string[] }
+  /** Confirm or edit the figures and conditions the agent proposed. */
+  | { kind: "form"; cta: Bi; lead: Bi; fields: FormField[]; accept: string; reject?: string; produces?: string[] };
 
 export type TheatreStep = {
   fetch: FetchLine[];
@@ -22,18 +54,27 @@ export type TheatreStep = {
   guardDocs?: Record<string, string>;
   /** Files this agent writes, opened from its output card. */
   produces?: string[];
+  /** How each of this step's human tasks is decided, in task order. */
+  tasks?: TaskUi[];
   /** What travels to the next owner. */
   handover: Bi[];
   /** Who receives it after the last agent. */
   finalOwner?: Bi;
 };
 
+export type CompletionCtx = { endedWith?: string; inputs: Record<string, TaskInput> };
+
 export type TheatreScript = {
   docs: SourceDoc[];
   arrival: { title: Bi; doc: string };
   steps: TheatreStep[];
-  completion: (lang: "en" | "de") => { hero: { value: string; label: string }; metrics: { value: string; label: string }[]; impact: string[] };
+  completion: (lang: "en" | "de", ctx: CompletionCtx) => { hero: { value: string; label: string }; metrics: { value: string; label: string }[]; impact: string[] };
 };
+
+/** Files a script produces, including those written when a person decides a task. */
+export function producedIds(script: TheatreScript): Set<string> {
+  return new Set(script.steps.flatMap((s) => [...(s.produces ?? []), ...(s.tasks ?? []).flatMap((t) => t.produces ?? [])]));
+}
 
 const FETCH_MS = 720;
 
@@ -134,4 +175,4 @@ const UC06: TheatreScript = {
   },
 };
 
-export const THEATRE: Partial<Record<UseCaseKey, TheatreScript>> = { uc06: UC06 };
+export const THEATRE: Partial<Record<UseCaseKey, TheatreScript>> = { uc06: UC06, uc04: UC04 };

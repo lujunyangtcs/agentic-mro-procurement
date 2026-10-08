@@ -25,7 +25,11 @@ export type RunState = {
   opened?: boolean;
   /** Guided playback: step index → how many of its cards are on screen. */
   beats?: Record<number, number>;
+  /** Guided playback: what a person typed or edited when deciding a task (reason, figures, sent e-mail). */
+  inputs?: Record<string, TaskInput>;
 };
+
+export type TaskInput = Record<string, string | number | boolean>;
 
 export type Signoff = { by: string; role: Role; at: string };
 

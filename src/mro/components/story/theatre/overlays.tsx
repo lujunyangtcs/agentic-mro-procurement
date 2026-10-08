@@ -35,6 +35,7 @@ export function ArrivalModal({
   request,
   caseId,
   firstAgent,
+  fileName,
   onOpenForm,
   onStart,
   onLater,
@@ -43,6 +44,7 @@ export function ArrivalModal({
   request: RequestCard;
   caseId: string;
   firstAgent: string;
+  fileName?: string;
   onOpenForm: () => void;
   onStart: () => void;
   onLater: () => void;
@@ -111,7 +113,7 @@ export function ArrivalModal({
             <span className="grid h-9 w-8 shrink-0 place-items-center rounded-sm border border-divider bg-white text-[9px] font-bold text-mark-red">PDF</span>
             <span className="min-w-0 flex-1">
               <span className="block text-[13px] font-bold text-ink">{t.openForm}</span>
-              <span className="block truncate text-[12px] text-mute">{`${request.requestId}_purchase-request.pdf`}</span>
+              <span className="block truncate text-[12px] text-mute">{fileName ?? `${request.requestId}_purchase-request.pdf`}</span>
             </span>
             <ArrowRight size={15} aria-hidden className="text-mute transition-transform group-hover:translate-x-0.5" />
           </button>

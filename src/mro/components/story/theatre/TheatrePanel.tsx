@@ -20,27 +20,16 @@ import { Spinner } from "@/mro/components/ai/Spinner";
 import { useTheatreCopy } from "@/mro/components/story/theatre/copy";
 import { AiAnalysisModal, type AnalysisItem } from "@/mro/components/story/theatre/overlays";
 import { FETCH_LINE_MS, type TheatreStep } from "@/mro/components/story/theatre/script";
-import { DocIcon, type SourceDoc } from "@/mro/components/story/theatre/pdf";
+import { DocChip, DocIcon, type SourceDoc } from "@/mro/components/story/theatre/pdf";
+import { TaskModal } from "@/mro/components/story/theatre/hitl";
+import { taskNote } from "@/mro/components/story/theatre/hitlNote";
+import type { TaskInput } from "@/mro/services/demoLedger";
 
 type Stage = "confidence" | "guardrails" | "lane";
 
 export function stagesOf(step: RunStep): Stage[] {
   const r = step.run;
   return [...(r.confidence ? (["confidence"] as const) : []), ...(r.guardrails.length ? (["guardrails"] as const) : []), ...(r.lane ? (["lane"] as const) : [])];
-}
-
-export function DocChip({ doc, onOpen, className }: { doc: SourceDoc; onOpen: (d: SourceDoc) => void; className?: string }) {
-  return (
-    <button
-      type="button"
-      onClick={() => onOpen(doc)}
-      title={`${doc.title} · ${doc.system}`}
-      className={cn("ui-pill inline-flex max-w-full items-center gap-1.5 whitespace-nowrap rounded border border-divider bg-white px-2 py-1 text-[12px] text-ink hover:border-ink/40 hover:bg-surface-fog", className)}
-    >
-      <DocIcon kind={doc.kind} className="shrink-0 text-steel" />
-      <span className="truncate">{doc.id}</span>
-    </button>
-  );
 }
 
 /* ── Fetching ───────────────────────────────────────────────────────────── */
@@ -124,6 +113,7 @@ export function TheatrePanel({
   finished,
   beat,
   decisions,
+  inputs,
   pendingCount,
   nextAgent,
   onStart,
@@ -143,18 +133,20 @@ export function TheatrePanel({
   finished: boolean;
   beat: number;
   decisions: Record<string, string>;
+  inputs: Record<string, TaskInput>;
   pendingCount: number;
   nextAgent?: string;
   onStart: () => void;
   onBeat: (to: number) => void;
   onOpenDoc: (d: SourceDoc) => void;
-  onDecide: (taskId: string, optionId: string) => void;
+  onDecide: (taskId: string, optionId: string, input?: TaskInput) => void;
   onHandOff: () => void;
 }) {
   const { c } = useStoryCopy();
-  const { t } = useTheatreCopy();
+  const { t, lang } = useTheatreCopy();
   const [showInput, setShowInput] = React.useState(false);
   const [analysing, setAnalysing] = React.useState(false);
+  const [openTask, setOpenTask] = React.useState<number | null>(null);
   const r = step.run;
   const seconds = Math.max(1, Math.round((Date.parse(r.finishedAt) - Date.parse(r.startedAt)) / 1000));
   const stages = stagesOf(step);
@@ -181,7 +173,8 @@ export function TheatrePanel({
   }, [next, running, beat]);
 
   const fetchedDocs = script.fetch.map((f) => (f.doc ? docs[f.doc] : undefined)).filter((d, i, a): d is SourceDoc => !!d && a.indexOf(d) === i);
-  const producedDocs = (script.produces ?? []).map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
+  const decidedDocs = step.tasks.flatMap((x, n) => (decisions[x.id] ? (script.tasks?.[n]?.produces ?? []) : []));
+  const producedDocs = [...new Set([...(script.produces ?? []), ...decidedDocs])].map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
 
   const analysisOf = (kind: "confidence" | "guardrails"): AnalysisItem[] =>
     kind === "confidence"
@@ -347,9 +340,21 @@ export function TheatrePanel({
           )}
 
           {shownBeat >= stages.length &&
-            step.tasks.map((x, i) => (
-              <HumanTaskCard key={x.id} task={x} decided={decisions[x.id]} active={live && i === firstOpen} onDecide={(o) => onDecide(x.id, o)} />
-            ))}
+            step.tasks.map((x, i) => {
+              const ui = script.tasks?.[i];
+              const chosen = decisions[x.id];
+              return (
+                <HumanTaskCard
+                  key={x.id}
+                  task={x}
+                  decided={chosen}
+                  active={live && i === firstOpen}
+                  onDecide={(o) => onDecide(x.id, o)}
+                  action={ui ? { label: ui.cta[lang], onOpen: () => setOpenTask(i) } : undefined}
+                  note={ui && chosen ? taskNote(ui, chosen, inputs[x.id], lang, t) : undefined}
+                />
+              );
+            })}
 
           {canHandOff && (
             <div className="aap-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
@@ -367,6 +372,21 @@ export function TheatrePanel({
             </div>
           )}
         </>
+      )}
+
+      {openTask !== null && step.tasks[openTask] && script.tasks?.[openTask] && !decisions[step.tasks[openTask].id] && (
+        <TaskModal
+          task={step.tasks[openTask]}
+          ui={script.tasks[openTask]}
+          docs={docs}
+          onOpenDoc={onOpenDoc}
+          onCancel={() => setOpenTask(null)}
+          onDecide={(optionId, input) => {
+            const id = step.tasks[openTask].id;
+            setOpenTask(null);
+            onDecide(id, optionId, input);
+          }}
+        />
       )}
 
       {analysing && (
