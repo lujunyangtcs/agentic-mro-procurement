@@ -57,7 +57,10 @@ export const UC04: TheatreScript = {
           kind: "choice",
           cta: { en: "Open the decision pack", de: "Entscheidungsvorlage öffnen" },
           prep: [
-            { en: `Both suppliers meet all ${CAPS} mandatory capabilities`, de: `Beide Lieferanten erfüllen alle ${CAPS} Pflichtanforderungen` },
+            {
+              en: `${kName} meets all ${CAPS} mandatory capabilities; NovaOps claims them in its quotation but has not been checked`,
+              de: `${kName} erfüllt alle ${CAPS} Pflichtanforderungen; NovaOps nennt sie im Angebot, geprüft ist das nicht`,
+            },
             {
               en: `${kName} is ${gbp(SAVING)} (${PCT}%) cheaper over ${DAYS} days and needs no onboarding`,
               de: `${kName} ist über ${DAYS} Tage ${gbpDe(SAVING)} (${PCT.replace(".", ",")} %) günstiger und braucht kein Onboarding`,
@@ -90,7 +93,7 @@ export const UC04: TheatreScript = {
               figureNote: { en: `${DAYS} days × ${gbp(named.day_rate_quoted)}`, de: `${DAYS} Tage × ${gbpDe(named.day_rate_quoted)}` },
               facts: [
                 { label: { en: "Panel", de: "Panel" }, value: { en: "Not on panel", de: "Nicht im Panel" } },
-                { label: { en: "Capabilities", de: "Anforderungen" }, value: { en: `${CAPS} of ${CAPS} + own simulation tool`, de: `${CAPS} von ${CAPS} + eigenes Simulationstool` } },
+                { label: { en: "Capabilities", de: "Anforderungen" }, value: { en: `${CAPS} of ${CAPS} claimed · not verified`, de: `${CAPS} von ${CAPS} laut Angebot · ungeprüft` } },
                 { label: { en: "Performance", de: "Leistung" }, value: { en: "No history with Client", de: "Keine Historie beim Client" } },
                 { label: { en: "Onboarding", de: "Onboarding" }, value: { en: `${named.onboarding_effort_days} days · new-supplier checks`, de: `${named.onboarding_effort_days} Tage · Neulieferantenprüfung` } },
                 { label: { en: "Risk", de: "Risiko" }, value: { en: "Unknown — not screened", de: "Unbekannt — nicht geprüft" } },

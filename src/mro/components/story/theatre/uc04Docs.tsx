@@ -398,7 +398,7 @@ function SupplierDecision() {
           rows={[
             ["Supplier", `${K.name} (${K.id})`, SUP.name],
             ["Panel status", `On ${D4.panel}`, "Not on panel"],
-            ["Mandatory capabilities", `${req.required.length} of ${req.required.length}`, `${req.required.length} of ${req.required.length} + own simulation tool`],
+            ["Mandatory capabilities", `${req.required.length} of ${req.required.length} · verified`, `${req.required.length} of ${req.required.length} claimed in ${D4.quote} · not verified`],
             ["Day rate", gbp(kestrel.day_rate), gbp(named.day_rate_quoted)],
             ["Days", String(DAYS), String(DAYS)],
             ["Total", gbp(rec.estimated_cost_gbp), gbp(NAMED_TOTAL)],
