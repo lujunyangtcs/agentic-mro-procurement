@@ -10,6 +10,11 @@ const en = {
   received: "Received",
   openForm: "Open the form",
   start: (agent: string) => `Start ${agent}`,
+  startShort: "Start agent",
+  handShort: "Hand off",
+  analyseShort: "AI · Run checks",
+  checkScope: (signals: number, guards: number) =>
+    [signals ? `${signals} confidence signal${signals === 1 ? "" : "s"}` : "", guards ? `${guards} guardrail${guards === 1 ? "" : "s"}` : ""].filter(Boolean).join(" · "),
   notNow: "Not now",
   awaiting: "Request received",
   working: "Working",
@@ -77,6 +82,11 @@ const de: Copy = {
   received: "Eingegangen",
   openForm: "Formular öffnen",
   start: (agent) => `${agent} starten`,
+  startShort: "Agent starten",
+  handShort: "Übergeben",
+  analyseShort: "KI · Prüfen",
+  checkScope: (signals, guards) =>
+    [signals ? `${signals} Konfidenzsignal${signals === 1 ? "" : "e"}` : "", guards ? `${guards} Leitplanke${guards === 1 ? "" : "n"}` : ""].filter(Boolean).join(" · "),
   notNow: "Später",
   awaiting: "Anforderung eingegangen",
   working: "Arbeitet",

@@ -2058,7 +2058,7 @@ const DICT: Record<string, Phrase> = {
     de: "Angebote vergleichen",
   },
   "qr.weighing": {
-    en: "Weighing price against lead time and what the downtime costs…",
+    en: "Weighing price against lead time and what the downtime costs��",
     de: "Wäge Preis gegen Lieferzeit und Stillstandskosten ab …",
   },
   "qr.accept": {
@@ -2813,7 +2813,7 @@ export function useT() {
  * translated surface at once — the person reading decides the language, not
  * whoever happened to raise the request.
  */
-export function LanguageSwitch({ className }: { className?: string }) {
+export function LanguageSwitch({ className, labelClassName }: { className?: string; labelClassName?: string }) {
   const { lang, setLang, t } = useT();
   const [open, setOpen] = React.useState(false);
   const box = React.useRef<HTMLDivElement>(null);
@@ -2841,9 +2841,9 @@ export function LanguageSwitch({ className }: { className?: string }) {
         aria-label={t("xlat.language")}
         className="ui-pill inline-flex items-center gap-2 whitespace-nowrap rounded-md border border-divider bg-white px-3.5 py-2 text-[13px] font-medium text-ink hover:bg-surface-fog"
       >
-        <LanguagesIcon size={15} className="text-mute" />
-        {current.native}
-        <ChevronDown
+  <LanguagesIcon size={15} className="text-mute" />
+  <span className={labelClassName}>{current.native}</span>
+  <ChevronDown
           size={14}
           className={cn("text-mute transition-transform", open && "rotate-180")}
         />

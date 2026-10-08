@@ -74,9 +74,9 @@ function Shell({ task, onCancel, children, footer }: { task: HumanTask; onCancel
   }, []);
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex overflow-y-auto bg-ink/50 px-4 py-6 backdrop-blur-[2px]">
-      <div role="dialog" aria-modal="true" aria-labelledby={titleId} className="ai-spring m-auto flex w-full max-w-[780px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl">
-        <header className="flex items-start gap-4 border-b border-divider px-6 py-5">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-ink/50 px-4 py-6 backdrop-blur-[2px]">
+      <div role="dialog" aria-modal="true" aria-labelledby={titleId} className="ai-spring flex max-h-full w-full max-w-[780px] flex-col overflow-hidden rounded-lg bg-white shadow-2xl">
+        <header className="flex shrink-0 items-start gap-4 border-b border-divider px-6 py-5">
           <span className="grid h-10 w-10 shrink-0 place-items-center border border-mark-amber/60 bg-surface-amber text-mark-amber">
             <UserRound size={17} aria-hidden />
           </span>
@@ -98,8 +98,8 @@ function Shell({ task, onCancel, children, footer }: { task: HumanTask; onCancel
             <X size={17} aria-hidden />
           </button>
         </header>
-        <div className="flex flex-col gap-5 px-6 py-5">{children}</div>
-        <footer className="flex flex-wrap items-center justify-end gap-2 border-t border-divider bg-surface-fog/60 px-6 py-4">{footer}</footer>
+        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto overscroll-contain px-6 py-5">{children}</div>
+        <footer className="flex shrink-0 flex-wrap items-center justify-end gap-2 border-t border-divider bg-surface-fog/60 px-6 py-4">{footer}</footer>
       </div>
     </div>,
     document.body,
@@ -345,7 +345,7 @@ function EmailModal({ task, ui, docs, onOpenDoc, onCancel, onDecide }: ModalProp
   );
 }
 
-/* ── Proposed figures and conditions: confirm or edit ───────────────────── */
+/* ── Proposed figures and conditions: confirm or edit ────────────��──────── */
 
 function FormModal({ task, ui, docs, onOpenDoc, onCancel, onDecide }: ModalProps<Extract<TaskUi, { kind: "form" }>>) {
   const { t, lang } = useTheatreCopy();

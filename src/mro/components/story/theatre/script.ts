@@ -6,6 +6,7 @@
  * keeps the standard run panel.
  */
 
+import type { ReactNode } from "react";
 import { IO, type UseCaseKey } from "@/mro/data/stories/io";
 import type { SourceDoc } from "@/mro/components/story/theatre/pdf";
 import type { TaskInput } from "@/mro/services/demoLedger";
@@ -15,6 +16,30 @@ import { UC04 } from "@/mro/components/story/theatre/uc04Script";
 export type Bi = { en: string; de: string };
 
 export type FetchLine = { label: Bi; doc?: string };
+
+/* ── A piece of an agent's work: popup first, then its card ─────────────── */
+
+/** One line the agent reasons through inside a beat's popup. `flag` marks a finding that needs attention. */
+export type BeatLine = { label: Bi; detail: Bi; value: Bi; doc?: string; flag?: boolean };
+
+export type BeatCardProps = { lang: "en" | "de"; docs: Record<string, SourceDoc>; onOpenDoc: (d: SourceDoc) => void };
+
+/**
+ * The presenter asks the agent for one piece of work; a popup shows it
+ * reasoning over its sources line by line, then the result lands as a card.
+ * A step plays its beats in order before confidence and guardrails.
+ */
+export type Beat = {
+  key: string;
+  cta: Bi;
+  short: Bi;
+  note: Bi;
+  title: Bi;
+  docLabel: Bi;
+  lines: BeatLine[];
+  result: Bi;
+  card: (p: BeatCardProps) => ReactNode;
+};
 
 /* ── How a person decides a task during guided playback ─────────────────── */
 
@@ -27,7 +52,7 @@ export type ChoiceOption = {
   title: string;
   figure: string;
   figureNote: Bi;
-  facts: { label: Bi; value: Bi }[];
+  facts: { label: Bi; value: Bi; flag?: boolean }[];
   docs?: string[];
   /** Choosing this option needs a typed reason, saved against the case. */
   reason?: { label: Bi; suggestion: Bi; suggestionLabel: Bi };
@@ -44,10 +69,14 @@ export type TaskUi =
   /** Review, edit and send an e-mail the agent drafted. */
   | { kind: "email"; cta: Bi; option: string; from: string; to: string; subject: string; body: string[]; attach?: string[]; send: Bi; produces?: string[] }
   /** Confirm or edit the figures and conditions the agent proposed. */
-  | { kind: "form"; cta: Bi; lead: Bi; fields: FormField[]; accept: string; reject?: string; produces?: string[] };
+  | { kind: "form"; cta: Bi; lead: Bi; fields: FormField[]; accept: string; reject?: string; produces?: string[] }
+  /** Approve the path the person owns, side by side with the agent's view, with the reason the agent drafted. */
+  | { kind: "approve"; cta: Bi; prep: Bi[]; compare: ChoiceOption[]; option: string; reason: { label: Bi; draft: Bi }; approve: Bi; produces?: string[] };
 
 export type TheatreStep = {
   fetch: FetchLine[];
+  /** The agent's work after fetching, one popup and one card at a time. */
+  beats?: Beat[];
   /** Confidence signal key → source file id. */
   signalDocs?: Record<string, string>;
   /** Guardrail rule → source file id. */

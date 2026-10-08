@@ -11,6 +11,7 @@ import { useDashCopy } from "@/mro/components/dashboard/copy";
 import { CaseCompleteModal, useCloseCeremony } from "@/mro/components/dashboard/CaseCompleteModal";
 import { storyCompletion } from "@/mro/components/dashboard/completion";
 import { useApp } from "@/mro/state";
+import { cn } from "@/mro/lib/utils";
 import type { StoryId } from "@/mro/domain/types";
 import { storyRunById } from "@/mro/data/stories/runModel";
 import { StatusPill } from "@/mro/components/blocks/StatusPill";
@@ -124,15 +125,17 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
   const progress = run.steps.length ? doneCount / run.steps.length : 0;
 
   return (
-    <div className="min-h-screen bg-surface-fog">
+    <div className="@container/story min-h-screen bg-surface-fog">
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-divider bg-white px-5 py-3">
         <button
           type="button"
           onClick={() => go({ kind: "agent", id: "intake" })}
-          className="ui-pill group aap-cta inline-flex shrink-0 items-center gap-2 whitespace-nowrap border border-ink/25 bg-white px-3.5 py-2 text-[12px] text-ink"
+          aria-label={c.back}
+          title={c.back}
+          className="ui-pill group aap-cta inline-flex h-9 shrink-0 items-center gap-2 whitespace-nowrap border border-ink/25 bg-white px-2.5 text-[12px] text-ink @3xl/story:px-3.5"
         >
           <ArrowLeft size={15} aria-hidden className="transition-transform duration-150 ease-out group-hover:-translate-x-1" />
-          {c.back}
+          <span className="hidden @3xl/story:inline">{c.back}</span>
         </button>
         <div className="min-w-0 flex-1 border-l border-divider pl-4">
           <p className="aap-eyebrow truncate text-[11px] text-steel">
@@ -144,7 +147,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           label={pill.label}
           kind={pill.kind}
           pulse={status === "running" || status === "waiting"}
-          className={status === "waiting" ? "max-w-[260px] truncate bg-surface-amber text-mark-amber" : "max-w-[260px] truncate"}
+          className={cn("hidden max-w-[260px] truncate @2xl/story:inline-flex", status === "waiting" && "bg-surface-amber text-mark-amber")}
         />
         {state.finished && (
           <button
@@ -164,7 +167,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
         >
           <RotateCcw size={15} aria-hidden className="transition-transform duration-300 ease-out group-hover:-rotate-[120deg]" />
         </button>
-        <LanguageSwitch />
+        <LanguageSwitch labelClassName="hidden @xl/story:inline" />
       </header>
 
       <StoryHero

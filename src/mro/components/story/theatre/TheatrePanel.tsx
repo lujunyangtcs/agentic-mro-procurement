@@ -1,14 +1,16 @@
 /**
  * The agent panel during guided playback. An agent first fetches its
- * sources line by line; its output then lands, and the presenter asks the
- * AI to score confidence and run guardrails one card at a time. The lane
- * follows on its own, then the baton can pass.
+ * sources line by line. Its work then plays as beats: the presenter asks
+ * for each piece, a popup shows the agent reasoning, and one card lands.
+ * Confidence and guardrails run as the last AI check, the lane follows on
+ * its own, a person decides in a popup where the lane needs one, then the
+ * baton can pass.
  */
 
 import * as React from "react";
-import { ArrowRight, Bot, Check, ChevronDown, Inbox, Sparkles } from "lucide-react";
+import { ArrowRight, Bot, Check, ChevronDown, Clock, Inbox, Sparkles, UserRound } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
-import type { RunStep } from "@/mro/data/stories/runModel";
+import type { HumanTask, RunStep } from "@/mro/data/stories/runModel";
 import type { UseCaseKey } from "@/mro/data/stories/io";
 import { IoBody } from "@/mro/components/story/IoBody";
 import { ConfidenceCard, GuardrailCard, LaneCard } from "@/mro/components/story/Envelope";
@@ -19,17 +21,34 @@ import { humanKey } from "@/mro/components/story/format";
 import { Spinner } from "@/mro/components/ai/Spinner";
 import { useTheatreCopy } from "@/mro/components/story/theatre/copy";
 import { AiAnalysisModal, type AnalysisItem } from "@/mro/components/story/theatre/overlays";
-import { FETCH_LINE_MS, type TheatreStep } from "@/mro/components/story/theatre/script";
+import { FETCH_LINE_MS, type TaskUi, type TheatreStep } from "@/mro/components/story/theatre/script";
 import { DocChip, DocIcon, type SourceDoc } from "@/mro/components/story/theatre/pdf";
 import { TaskModal } from "@/mro/components/story/theatre/hitl";
 import { taskNote } from "@/mro/components/story/theatre/hitlNote";
 import type { TaskInput } from "@/mro/services/demoLedger";
 
-type Stage = "confidence" | "guardrails" | "lane";
+type CheckStage = "confidence" | "guardrails";
+type Stage = CheckStage | "lane" | `beat:${number}`;
 
-export function stagesOf(step: RunStep): Stage[] {
+export function stagesOf(step: RunStep, script?: TheatreStep): Stage[] {
   const r = step.run;
-  return [...(r.confidence ? (["confidence"] as const) : []), ...(r.guardrails.length ? (["guardrails"] as const) : []), ...(r.lane ? (["lane"] as const) : [])];
+  return [
+    ...(script?.beats ?? []).map((_, i) => `beat:${i}` as const),
+    ...(r.confidence ? (["confidence"] as const) : []),
+    ...(r.guardrails.length ? (["guardrails"] as const) : []),
+    ...(r.lane ? (["lane"] as const) : []),
+  ];
+}
+
+/** Brings the next thing to press into view once the card above it has landed. */
+function useBringIntoView<T extends HTMLElement>() {
+  const ref = React.useRef<T>(null);
+  React.useEffect(() => {
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const tm = window.setTimeout(() => ref.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 120);
+    return () => window.clearTimeout(tm);
+  }, []);
+  return ref;
 }
 
 /* ── Fetching ───────────────────────────────────────────────────────────── */
@@ -79,23 +98,35 @@ function Fetching({ script, docs, onOpen }: { script: TheatreStep; docs: Record<
 
 /* ── The next AI action, offered as a button ────────────────────────────── */
 
-function AiAction({ label, onClick }: { label: string; onClick: () => void }) {
+function AiAction({ label, short, note, onClick }: { label: string; short: string; note: string; onClick: () => void }) {
   const ref = React.useRef<HTMLButtonElement>(null);
+  const box = useBringIntoView<HTMLDivElement>();
   React.useEffect(() => ref.current?.focus({ preventScroll: true }), []);
   return (
-    <div className="aap-fade-up flex items-center gap-3 border border-dashed border-ink/30 bg-white px-5 py-3.5">
+    <div ref={box} className="aap-fade-up flex scroll-mb-6 items-center gap-3 border border-dashed border-ink/30 bg-white px-5 py-3.5">
       <span className="h-2 w-2 shrink-0 rounded-full bg-surface-deep ai-pulse" aria-hidden />
-      <span className="min-w-0 flex-1 truncate text-[13px] text-mute">{label.replace(/^AI · /, "")}</span>
+      <span className="hidden min-w-0 flex-1 truncate text-[13px] text-mute @md/agent:block">{note}</span>
       <button
         ref={ref}
         type="button"
         onClick={onClick}
-        className="ui-pill aap-cta group inline-flex shrink-0 items-center gap-2 whitespace-nowrap bg-ink px-5 py-2.5 text-[12.5px] text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+        aria-label={label}
+        className="ui-pill aap-cta group ml-auto inline-flex shrink-0 items-center gap-2 whitespace-nowrap bg-ink px-5 py-2.5 text-[12.5px] text-ink-inverse focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
       >
-        <Sparkles size={15} aria-hidden /> {label}
+        <Sparkles size={15} aria-hidden /> <Fit full={label} short={short} />
         <ArrowRight size={15} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
       </button>
     </div>
+  );
+}
+
+/** A button label that drops to its short form when the agent panel is narrow. */
+function Fit({ full, short }: { full: string; short: string }) {
+  return (
+    <>
+      <span className="hidden @xl/agent:inline">{full}</span>
+      <span className="@xl/agent:hidden">{short}</span>
+    </>
   );
 }
 
@@ -206,7 +237,7 @@ export function TheatrePanel({
     .join(" · ");
 
   return (
-    <article className="flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
+    <article className="@container/agent flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
       <header className="aap-fade-up relative flex flex-wrap items-center gap-x-4 gap-y-1 bg-accent-navy px-5 py-4 text-ink-inverse">
         <span aria-hidden className="aap-rule absolute inset-x-0 bottom-0 block h-[2px] bg-sand" />
         <span className="grid h-10 w-10 shrink-0 place-items-center border border-sand/60 text-sand" aria-hidden>
@@ -221,7 +252,7 @@ export function TheatrePanel({
           </h2>
         </div>
         {!running && !held && (
-          <p className="shrink-0 text-right text-[12px] font-light leading-[17px] text-ink-inverse/75">
+          <p className="w-full pl-14 text-[12px] font-light leading-[17px] text-ink-inverse/75 @lg/agent:w-auto @lg/agent:shrink-0 @lg/agent:pl-0 @lg/agent:text-right">
             {r.caseId}
             <br />
             {r.model && `${c.model} ${r.model} · `}
@@ -237,9 +268,10 @@ export function TheatrePanel({
           <button
             type="button"
             onClick={onStart}
-            className="ui-pill aap-cta inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
+            aria-label={t.start(r.agent)}
+            className="ui-pill aap-cta ml-auto inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
           >
-            <Bot size={15} aria-hidden /> {t.start(r.agent)}
+            <Bot size={15} aria-hidden /> <Fit full={t.start(r.agent)} short={t.startShort} />
             <ArrowRight size={16} aria-hidden />
           </button>
         </div>
@@ -326,7 +358,14 @@ export function TheatrePanel({
             </div>
           )}
 
-          {checking && <AiAction label={checkLabel} onClick={() => setAnalysing(true)} />}
+          {checking && (
+            <AiAction
+              label={checkLabel}
+              short={t.analyseShort}
+              note={t.checkScope(checks.includes("confidence") ? (r.confidence?.signals.length ?? 0) : 0, checks.includes("guardrails") ? r.guardrails.length : 0)}
+              onClick={() => setAnalysing(true)}
+            />
+          )}
           {next === "lane" && (
             <p role="status" className="aap-fade-up flex items-center gap-3 border border-divider bg-white px-5 py-3.5 text-[13px] text-ink">
               <Spinner size={13} /> {t.deciding}
@@ -364,9 +403,10 @@ export function TheatrePanel({
               <button
                 type="button"
                 onClick={onHandOff}
-                className="ui-pill aap-cta inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
+                aria-label={nextAgent ? c.handTo(nextAgent) : c.closeCase}
+                className="ui-pill aap-cta ml-auto inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
               >
-                {nextAgent ? c.handTo(nextAgent) : c.closeCase}
+                {nextAgent ? <Fit full={c.handTo(nextAgent)} short={t.handShort} /> : c.closeCase}
                 <ArrowRight size={16} aria-hidden />
               </button>
             </div>
