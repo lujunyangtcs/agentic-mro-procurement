@@ -2,8 +2,8 @@
  * Turns each use case's I/O into a run the workspace can play: the request as
  * it arrived, the agent chain in manifest order, and the human tasks each
  * HiTL lane decision creates. Every figure is read from `IO`; the only things
- * written here are the labels for the decision buttons and, for UC4, which
- * choice ends the run early (the redirect the Supplier Match Agent proposed).
+ * written here are the labels for the decision buttons and which choices end
+ * the run early (UC4's supplier rejection at risk screening).
  */
 
 import type { StoryId } from "@/mro/domain/types";
@@ -193,18 +193,7 @@ const OPTIONS: Record<string, HumanOption[]> = {
   "uc09:1:0": [
     { id: "negotiate", primary: true, label: { en: "Comparable · negotiate at target", de: "Vergleichbar · zum Zielpreis verhandeln" } },
   ],
-  "uc04:0:0": [
-    {
-      id: "redirect",
-      primary: true,
-      label: { en: "Confirm panel supplier", de: "Panel-Lieferant bestätigen" },
-      endsRun: {
-        en: "Redirected to SUP-40210 Kestrel Operations · £34,500 · £7,500 below the named supplier · no onboarding",
-        de: "Umgeleitet zu SUP-40210 Kestrel Operations · £34.500 · £7.500 unter dem genannten Lieferanten · kein Onboarding",
-      },
-    },
-    { id: "exception", label: { en: "Approve onboarding exception", de: "Onboarding-Ausnahme freigeben" } },
-  ],
+  "uc04:0:0": [{ id: "exception", primary: true, label: { en: "Approve onboarding exception", de: "Onboarding-Ausnahme freigeben" } }],
   "uc04:1:0": [
     { id: "return", primary: true, label: { en: "Return gap list to supplier", de: "Lückenliste an Lieferanten senden" } },
   ],

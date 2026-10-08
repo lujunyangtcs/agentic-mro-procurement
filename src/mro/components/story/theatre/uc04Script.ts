@@ -1,14 +1,16 @@
 /**
- * ST03 · UC4 guided playback. Three agents, three people: the Category Lead
- * chooses between the panel supplier and the named one (and types the reason
- * if they overrule the agent), the Buy Desk Analyst reviews and sends the gap
- * e-mail the Onboarding Agent drafted, and the Risk Analyst confirms or edits
- * the conditions the Risk Screening Agent proposed. Figures come from `IO`.
+ * ST03 · UC4 guided playback. Three agents, each playing its work as beats,
+ * and three people: the Category Lead approves the onboarding exception with
+ * the panel match beside it and the reason the agent drafted, the Buy Desk
+ * Analyst reviews and sends the gap e-mail the Onboarding Agent drafted, and
+ * the Risk Analyst confirms or edits the conditions the Risk Screening Agent
+ * proposed. Figures come from `IO`.
  */
 
 import { IO } from "@/mro/data/stories/io";
 import type { TheatreScript } from "@/mro/components/story/theatre/script";
 import { D4, GAP_DRAFT, GAP_FROM, GAP_SUBJECT, PROPOSED_CAP, PROPOSED_YEARS, UC04_DOCS, UC04_TASK } from "@/mro/components/story/theatre/uc04Docs";
+import { UC04_BEATS } from "@/mro/components/story/theatre/uc04Beats";
 
 const gbp = (n: number) => `£${Math.round(n).toLocaleString("en-GB")}`;
 const gbpDe = (n: number) => `£${Math.round(n).toLocaleString("de-DE")}`;
@@ -50,29 +52,42 @@ export const UC04: TheatreScript = {
         { label: { en: `Checking commitment headroom on ${D4.agr}`, de: `Prüfe Restvolumen in ${D4.agr}` }, doc: D4.agr },
         { label: { en: `Checking the approval band in ${D4.doa}`, de: `Prüfe das Freigabeband in ${D4.doa}` }, doc: D4.doa },
       ],
+      beats: UC04_BEATS[0],
       signalDocs: { capability_match: D4.panel, performance: D4.perf, capacity: D4.panel, commercial: D4.agr },
       guardDocs: { "Panels first": D4.panel, "No duplicate supplier": D4.panel, "Value band": D4.doa },
       tasks: [
         {
-          kind: "choice",
-          cta: { en: "Open the decision pack", de: "Entscheidungsvorlage öffnen" },
+          kind: "approve",
+          cta: { en: "Open the exception approval", de: "Ausnahmefreigabe öffnen" },
           prep: [
             {
-              en: `${kName} meets all ${CAPS} mandatory capabilities; NovaOps claims them in its quotation but has not been checked`,
-              de: `${kName} erfüllt alle ${CAPS} Pflichtanforderungen; NovaOps nennt sie im Angebot, geprüft ist das nicht`,
+              en: `${kName} meets all ${CAPS} mandatory capabilities and is ${gbp(SAVING)} (${PCT}%) cheaper over ${DAYS} days`,
+              de: `${kName} erfüllt alle ${CAPS} Pflichtanforderungen und ist über ${DAYS} Tage ${gbpDe(SAVING)} (${PCT.replace(".", ",")} %) günstiger`,
             },
             {
-              en: `${kName} is ${gbp(SAVING)} (${PCT}%) cheaper over ${DAYS} days and needs no onboarding`,
-              de: `${kName} ist über ${DAYS} Tage ${gbpDe(SAVING)} (${PCT.replace(".", ",")} %) günstiger und braucht kein Onboarding`,
+              en: `Only NovaOps offers the paint-line simulation tool the request depends on (${req.request_id} §4)`,
+              de: `Nur NovaOps bietet das Lackierlinien-Simulationstool, auf dem die Anforderung beruht (${req.request_id} §4)`,
             },
-            { en: "The request cites a paint-line simulation tool only NovaOps offers", de: "Die Anforderung nennt ein Lackierlinien-Simulationstool, das nur NovaOps anbietet" },
+            {
+              en: `Approving starts onboarding: ${oi.required_documents.length} documents, risk screening and a Finance bank call-back — the PO stays blocked until NovaOps is active`,
+              de: `Die Freigabe startet das Onboarding: ${oi.required_documents.length} Dokumente, Risikoprüfung und Finance-Rückruf — die Bestellung bleibt gesperrt, bis NovaOps aktiv ist`,
+            },
             { en: `Above £30K the supplier choice is yours (${D4.doa} §4.2)`, de: `Über £30K entscheiden Sie über den Lieferanten (${D4.doa} §4.2)` },
           ],
-          options: [
+          option: "exception",
+          reason: {
+            label: { en: "Reason for the exception", de: "Begründung der Ausnahme" },
+            draft: {
+              en: oi.human_decision.reason,
+              de: "Anforderer benötigt das proprietäre Lackierlinien-Simulationstool von NovaOps; Kestrel kann es nicht bereitstellen",
+            },
+          },
+          approve: { en: "Approve onboarding exception", de: "Onboarding-Ausnahme freigeben" },
+          compare: [
             {
               id: "redirect",
               recommended: true,
-              tag: { en: "Agent recommendation", de: "Empfehlung des Agenten" },
+              tag: { en: "Panel match", de: "Panel-Treffer" },
               title: `${kName} · ${kId}`,
               figure: gbp(rec.estimated_cost_gbp),
               figureNote: { en: `${DAYS} days × ${gbp(kestrel.day_rate)}`, de: `${DAYS} Tage × ${gbpDe(kestrel.day_rate)}` },
@@ -99,14 +114,6 @@ export const UC04: TheatreScript = {
                 { label: { en: "Risk", de: "Risiko" }, value: { en: "Unknown — not screened", de: "Unbekannt — nicht geprüft" } },
               ],
               docs: [D4.req, D4.quote],
-              reason: {
-                label: { en: "Reason for the exception", de: "Begründung der Ausnahme" },
-                suggestion: {
-                  en: oi.human_decision.reason,
-                  de: "Anforderer benötigt das proprietäre Lackierlinien-Simulationstool von NovaOps; Kestrel kann es nicht bereitstellen",
-                },
-                suggestionLabel: { en: `Use the requester's justification (${req.request_id} §4)`, de: `Begründung des Anforderers übernehmen (${req.request_id} §4)` },
-              },
             },
           ],
           produces: [D4.decision],
@@ -125,12 +132,13 @@ export const UC04: TheatreScript = {
       fetch: [
         { label: { en: `Reading the Category Lead decision ${D4.decision}`, de: `Lese die Entscheidung ${D4.decision}` }, doc: D4.decision },
         { label: { en: `Sending portal invitation ${D4.invite}`, de: `Sende Portal-Einladung ${D4.invite}` }, doc: D4.invite },
-        { label: { en: `Checking incorporation against Companies House ${SUP.companies_house}`, de: `Prüfe Gründung bei Companies House ${SUP.companies_house}` }, doc: D4.coi },
-        { label: { en: "Matching the VAT number against the VAT registry", de: "Gleiche die USt-Nummer mit dem Register ab" }, doc: D4.vat },
-        { label: { en: "Reading the insurance certificate against PI £2M · PL £5M", de: "Prüfe das Versicherungszertifikat gegen PI £2M · PL £5M" }, doc: D4.ins },
-        { label: { en: "Reading the information security questionnaire", de: "Lese den Informationssicherheits-Fragebogen" }, doc: D4.isq },
-        { label: { en: "Bank letter received — routing to Finance, not verifying", de: "Bankbestätigung erhalten — an Finance, keine eigene Prüfung" }, doc: D4.bank },
+        { label: { en: "Downloading the certificate of incorporation", de: "Lade die Gründungsurkunde" }, doc: D4.coi },
+        { label: { en: "Downloading the VAT registration certificate", de: "Lade die USt-Registrierung" }, doc: D4.vat },
+        { label: { en: "Downloading the insurance certificate", de: "Lade das Versicherungszertifikat" }, doc: D4.ins },
+        { label: { en: "Downloading the security questionnaire", de: "Lade den Sicherheitsfragebogen" }, doc: D4.isq },
+        { label: { en: "Downloading the bank confirmation letter", de: "Lade die Bankbestätigung" }, doc: D4.bank },
       ],
+      beats: UC04_BEATS[1],
       signalDocs: { completeness: D4.ins, validity: D4.coi },
       guardDocs: { "Requester cannot approve own supplier": D4.decision, "Bank details verified by a person": D4.bank },
       produces: [D4.invite],
@@ -168,6 +176,7 @@ export const UC04: TheatreScript = {
         { label: { en: "Reading the external cyber rating", de: "Lese das externe Cyber-Rating" }, doc: D4.cyber },
         { label: { en: "Checking the Companies House filing history", de: "Prüfe die Einreichungen bei Companies House" }, doc: D4.coi },
       ],
+      beats: UC04_BEATS[2],
       signalDocs: { sanctions: D4.san, financial: D4.credit, cyber: D4.cyber, filings: D4.coi },
       guardDocs: { "No activation with sanctions hit": D4.san, "Medium risk needs human review": D4.credit },
       tasks: [
@@ -231,28 +240,6 @@ export const UC04: TheatreScript = {
   completion: (lang, ctx) => {
     const en = lang === "en";
     const money = en ? gbp : gbpDe;
-    if (ctx.endedWith === "redirect") {
-      return {
-        hero: { value: gbp(SAVING), label: en ? "saved by staying on the panel" : "eingespart durch das Panel" },
-        metrics: [
-          { value: "1", label: en ? "Human decision" : "Menschliche Entscheidung" },
-          { value: money(rec.estimated_cost_gbp), label: en ? `Call-off with ${kName}` : `Abruf bei ${kName}` },
-          { value: en ? `${named.onboarding_effort_days} days` : `${named.onboarding_effort_days} Tage`, label: en ? "Onboarding avoided" : "Onboarding vermieden" },
-          { value: "0", label: en ? "New suppliers created" : "Neue Lieferanten" },
-        ],
-        impact: en
-          ? [
-              `${kName} meets all ${CAPS} requirements at ${gbp(kestrel.day_rate)} a day against NovaOps' ${gbp(named.day_rate_quoted)} — ${gbp(SAVING)} less over ${DAYS} days.`,
-              `The call-off moves ${kName} towards the ${gbp(kestrel.utilisation_commitment!.committed_gbp)} rebate tier in ${D4.agr}.`,
-              `No new vendor record, no screening and no bank verification — the consultant can start on 20 Oct 2026.`,
-            ]
-          : [
-              `${kName} erfüllt alle ${CAPS} Anforderungen zu ${gbpDe(kestrel.day_rate)} pro Tag statt ${gbpDe(named.day_rate_quoted)} bei NovaOps — ${gbpDe(SAVING)} weniger über ${DAYS} Tage.`,
-              `Der Abruf bringt ${kName} näher an die Rabattstufe von ${gbpDe(kestrel.utilisation_commitment!.committed_gbp)} in ${D4.agr}.`,
-              "Kein neuer Kreditor, keine Prüfungen, keine Bankverifizierung — Start am 20.10.2026 möglich.",
-            ],
-      };
-    }
     const risk = ctx.inputs[UC04_TASK.risk];
     const cap = Number(risk?.cap ?? PROPOSED_CAP);
     const mfa = risk?.mfa ?? true;

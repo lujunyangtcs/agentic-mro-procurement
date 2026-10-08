@@ -1,16 +1,16 @@
 /**
  * The agent panel during guided playback. An agent first fetches its
- * sources line by line. Its work then plays as beats: the presenter asks
- * for each piece, a popup shows the agent reasoning, and one card lands.
- * Confidence and guardrails run as the last AI check, the lane follows on
- * its own, a person decides in a popup where the lane needs one, then the
- * baton can pass.
+ * sources line by line. Its work then plays as beats on a stage: the
+ * presenter asks for each piece, a popup shows the agent reasoning, and one
+ * card lands in place of the last. Confidence and guardrails run as the last
+ * AI check and land as a pair, the lane follows, a person decides in a popup
+ * where the lane needs one, then the baton can pass.
  */
 
 import * as React from "react";
-import { ArrowRight, Bot, Check, ChevronDown, Clock, Inbox, Sparkles, UserRound } from "lucide-react";
+import { ArrowRight, Bot, Check, ChevronDown, Inbox, Sparkles } from "lucide-react";
 import { cn } from "@/mro/lib/utils";
-import type { HumanTask, RunStep } from "@/mro/data/stories/runModel";
+import type { RunStep } from "@/mro/data/stories/runModel";
 import type { UseCaseKey } from "@/mro/data/stories/io";
 import { IoBody } from "@/mro/components/story/IoBody";
 import { ConfidenceCard, GuardrailCard, LaneCard } from "@/mro/components/story/Envelope";
@@ -21,7 +21,7 @@ import { humanKey } from "@/mro/components/story/format";
 import { Spinner } from "@/mro/components/ai/Spinner";
 import { useTheatreCopy } from "@/mro/components/story/theatre/copy";
 import { AiAnalysisModal, type AnalysisItem } from "@/mro/components/story/theatre/overlays";
-import { FETCH_LINE_MS, type TaskUi, type TheatreStep } from "@/mro/components/story/theatre/script";
+import { FETCH_LINE_MS, type TheatreStep } from "@/mro/components/story/theatre/script";
 import { DocChip, DocIcon, type SourceDoc } from "@/mro/components/story/theatre/pdf";
 import { TaskModal } from "@/mro/components/story/theatre/hitl";
 import { taskNote } from "@/mro/components/story/theatre/hitlNote";
@@ -30,7 +30,7 @@ import type { TaskInput } from "@/mro/services/demoLedger";
 type CheckStage = "confidence" | "guardrails";
 type Stage = CheckStage | "lane" | `beat:${number}`;
 
-export function stagesOf(step: RunStep, script?: TheatreStep): Stage[] {
+function stagesOf(step: RunStep, script?: TheatreStep): Stage[] {
   const r = step.run;
   return [
     ...(script?.beats ?? []).map((_, i) => `beat:${i}` as const),
@@ -41,14 +41,75 @@ export function stagesOf(step: RunStep, script?: TheatreStep): Stage[] {
 }
 
 /** Brings the next thing to press into view once the card above it has landed. */
-function useBringIntoView<T extends HTMLElement>() {
+function useBringIntoView<T extends HTMLElement>(enabled = true) {
   const ref = React.useRef<T>(null);
   React.useEffect(() => {
+    if (!enabled) return;
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const tm = window.setTimeout(() => ref.current?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }), 120);
     return () => window.clearTimeout(tm);
-  }, []);
+  }, [enabled]);
   return ref;
+}
+
+/** A beat's short CTA without its "AI ·" prefix, used as its name on the stage rail. */
+const stageName = (short: string) => short.replace(/^(AI|KI)\s·\s/, "");
+
+/**
+ * Where the agent is in its own work, so a card can leave the page once the
+ * next one lands. Finished agents can be stepped back through from here.
+ */
+function StageRail({
+  stages,
+  reached,
+  view,
+  live,
+  onPick,
+  railRef,
+}: {
+  stages: { key: string; label: string }[];
+  reached: number;
+  view: number;
+  live: boolean;
+  onPick: (i: number) => void;
+  railRef: React.Ref<HTMLElement>;
+}) {
+  const { t } = useTheatreCopy();
+  return (
+    <nav ref={railRef} aria-label={t.stagesLabel} className="aap-fade-up scroll-mt-20 border border-divider bg-white px-5 pb-2.5 pt-3">
+      <ol className="flex gap-1.5">
+        {stages.map((s, i) => {
+          const current = i === view;
+          const done = i < reached || (!live && i <= reached);
+          const body = (
+            <>
+              <span aria-hidden className={cn("block h-[3px] w-full transition-colors", current ? "bg-ink" : done ? "bg-surface-deep" : "bg-surface-fog")} />
+              <span
+                className={cn(
+                  "mt-1.5 items-center gap-1 truncate text-[11.5px] leading-[16px]",
+                  current ? "flex font-bold text-ink" : "hidden text-mute @lg/agent:flex",
+                )}
+              >
+                {done && !current && <Check size={12} strokeWidth={2.6} aria-hidden className="shrink-0 text-surface-deep" />}
+                <span className="truncate">{s.label}</span>
+              </span>
+            </>
+          );
+          return (
+            <li key={s.key} className="min-w-0 flex-1">
+              {!live && i <= reached ? (
+                <button type="button" onClick={() => onPick(i)} aria-current={current ? "step" : undefined} className="block w-full text-left hover:opacity-80">
+                  {body}
+                </button>
+              ) : (
+                <div aria-current={current ? "step" : undefined}>{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
 }
 
 /* ── Fetching ───────────────────────────────────────────────────────────── */
@@ -98,13 +159,28 @@ function Fetching({ script, docs, onOpen }: { script: TheatreStep; docs: Record<
 
 /* ── The next AI action, offered as a button ────────────────────────────── */
 
-function AiAction({ label, short, note, onClick }: { label: string; short: string; note: string; onClick: () => void }) {
+function AiAction({
+  label,
+  short,
+  note,
+  counter,
+  scroll = true,
+  onClick,
+}: {
+  label: string;
+  short: string;
+  note: string;
+  counter?: string;
+  scroll?: boolean;
+  onClick: () => void;
+}) {
   const ref = React.useRef<HTMLButtonElement>(null);
-  const box = useBringIntoView<HTMLDivElement>();
+  const box = useBringIntoView<HTMLDivElement>(scroll);
   React.useEffect(() => ref.current?.focus({ preventScroll: true }), []);
   return (
     <div ref={box} className="aap-fade-up flex scroll-mb-6 items-center gap-3 border border-dashed border-ink/30 bg-white px-5 py-3.5">
       <span className="h-2 w-2 shrink-0 rounded-full bg-surface-deep ai-pulse" aria-hidden />
+      {counter && <span className="shrink-0 whitespace-nowrap text-[12px] tabular-nums text-steel">{counter}</span>}
       <span className="hidden min-w-0 flex-1 truncate text-[13px] text-mute @md/agent:block">{note}</span>
       <button
         ref={ref}
@@ -178,19 +254,46 @@ export function TheatrePanel({
   const [showInput, setShowInput] = React.useState(false);
   const [analysing, setAnalysing] = React.useState(false);
   const [openTask, setOpenTask] = React.useState<number | null>(null);
+  const [beatOpen, setBeatOpen] = React.useState<number | null>(null);
   const r = step.run;
   const seconds = Math.max(1, Math.round((Date.parse(r.finishedAt) - Date.parse(r.startedAt)) / 1000));
-  const stages = stagesOf(step);
+  const beats = script.beats ?? [];
+  const stages = stagesOf(step, script);
   /* Confidence and guardrails run as one AI check, so both cards land together. */
-  const checks = stages.filter((s): s is "confidence" | "guardrails" => s !== "lane");
+  const checks = stages.filter((s): s is CheckStage => s === "confidence" || s === "guardrails");
+  const checksEnd = beats.length + checks.length;
   const live = isFrontier && !finished;
   const shownBeat = live ? beat : stages.length;
   const shown = (s: Stage) => stages.indexOf(s) < shownBeat;
-  const fresh = (s: Stage) => live && (s === "lane" ? stages.indexOf(s) === shownBeat - 1 : shownBeat === checks.length);
+  const fresh = (s: Stage) => live && (s === "confidence" || s === "guardrails" ? shownBeat === checksEnd : stages.indexOf(s) === shownBeat - 1);
   const next = live ? stages[beat] : undefined;
   const checking = next === "confidence" || next === "guardrails";
+  const nextBeatAt = next?.startsWith("beat:") ? Number(next.slice(5)) : -1;
+  const openBeat = beatOpen !== null ? beats[beatOpen] : undefined;
   const firstOpen = step.tasks.findIndex((x) => !decisions[x.id]);
   const canHandOff = live && !running && shownBeat >= stages.length && pendingCount === 0;
+
+  /*
+   * An agent with beats plays as a stage: one card at a time (confidence and
+   * guardrails land as a pair), and each new card replaces the one before.
+   */
+  const staged = beats.length > 0;
+  const stageList = staged
+    ? [
+        ...beats.map((b, i) => ({ key: `beat:${i}`, label: stageName(b.short[lang]) })),
+        ...(checks.length ? [{ key: "checks", label: t.stageChecks }] : []),
+        ...(r.lane || step.tasks.length ? [{ key: "decision", label: step.tasks.length ? t.stageDecision : t.stageRoute }] : []),
+      ]
+    : [];
+  const checksAt = stageList.findIndex((s) => s.key === "checks");
+  const decisionAt = stageList.findIndex((s) => s.key === "decision");
+  const reached =
+    shownBeat >= stages.length && decisionAt >= 0 ? decisionAt : shownBeat > beats.length && checksAt >= 0 ? checksAt : Math.min(shownBeat, beats.length) - 1;
+  const [peek, setPeek] = React.useState<number | null>(null);
+  const view = !live && peek !== null && peek <= reached ? peek : reached;
+  const viewKey = stageList[view]?.key ?? "intro";
+  const [routing, setRouting] = React.useState(false);
+  const railRef = React.useRef<HTMLElement>(null);
 
   /* The lane is a consequence of the two checks, so it lands on its own. */
   const onBeatRef = React.useRef(onBeat);
@@ -198,10 +301,29 @@ export function TheatrePanel({
     onBeatRef.current = onBeat;
   });
   React.useEffect(() => {
-    if (next !== "lane" || running) return;
+    if (staged || next !== "lane" || running) return;
     const tm = window.setTimeout(() => onBeatRef.current(beat + 1), 1100);
     return () => window.clearTimeout(tm);
-  }, [next, running, beat]);
+  }, [staged, next, running, beat]);
+
+  /* On a stage the presenter asks for the lane, so the checks stay up while they are discussed. */
+  React.useEffect(() => {
+    if (!routing) return;
+    const tm = window.setTimeout(() => {
+      setRouting(false);
+      onBeatRef.current(beat + 1);
+    }, 1100);
+    return () => window.clearTimeout(tm);
+  }, [routing, beat]);
+
+  /* When a card replaces a taller one, bring the top of the new card back into view. */
+  React.useEffect(() => {
+    if (!staged || !live) return;
+    const el = railRef.current;
+    if (!el || el.getBoundingClientRect().top >= 64) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+  }, [viewKey, staged, live]);
 
   const fetchedDocs = script.fetch.map((f) => (f.doc ? docs[f.doc] : undefined)).filter((d, i, a): d is SourceDoc => !!d && a.indexOf(d) === i);
   const decidedDocs = step.tasks.flatMap((x, n) => (decisions[x.id] ? (script.tasks?.[n]?.produces ?? []) : []));
@@ -235,6 +357,87 @@ export function TheatrePanel({
   const checkResult = checks
     .map((k) => (k === "confidence" && r.confidence ? t.confidenceResult(r.confidence.score.toFixed(2), bandLabel(r.confidence.score)) : t.guardResult(passCount, r.guardrails.length)))
     .join(" · ");
+
+  const arrive = (on: boolean) => cn("aap-fade-up", on && "theatre-arrive");
+  const atEnd = shownBeat >= stages.length;
+
+  const checksCards = (shown("confidence") || shown("guardrails")) && (
+    <div className="grid grid-cols-1 items-start gap-3 2xl:grid-cols-2">
+      {r.confidence && shown("confidence") && (
+        <div className={arrive(fresh("confidence"))}>
+          <ConfidenceCard confidence={r.confidence} animate={fresh("confidence")} />
+        </div>
+      )}
+      {shown("guardrails") && (
+        <div className={arrive(fresh("guardrails"))}>
+          <GuardrailCard guardrails={r.guardrails} />
+        </div>
+      )}
+    </div>
+  );
+
+  const checksAction = checking && (
+    <AiAction
+      label={checkLabel}
+      short={t.analyseShort}
+      note={t.checkScope(checks.includes("confidence") ? (r.confidence?.signals.length ?? 0) : 0, checks.includes("guardrails") ? r.guardrails.length : 0)}
+      scroll={!staged}
+      onClick={() => setAnalysing(true)}
+    />
+  );
+
+  const routeAction =
+    next === "lane" &&
+    (staged && !routing ? (
+      <AiAction label={t.route} short={t.routeShort} note={t.routeNote} scroll={false} onClick={() => setRouting(true)} />
+    ) : (
+      <p role="status" className="aap-fade-up flex items-center gap-3 border border-divider bg-white px-5 py-3.5 text-[13px] text-ink">
+        <Spinner size={13} /> {t.deciding}
+      </p>
+    ));
+
+  const laneCard = r.lane && shown("lane") && (
+    <div className={arrive(fresh("lane"))}>
+      <LaneCard lane={r.lane} />
+    </div>
+  );
+
+  const taskCards =
+    atEnd &&
+    step.tasks.map((x, i) => {
+      const ui = script.tasks?.[i];
+      const chosen = decisions[x.id];
+      return (
+        <HumanTaskCard
+          key={x.id}
+          task={x}
+          decided={chosen}
+          active={live && i === firstOpen}
+          onDecide={(o) => onDecide(x.id, o)}
+          action={ui ? { label: ui.cta[lang], onOpen: () => setOpenTask(i) } : undefined}
+          note={ui && chosen ? taskNote(ui, chosen, inputs[x.id], lang, t) : undefined}
+        />
+      );
+    });
+
+  const handOffBar = canHandOff && (
+    <div className="aap-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
+      <p className="min-w-0 flex-1 text-[13px] leading-[19px] text-mute">
+        {step.tasks.length === 0 ? c.policyHandoff : c.decidedBy(step.tasks.map((x) => x.persona).join(", "))}
+      </p>
+      <button
+        type="button"
+        onClick={onHandOff}
+        aria-label={nextAgent ? c.handTo(nextAgent) : c.closeCase}
+        className="ui-pill aap-cta ml-auto inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
+      >
+        {nextAgent ? <Fit full={c.handTo(nextAgent)} short={t.handShort} /> : c.closeCase}
+        <ArrowRight size={16} aria-hidden />
+      </button>
+    </div>
+  );
+
+  const onStage = viewKey.startsWith("beat:") ? beats[Number(viewKey.slice(5))] : undefined;
 
   return (
     <article className="@container/agent flex min-w-0 flex-col gap-3" aria-labelledby={`agent-${step.index}`}>
@@ -282,6 +485,52 @@ export function TheatrePanel({
       ) : running ? (
         <Fetching script={script} docs={docs} onOpen={onOpenDoc} />
       ) : (
+        staged ? (
+          <>
+            <StageRail stages={stageList} reached={reached} view={view} live={live} onPick={setPeek} railRef={railRef} />
+            <div key={viewKey} className="flex flex-col gap-3">
+              {viewKey === "intro" && fetchedDocs.length > 0 && (
+                <section className={cn("aap-fade-up flex flex-wrap items-center gap-1.5 border border-divider bg-white px-5 py-3", live && "theatre-arrive")}>
+                  <span className="mr-1 inline-flex items-center gap-1.5 whitespace-nowrap text-[12px] text-mute">
+                    <Check size={14} strokeWidth={2.6} className="text-surface-deep" aria-hidden /> {t.readSources(fetchedDocs.length)}
+                  </span>
+                  {fetchedDocs.map((d) => (
+                    <DocChip key={d.id} doc={d} onOpen={onOpenDoc} />
+                  ))}
+                </section>
+              )}
+              {onStage && <div className={arrive(live)}>{onStage.card({ lang, docs, onOpenDoc })}</div>}
+              {viewKey === "checks" && checksCards}
+              {viewKey === "decision" && (
+                <>
+                  {laneCard}
+                  {taskCards}
+                  {atEnd && producedDocs.length > 0 && (
+                    <section className="aap-fade-up flex flex-wrap items-center gap-1.5 border border-divider bg-white px-5 py-3">
+                      <span className="mr-1 whitespace-nowrap text-[12px] text-mute">{t.written}</span>
+                      {producedDocs.map((d) => (
+                        <DocChip key={d.id} doc={d} onOpen={onOpenDoc} />
+                      ))}
+                    </section>
+                  )}
+                </>
+              )}
+            </div>
+            {nextBeatAt >= 0 && beats[nextBeatAt] && (
+              <AiAction
+                key={nextBeatAt}
+                label={beats[nextBeatAt].cta[lang]}
+                short={beats[nextBeatAt].short[lang]}
+                note={beats[nextBeatAt].note[lang]}
+                scroll={false}
+                onClick={() => setBeatOpen(nextBeatAt)}
+              />
+            )}
+            {checksAction}
+            {routeAction}
+            {handOffBar}
+          </>
+        ) : (
         <>
           <section className={cn("aap-fade-up flex flex-col gap-4 border border-divider bg-white p-5", live && shownBeat === 0 && "theatre-arrive")}>
             <div className="flex items-center gap-2">
@@ -342,76 +591,14 @@ export function TheatrePanel({
               </div>
             )}
           </section>
-
-          {(shown("confidence") || shown("guardrails")) && (
-            <div className="grid grid-cols-1 items-start gap-3 2xl:grid-cols-2">
-              {r.confidence && shown("confidence") && (
-                <div className={cn("aap-fade-up", fresh("confidence") && "theatre-arrive")}>
-                  <ConfidenceCard confidence={r.confidence} animate={fresh("confidence")} />
-                </div>
-              )}
-              {shown("guardrails") && (
-                <div className={cn("aap-fade-up", fresh("guardrails") && "theatre-arrive")}>
-                  <GuardrailCard guardrails={r.guardrails} />
-                </div>
-              )}
-            </div>
-          )}
-
-          {checking && (
-            <AiAction
-              label={checkLabel}
-              short={t.analyseShort}
-              note={t.checkScope(checks.includes("confidence") ? (r.confidence?.signals.length ?? 0) : 0, checks.includes("guardrails") ? r.guardrails.length : 0)}
-              onClick={() => setAnalysing(true)}
-            />
-          )}
-          {next === "lane" && (
-            <p role="status" className="aap-fade-up flex items-center gap-3 border border-divider bg-white px-5 py-3.5 text-[13px] text-ink">
-              <Spinner size={13} /> {t.deciding}
-            </p>
-          )}
-
-          {r.lane && shown("lane") && (
-            <div className={cn("aap-fade-up", fresh("lane") && "theatre-arrive")}>
-              <LaneCard lane={r.lane} />
-            </div>
-          )}
-
-          {shownBeat >= stages.length &&
-            step.tasks.map((x, i) => {
-              const ui = script.tasks?.[i];
-              const chosen = decisions[x.id];
-              return (
-                <HumanTaskCard
-                  key={x.id}
-                  task={x}
-                  decided={chosen}
-                  active={live && i === firstOpen}
-                  onDecide={(o) => onDecide(x.id, o)}
-                  action={ui ? { label: ui.cta[lang], onOpen: () => setOpenTask(i) } : undefined}
-                  note={ui && chosen ? taskNote(ui, chosen, inputs[x.id], lang, t) : undefined}
-                />
-              );
-            })}
-
-          {canHandOff && (
-            <div className="aap-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
-              <p className="min-w-0 flex-1 text-[13px] leading-[19px] text-mute">
-                {step.tasks.length === 0 ? c.policyHandoff : c.decidedBy(step.tasks.map((x) => x.persona).join(", "))}
-              </p>
-              <button
-                type="button"
-                onClick={onHandOff}
-                aria-label={nextAgent ? c.handTo(nextAgent) : c.closeCase}
-                className="ui-pill aap-cta ml-auto inline-flex items-center gap-3 whitespace-nowrap bg-ink px-6 py-3 text-[12.5px] text-ink-inverse"
-              >
-                {nextAgent ? <Fit full={c.handTo(nextAgent)} short={t.handShort} /> : c.closeCase}
-                <ArrowRight size={16} aria-hidden />
-              </button>
-            </div>
-          )}
+          {checksCards}
+          {checksAction}
+          {routeAction}
+          {laneCard}
+          {taskCards}
+          {handOffBar}
         </>
+        )
       )}
 
       {openTask !== null && step.tasks[openTask] && script.tasks?.[openTask] && !decisions[step.tasks[openTask].id] && (
@@ -440,7 +627,30 @@ export function TheatrePanel({
           result={checkResult}
           onDone={() => {
             setAnalysing(false);
-            onBeat(checks.length);
+            onBeat(checksEnd);
+          }}
+        />
+      )}
+
+      {openBeat && beatOpen !== null && (
+        <AiAnalysisModal
+          caseId={r.caseId}
+          title={openBeat.title[lang]}
+          docLabel={openBeat.docLabel[lang]}
+          agent={r.agent}
+          model={r.model}
+          items={openBeat.lines.map((l, n) => ({
+            key: `${openBeat.key}-${n}`,
+            label: l.label[lang],
+            detail: l.detail[lang],
+            value: l.value[lang],
+            doc: l.doc ? docs[l.doc] : undefined,
+            ok: !l.flag,
+          }))}
+          result={openBeat.result[lang]}
+          onDone={() => {
+            setBeatOpen(null);
+            onBeat(beatOpen + 1);
           }}
         />
       )}
@@ -448,7 +658,7 @@ export function TheatrePanel({
   );
 }
 
-/* ── Source files gathered so far ───────────────────────────────────────── */
+/* ── Source files gathered so far ─────────────────────────────────��─────── */
 
 export function SourceFiles({ docs, onOpen }: { docs: SourceDoc[]; onOpen: (d: SourceDoc) => void }) {
   const { t } = useTheatreCopy();

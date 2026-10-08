@@ -15,8 +15,10 @@ describe.each(scripts)("guided playback %s", (uc, script) => {
     s.fetch.forEach((f) => f.doc && referenced.add(f.doc));
     Object.values(s.signalDocs ?? {}).forEach((id) => referenced.add(id));
     Object.values(s.guardDocs ?? {}).forEach((id) => referenced.add(id));
+    (s.beats ?? []).forEach((b) => b.lines.forEach((l) => l.doc && referenced.add(l.doc)));
     (s.tasks ?? []).forEach((t) => {
       if (t.kind === "choice") t.options.forEach((o) => (o.docs ?? []).forEach((id) => referenced.add(id)));
+      if (t.kind === "approve") t.compare.forEach((o) => (o.docs ?? []).forEach((id) => referenced.add(id)));
       if (t.kind === "email") (t.attach ?? []).forEach((id) => referenced.add(id));
       if (t.kind === "form") t.fields.forEach((f) => f.doc && referenced.add(f.doc));
     });
@@ -25,6 +27,18 @@ describe.each(scripts)("guided playback %s", (uc, script) => {
   it("has a document behind every file it names", () => {
     expect([...referenced].filter((id) => !docs.has(id))).toEqual([]);
   });
+
+  const beats = script.steps.flatMap((s, i) => (s.beats ?? []).map((b) => [`${i}:${b.key}`, b] as const));
+  if (beats.length) {
+    it.each(beats)("lands beat %s as a card in both languages", (_id, b) => {
+      (["en", "de"] as const).forEach((lang) => {
+        const html = renderToStaticMarkup(<>{b.card({ lang, docs: Object.fromEntries(docs), onOpenDoc: () => {} })}</>);
+        expect(html).not.toMatch(/undefined|NaN|\[object Object\]/);
+        expect(b.lines.length).toBeGreaterThan(1);
+        expect(JSON.stringify([b.cta, b.result, b.lines])).not.toMatch(/undefined|NaN/);
+      });
+    });
+  }
 
   it("has unique document ids", () => {
     expect(docs.size).toBe(script.docs.length);
@@ -48,7 +62,11 @@ describe.each(scripts)("guided playback %s", (uc, script) => {
         expect(task, `step ${i} task ${n}`).toBeDefined();
         const ids = new Set(task.options.map((o) => o.id));
         const named =
-          ui.kind === "choice" ? ui.options.map((o) => o.id) : ui.kind === "email" ? [ui.option] : [ui.accept, ...(ui.reject ? [ui.reject] : [])];
+          ui.kind === "choice"
+            ? ui.options.map((o) => o.id)
+            : ui.kind === "email" || ui.kind === "approve"
+              ? [ui.option]
+              : [ui.accept, ...(ui.reject ? [ui.reject] : [])];
         expect(named.filter((id) => !ids.has(id)), `step ${i} task ${n}`).toEqual([]);
       });
     });

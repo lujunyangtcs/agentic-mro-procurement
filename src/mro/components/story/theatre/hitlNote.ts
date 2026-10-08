@@ -13,6 +13,7 @@ export function taskNote(ui: TaskUi, optionId: string, input: TaskInput | undefi
     const o = ui.options.find((x) => x.id === optionId);
     return o ? `${o.title} · ${o.figure}` : undefined;
   }
+  if (ui.kind === "approve") return typeof input?.reason === "string" ? `${t.reasonSaved}: “${input.reason}”` : undefined;
   if (ui.kind === "email") return `${t.sentTo} ${ui.to} · ${input?.edited ? t.editedByYou : t.sentAsDrafted}`;
   if (optionId !== ui.accept || !input) return undefined;
   return ui.fields

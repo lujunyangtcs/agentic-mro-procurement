@@ -50,6 +50,8 @@ export function TaskModal({ ui, ...rest }: ModalProps) {
       return <EmailModal {...rest} ui={ui} />;
     case "form":
       return <FormModal {...rest} ui={ui} />;
+    case "approve":
+      return <ApproveModal {...rest} ui={ui} />;
   }
 }
 
@@ -223,11 +225,13 @@ function ChoiceModal({ task, ui, docs, onOpenDoc, onCancel, onDecide }: ModalPro
   );
 }
 
+/** One prepared option. With `onPick` it is a radio; without, a read-only card, highlighted when `selected`. */
 function OptionCard({
   option: o,
   index,
   selected,
   onPick,
+  badge,
   docs,
   onOpenDoc,
   lang,
@@ -235,38 +239,52 @@ function OptionCard({
   option: ChoiceOption;
   index: number;
   selected: boolean;
-  onPick: () => void;
+  onPick?: () => void;
+  badge?: string;
   docs: Record<string, SourceDoc>;
   onOpenDoc: (d: SourceDoc) => void;
   lang: Lang;
 }) {
   const files = (o.docs ?? []).map((id) => docs[id]).filter((d): d is SourceDoc => !!d);
-  return (
-    <div className={cn("aap-fade-up flex flex-col border bg-white transition-colors", selected ? "border-ink ring-1 ring-ink" : "border-divider")} style={{ animationDelay: `${index * 140}ms` }}>
-      <button type="button" role="radio" aria-checked={selected} onClick={onPick} className="group flex flex-1 flex-col gap-3 p-4 text-left hover:bg-surface-fog/40">
-        <span className="flex items-center gap-2">
-          <span className={cn("flex min-w-0 flex-1 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em]", o.recommended ? "text-surface-deep" : "text-mute")}>
-            {o.recommended ? <Sparkles size={13} aria-hidden /> : <UserRound size={13} aria-hidden />}
-            <span className="truncate">{o.tag[lang]}</span>
-          </span>
+  const body = (
+    <>
+      <span className="flex items-center gap-2">
+        <span className={cn("flex min-w-0 flex-1 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em]", o.recommended ? "text-surface-deep" : "text-mute")}>
+          {o.recommended ? <Sparkles size={13} aria-hidden /> : <UserRound size={13} aria-hidden />}
+          <span className="truncate">{o.tag[lang]}</span>
+        </span>
+        {onPick ? (
           <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-full border", selected ? "border-ink bg-ink text-ink-inverse" : "border-ink/30")} aria-hidden>
             {selected && <Check size={12} strokeWidth={3} />}
           </span>
-        </span>
-        <span className="text-[15px] font-bold leading-[20px] text-ink">{o.title}</span>
-        <span className="flex items-baseline gap-2">
-          <span className="text-[26px] font-bold leading-none tabular-nums text-ink">{o.figure}</span>
-          <span className="text-[12.5px] text-mute">{o.figureNote[lang]}</span>
-        </span>
-        <dl className="flex flex-col divide-y divide-divider border-t border-divider text-[12.5px] leading-[18px]">
-          {o.facts.map((f) => (
-            <div key={f.label.en} className="flex items-start justify-between gap-3 py-1.5">
-              <dt className="shrink-0 text-mute">{f.label[lang]}</dt>
-              <dd className="text-right text-ink">{f.value[lang]}</dd>
-            </div>
-          ))}
-        </dl>
-      </button>
+        ) : (
+          badge && <span className="shrink-0 whitespace-nowrap bg-ink px-2 py-0.5 text-[11px] font-bold text-ink-inverse">{badge}</span>
+        )}
+      </span>
+      <span className="text-[15px] font-bold leading-[20px] text-ink">{o.title}</span>
+      <span className="flex items-baseline gap-2">
+        <span className="text-[26px] font-bold leading-none tabular-nums text-ink">{o.figure}</span>
+        <span className="text-[12.5px] text-mute">{o.figureNote[lang]}</span>
+      </span>
+      <dl className="flex flex-col divide-y divide-divider border-t border-divider text-[12.5px] leading-[18px]">
+        {o.facts.map((f) => (
+          <div key={f.label.en} className="flex items-start justify-between gap-3 py-1.5">
+            <dt className="shrink-0 text-mute">{f.label[lang]}</dt>
+            <dd className={cn("text-right", f.flag ? "text-mark-amber" : "text-ink")}>{f.value[lang]}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+  return (
+    <div className={cn("aap-fade-up flex flex-col border bg-white transition-colors", selected ? "border-ink ring-1 ring-ink" : "border-divider")} style={{ animationDelay: `${index * 140}ms` }}>
+      {onPick ? (
+        <button type="button" role="radio" aria-checked={selected} onClick={onPick} className="group flex flex-1 flex-col gap-3 p-4 text-left hover:bg-surface-fog/40">
+          {body}
+        </button>
+      ) : (
+        <div className="flex flex-1 flex-col gap-3 p-4">{body}</div>
+      )}
       {files.length > 0 && (
         <div className="flex flex-wrap gap-1.5 border-t border-divider px-4 py-2.5">
           {files.map((d) => (
@@ -275,6 +293,63 @@ function OptionCard({
         </div>
       )}
     </div>
+  );
+}
+
+/* ── Approve the path the person owns, with the reason the agent drafted ── */
+
+function ApproveModal({ task, ui, docs, onOpenDoc, onCancel, onDecide }: ModalProps<Extract<TaskUi, { kind: "approve" }>>) {
+  const { t, lang } = useTheatreCopy();
+  const shown = useStream(ui.prep.length, 560);
+  const ready = shown >= ui.prep.length;
+  const draft = ui.reason.draft[lang];
+  const [reason, setReason] = React.useState(draft);
+  const reasonId = React.useId();
+  const edited = reason.trim() !== draft.trim();
+  const ok = reason.trim().length >= 12;
+
+  return (
+    <Shell
+      task={task}
+      onCancel={onCancel}
+      footer={
+        <>
+          <span className="mr-auto text-[12.5px] text-mute">{!ready ? t.preparing : !ok ? t.reasonNeeded : edited ? t.reasonEdited : t.reasonDrafted}</span>
+          <CancelButton onClick={onCancel} />
+          <PrimaryButton disabled={!ready || !ok} autoFocus onClick={() => onDecide(ui.option, { reason: reason.trim(), edited })}>
+            <Check size={15} aria-hidden /> {ui.approve[lang]}
+          </PrimaryButton>
+        </>
+      }
+    >
+      <AgentPrep title={ready ? t.prepared : t.preparing} lines={ui.prep.map((l) => l[lang])} shown={shown} />
+
+      {ready && (
+        <>
+          <div className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-2">
+            {ui.compare.map((o, i) => (
+              <OptionCard key={o.id} option={o} index={i} selected={o.id === ui.option} badge={o.id === ui.option ? t.youApprove : undefined} docs={docs} onOpenDoc={onOpenDoc} lang={lang} />
+            ))}
+          </div>
+          <div className="aap-fade-up flex flex-col gap-2" style={{ animationDelay: "280ms" }}>
+            <label htmlFor={reasonId} className="text-[13.5px] font-bold text-ink">
+              {ui.reason.label[lang]}
+            </label>
+            <textarea
+              id={reasonId}
+              rows={3}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder={t.reasonPlaceholder}
+              className="w-full resize-y border border-divider px-3 py-2.5 text-[14px] leading-[21px] text-ink placeholder:text-mute focus:border-ink focus:outline-none"
+            />
+            <p className="flex items-center gap-1.5 text-[12px] text-mute">
+              <Sparkles size={13} aria-hidden className="shrink-0 text-surface-deep" /> {t.savedToCase}
+            </p>
+          </div>
+        </>
+      )}
+    </Shell>
   );
 }
 

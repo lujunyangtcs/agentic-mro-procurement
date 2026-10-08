@@ -68,6 +68,19 @@ const en = {
   asProposed: "Accepting as proposed",
   required: "Required",
   notRequired: "Not required",
+  youApprove: "You approve",
+  reasonDrafted: "Reason drafted by the agent · edit before approving",
+  reasonEdited: "Reason edited by you",
+  beatCount: (n: number, total: number) => `${n} of ${total}`,
+  readSources: (n: number) => `Read ${n} source${n === 1 ? "" : "s"}`,
+  written: "Written",
+  route: "AI · Route the case",
+  routeShort: "AI · Route",
+  routeNote: "Lane from the confidence band and guardrails",
+  stageChecks: "Checks",
+  stageDecision: "Decision",
+  stageRoute: "Routing",
+  stagesLabel: "Agent progress",
 };
 
 type Copy = typeof en;
@@ -140,6 +153,19 @@ const de: Copy = {
   asProposed: "Annahme wie vorgeschlagen",
   required: "Erforderlich",
   notRequired: "Nicht erforderlich",
+  youApprove: "Ihre Freigabe",
+  reasonDrafted: "Begründung vom Agenten entworfen · vor der Freigabe bearbeitbar",
+  reasonEdited: "Begründung von Ihnen bearbeitet",
+  beatCount: (n, total) => `${n} von ${total}`,
+  readSources: (n) => `${n} ${n === 1 ? "Quelle" : "Quellen"} gelesen`,
+  written: "Erstellt",
+  route: "KI · Fall weiterleiten",
+  routeShort: "KI · Weiterleiten",
+  routeNote: "Bearbeitungsweg aus Konfidenzband und Leitplanken",
+  stageChecks: "Prüfungen",
+  stageDecision: "Entscheidung",
+  stageRoute: "Weiterleitung",
+  stagesLabel: "Agentenfortschritt",
 };
 
 export function useTheatreCopy() {
