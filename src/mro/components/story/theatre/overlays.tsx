@@ -64,8 +64,8 @@ export function ArrivalModal({
             <Inbox size={22} aria-hidden />
           </span>
           <div className="min-w-0">
-            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-sand">
-              {t.newRequest} · {request.channel}
+              <p className="truncate text-[11px] font-bold uppercase tracking-[0.14em] text-sand" title={`${t.newRequest} · ${request.channel}`}>
+                {t.newRequest} · {request.channel}
             </p>
             <h2 id={titleId} className="mt-1 text-balance text-[20px] font-bold leading-[26px]">
               {title}
