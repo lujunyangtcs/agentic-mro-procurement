@@ -282,7 +282,7 @@ export const UC04: TheatreScript = {
         ? [
             `The Category Lead chose NovaOps knowing the ${gbp(SAVING)} premium over ${kName}; the reason is saved against the case: “${shortReason}”`,
             `Professional indemnity of £1M against the £2M requirement was caught and returned to the supplier (round 1 of 2) before any PO.`,
-            `${credit.tier.toLowerCase()} financial risk (${credit.score}/100) accepted with a ${gbp(cap)} cap${mfa ? " and MFA before system access" : ""}; the PO stays blocked until Finance verifies the bank details by call-back.`,
+            `${credit.tier.charAt(0)}${credit.tier.slice(1).toLowerCase()} financial risk (${credit.score}/100) accepted with a ${gbp(cap)} cap${mfa ? " and MFA before system access" : ""}; the PO stays blocked until Finance verifies the bank details by call-back.`,
           ]
         : [
             `Die Category Lead hat NovaOps trotz ${gbpDe(SAVING)} Aufpreis gegenüber ${kName} gewählt; der Grund ist am Fall gespeichert: „${shortReason}“`,

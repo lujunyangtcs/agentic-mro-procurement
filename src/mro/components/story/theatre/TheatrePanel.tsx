@@ -294,6 +294,7 @@ export function TheatrePanel({
   const viewKey = stageList[view]?.key ?? "intro";
   const [routing, setRouting] = React.useState(false);
   const railRef = React.useRef<HTMLElement>(null);
+  const handRef = useBringIntoView<HTMLDivElement>(canHandOff);
 
   /* The lane is a consequence of the two checks, so it lands on its own. */
   const onBeatRef = React.useRef(onBeat);
@@ -421,7 +422,7 @@ export function TheatrePanel({
     });
 
   const handOffBar = canHandOff && (
-    <div className="aap-fade-up flex flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
+    <div ref={handRef} className="aap-fade-up flex scroll-mb-6 flex-wrap items-center gap-4 border border-ink bg-white px-5 py-4" style={{ animationDelay: "160ms" }}>
       <p className="min-w-0 flex-1 text-[13px] leading-[19px] text-mute">
         {step.tasks.length === 0 ? c.policyHandoff : c.decidedBy(step.tasks.map((x) => x.persona).join(", "))}
       </p>

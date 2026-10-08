@@ -65,6 +65,13 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
   const closeDoc = React.useCallback(() => setViewing(null), []);
   const [arrivalDismissed, setArrivalDismissed] = React.useState(false);
   const [handing, setHanding] = React.useState<{ from: string; to: string; final: boolean; payload: string[] } | null>(null);
+  /* After the baton passes, show the stepper and the agent that just woke up rather than where the last one ended. */
+  const runRef = React.useRef<HTMLDivElement>(null);
+  const showRun = () =>
+    window.requestAnimationFrame(() => {
+      const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      runRef.current?.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
+    });
   const restart = () => {
     setArrivalDismissed(false);
     setHanding(null);
@@ -180,7 +187,9 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
       />
 
       <div className="flex flex-col gap-4 px-5 pb-12 pt-5">
-        <SectionHead title={c.agentRun} aside={c.ofAgents(doneCount, run.steps.length)} />
+        <div ref={runRef} className="scroll-mt-20">
+          <SectionHead title={c.agentRun} aside={c.ofAgents(doneCount, run.steps.length)} />
+        </div>
         <AgentStepper run={run} state={state} stepDone={stepDone} pending={(i) => pendingTasks(i).length} onSelect={select} />
 
         <div className="grid grid-cols-1 items-start gap-3 xl:grid-cols-[minmax(0,1fr)_320px]">
@@ -290,6 +299,7 @@ export function StoryWorkspace({ storyId, step: openStep }: { storyId: StoryId; 
           onDone={() => {
             setHanding(null);
             handOff();
+            showRun();
           }}
         />
       )}
