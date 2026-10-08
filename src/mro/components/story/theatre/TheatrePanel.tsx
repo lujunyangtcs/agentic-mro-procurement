@@ -86,12 +86,12 @@ function StageRail({
               <span aria-hidden className={cn("block h-[3px] w-full transition-colors", current ? "bg-ink" : done ? "bg-surface-deep" : "bg-surface-fog")} />
               <span
                 className={cn(
-                  "mt-1.5 items-center gap-1 truncate text-[11.5px] leading-[16px]",
-                  current ? "flex font-bold text-ink" : "hidden text-mute @lg/agent:flex",
+                  "mt-1.5 truncate text-[11.5px] leading-[16px]",
+                  current ? "block font-bold text-ink" : done ? "hidden text-surface-deep @lg/agent:block" : "hidden text-mute @lg/agent:block",
                 )}
               >
-                {done && !current && <Check size={12} strokeWidth={2.6} aria-hidden className="shrink-0 text-surface-deep" />}
-                <span className="truncate">{s.label}</span>
+                {s.label}
+                {done && !current && <span className="sr-only">{` · ${t.done}`}</span>}
               </span>
             </>
           );
