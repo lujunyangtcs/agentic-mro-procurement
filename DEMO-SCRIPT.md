@@ -1,10 +1,12 @@
 # Northgate Industries · MRO procurement — presenter script
 
-Three stories, ~18 minutes total. Every figure below was read off the running app,
+Five stories, ~28 minutes total. Every figure below was read off the running app,
 so it can be said out loud verbatim. Sign in fresh before starting: the store
 resets, and Story 2 depends on nothing having been resolved yet.
 
-Run order matters — Story 1 sets the baseline that Story 2 breaks.
+Run order matters — Story 1 sets the baseline that Story 2 breaks. Stories 4 and 5
+are short guided tours (UC6, UC4) and can run in either order, or be dropped if time
+is short.
 
 ---
 
@@ -95,6 +97,75 @@ Switch back to **Buyer**.
 
 ---
 
+## Story 4 · The twelve licences that already existed (UC6) (~4 min)
+
+**Covers:** the guided "theatre" case — an agent chain that shows its sources live, scores its
+own confidence, runs its own guardrails, and hands off with a visible baton — paired with the
+exception side so the contrast lands: one request needs a person, this one never does.
+
+This is a short tour, not a full story run. Start on the **Dashboard**. PR-48630 must still be
+unresolved and UC6 must read **Not started** — sign in fresh if either has moved.
+
+| # | Where | Click | Say |
+|---|---|---|---|
+| 0 | Dashboard | — | "One more pairing before we move on — the hardest exception next to the easiest case, back to back." |
+| 1 | Exceptions | sidebar | "PR-48630 is already open — the mechanical seal. Nothing has changed here." |
+| 2 | Detail rail | **Original email — German** | "Same stop as before: a range, not a part number." |
+| 3 | — | **Analyze with AI** | "The agent reads its sources, proposes 50 mm, and drafts the reply in German — the same ceremony every exception gets." |
+| 4 | Modal | **Cancel** | "I'm leaving this one unresolved for now — we're here to look at the opposite case." |
+| 5 | Dashboard | sidebar | "Back to the dashboard. **New tickets** — the five client use cases, each run end to end from its own source files." |
+| 6 | New tickets card | **UC6 · Reuse licences before buying** | "Guided — this one narrates itself. A request for twelve CAD licences just came in." |
+| 7 | Arrival modal | **Open the form** | "The request, as a PDF — not a free-text message this time, a front-door form. Name, cost centre, what's needed, by when." |
+| 8 | Arrival modal | **Start Intake Agent** | "Watch it fetch, in order." |
+| 9 | Step 1 · Intake Agent | open each doc chip as it lands — form, **PO-7781223**, **BUD-CC4471-FY27** | "The form it just opened, the last price paid for this exact licence, and the cost centre's remaining budget — three different systems, read live." |
+| 10 | — | **AI · Score confidence & run guardrails** | "Confidence 0.96, three guardrails, all pass — front door only, coding not TBD, budget available." |
+| 11 | — | **Hand off to Spend Intelligence Agent** | "Watch the baton pass — what it fetched travels with it." |
+| 12 | Step 2 · Spend Intelligence Agent | open **SAM-2026-10-06** and **EA-SW-2024-017** | "A utilisation report and the licence agreement itself. Eighteen seats sit unassigned in the pool right now, and clause 6.2 allows reassigning them at no charge." |
+| 13 | — | **AI · Score confidence & run guardrails** | "Twelve of the eighteen idle seats cover this request exactly — nothing needs to be bought." |
+| 14 | — | **Hand off to Channel Decision Agent** | — |
+| 15 | Step 3 · Channel Decision Agent | open **APP-CV-01**, then the produced **SAM-ASSIGN-77120** and **MAIL-118204** | "The owner policy that pre-approves a same-tier reassignment, the assignment record it just wrote, and the notice it just sent the requester — in German if she worked in German, in English because she works in English." |
+| 16 | — | **AI · Score confidence & run guardrails** | "Application-owner approval, pre-cleared by policy. Nothing left to check." |
+| 17 | — | **Close the case** | — |
+| 18 | Completion card | open the **value record** | "£14,400 avoided, zero buyer touches, eight minutes end to end — and it files its own value record, open it, that's the paper trail Finance signs off." |
+| 19 | Dashboard | sidebar | "**New tickets** now reads UC6 as closed. Five documents read, three written, nobody clicked anything that wasn't already theirs to decide." |
+
+**Landing line:** "That's the full range in one pass — a person settling a 5 mm ambiguity a machine
+can't, and a machine settling a licence question a person never needed to see."
+
+---
+
+## Story 5 · The redirect the human overruled (UC4) (~4 min)
+
+**Covers:** panel-first supplier matching · a guardrail that forces a Category Lead decision ·
+risk-based onboarding with conditions · the audit trail an override leaves behind
+
+Another guided tour, same shape as Story 4 — short, narrated, nothing improvised. Start on the
+**Dashboard**. UC4 must still read **Not started** — sign in fresh if it has moved.
+
+| # | Where | Click | Say |
+|---|---|---|---|
+| 0 | Dashboard | — | "One more guided case — this one is about the moment an agent's recommendation gets overruled, on the record." |
+| 1 | New tickets card | **UC4 · Check the panel before onboarding** | "A programme manager at Solihull wants a named consultant for six weeks of paint-shop work — and named a supplier who isn't on our panel: NovaOps, at £42,000." |
+| 2 | Arrival | **Run the agent chain** | "Supplier Match Agent, first." |
+| 3 | Step 1 · Supplier Match Agent | open **the panel list** and **the named-supplier profile** | "Two panel suppliers do this work. Kestrel Operations quotes £1,150 a day; NovaOps quoted £1,400." |
+| 4 | — | **AI · Score confidence & run guardrails** | "Confidence 0.93 — Kestrel meets every requirement, it's £7,500 cheaper, and it's already two-thirds through its £250K commitment, so this pushes us toward a rebate tier. One guardrail trips: anything over £30K needs the Category Lead to confirm supplier fit before anything moves." |
+| 5 | Decision | **Confirm panel supplier** vs **Approve onboarding exception** | "This is the fork. The agent's own answer is the first button — redirect to Kestrel and the case is done in one click. But the Category Lead knows NovaOps owns a proprietary paint-line simulation tool Kestrel can't offer." Click **Approve onboarding exception**. "That reason gets typed in and saved right here, against the case." |
+| 6 | Step 2 · Onboarding Agent | open the **document validation** list | "Five documents land clean. One doesn't: professional indemnity cover is £1M against the £2M we require." |
+| 7 | — | **AI · Score confidence & run guardrails** | "Confidence 0.88. Note what's *not* checked here — bank-detail verification is never automated, by rule, not by this agent's judgement." |
+| 8 | Decision | **Return gap list to supplier** | "It doesn't waive the insurance gap. It sends it back." |
+| 9 | Step 3 · Risk Screening Agent | open **sanctions**, **financial health**, **cyber** | "Clear on sanctions, clean on adverse media, filings up to date — but a 58-out-of-100 credit score and no MFA on remote access put this at medium risk." |
+| 10 | — | **AI · Score confidence & run guardrails** | "Confidence 0.90. Medium risk always goes to a person — that guardrail doesn't bend for a high confidence score." |
+| 11 | Decision | **Accept with conditions** | "A £60,000 value cap until two years of accounts are reviewed, MFA required before any system access. Conditions, not a blank cheque." |
+| 12 | Completion card | open the **value record** | "£7,500 identified against the named quote — banked against an approved exception, not a straight redirect. Every reason anyone typed is still attached to the case." |
+| 13 | — | — | "One step still sits with a person after this: Finance calls the bank to verify the account before the supplier goes active — the PO stays blocked until they do. The agent never touches that step." |
+| 14 | Dashboard | sidebar | "**New tickets** now reads UC4 as closed." |
+
+**Landing line:** "Same workforce, same guardrails — but this time the person in the loop didn't just
+approve the agent's answer, they overruled it, for a reason the agent had no way to know. That
+reason is now part of the record, not lost in an email thread."
+
+---
+
 ## Numbers you may be asked
 
 | Figure | Where it comes from |
@@ -106,6 +177,12 @@ Switch back to **Buyer**.
 | €38,400 vs €44,900 | the two quotes; €6,500 is the difference |
 | 50% touchless | released without a person ÷ finished requests |
 | $2,810,200 spend | control tower = annual network spend, a different metric from requisitions in flight |
+| £14,400 avoided | UC6 — 12 CAD viewer pro licences at £1,200/yr, reassigned instead of bought |
+| £8,400 renewal pipeline | UC6 — 7 licences inactive 90+ days, flagged for right-sizing at the Dec 2026 renewal |
+| 8 min | UC6 — front-door form to licences assigned, no PO |
+| £42,000 | UC4 — starting cost of the named supplier (NovaOps) quote |
+| £7,500 | UC4 — saving identified vs. the named supplier (£1,150 vs £1,400 day rate) |
+| £60,000 | UC4 — value cap condition attached to the medium-risk accept |
 
 ## Before you present
 
